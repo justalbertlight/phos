@@ -2,227 +2,1504 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Phos Academy — Learning Portal</title>
-
-<!--
-  ============================================================================
-  PHOS ACADEMY LMS — SETUP INSTRUCTIONS
-  ============================================================================
-  This file needs a free Firebase project to store data (students, grades,
-  messages, etc.) so it works across every device/browser, not just one.
-
-  1. Go to https://console.firebase.google.com and create a free project
-     (no credit card needed on the free "Spark" plan).
-  2. In the project, click "Build > Firestore Database" > Create database
-     > Start in "test mode" (you'll tighten rules below).
-  3. Click the gear icon > Project settings > scroll to "Your apps" >
-     click the </> (web) icon > register the app (any nickname).
-  4. Firebase will show you a firebaseConfig object. Copy it and paste it
-     over the placeholder FIREBASE_CONFIG object below (search for
-     "PASTE YOUR FIREBASE CONFIG HERE").
-  5. In Firestore > Rules, paste this (then click Publish):
-
-       rules_version = '2';
-       service cloud.firestore {
-         match /databases/{database}/documents {
-           match /{document=**} {
-             allow read, write: if true;
-           }
-         }
-       }
-
-     NOTE ON SECURITY: this file checks the admin/student passwords in the
-     browser, not on a server, so it is NOT bank-grade security. Anyone who
-     obtained your Firebase config AND guessed/knew a password could read or
-     change data directly. That's an acceptable trade-off for a small private
-     tutoring site with no server, but do NOT reuse a sensitive password for
-     the admin account, and don't publish the site link publicly — share it
-     only with your students/parents.
-  6. Upload this single file to GitHub Pages (or any static host) the same
-     way you did for the Quantum Leap Schools admission portal, and it's live.
-  7. Change the admin password by editing ADMIN_USERNAME / ADMIN_PASSWORD
-     below before you deploy.
-  ============================================================================
--->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phos Academy | Private Tutoring</title>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
 <style>
-  :root{
-    --bg:#f6f7f8;
-    --surface:#ffffff;
-    --text:#1c2230;
-    --muted:#68707e;
-    --border:#e4e7eb;
-    --accent:#0f6e5e;
-    --accent-dark:#0a4f43;
-    --accent-soft:#e6f2ef;
-    --danger:#b3261e;
-    --danger-soft:#fbeceb;
-    --warn:#9a6700;
-    --warn-soft:#fdf3d9;
-    --good:#166534;
-    --good-soft:#e8f5ea;
-    --radius:10px;
-  }
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
-  body{
-    background:var(--bg);
-    color:var(--text);
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    line-height:1.5;
-  }
-  .hidden{display:none !important;}
-  a{color:var(--accent);}
-  button{font-family:inherit;cursor:pointer;}
-  input,select,textarea{font-family:inherit;font-size:14px;}
+:root{
+  --primary:#5b4bdb;
+  --primary-dark:#4638b8;
+  --secondary:#14b8a6;
+  --dark:#172033;
+  --text:#344054;
+  --muted:#667085;
+  --light:#f6f7fb;
+  --white:#fff;
+  --border:#e4e7ec;
+  --danger:#dc3545;
+  --success:#198754;
+  --warning:#f59e0b;
+  --shadow:0 12px 35px rgba(16,24,40,.08);
+  --radius:18px;
+}
 
-  /* ---------- top nav ---------- */
-  header.topbar{
-    background:var(--surface);
-    border-bottom:1px solid var(--border);
-    padding:12px 20px;
-    display:flex;align-items:center;justify-content:space-between;
-    position:sticky;top:0;z-index:50;
-  }
-  .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px;}
-  .brand-mark{
-    width:32px;height:32px;border-radius:8px;background:var(--accent);
-    color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;
-  }
-  .topbar-actions{display:flex;gap:10px;align-items:center;}
-  .btn{
-    border:1px solid var(--border);background:var(--surface);color:var(--text);
-    padding:9px 14px;border-radius:8px;font-size:14px;font-weight:600;
-  }
-  .btn:hover{background:var(--bg);}
-  .btn-primary{background:var(--accent);border-color:var(--accent);color:#fff;}
-  .btn-primary:hover{background:var(--accent-dark);}
-  .btn-danger{background:var(--danger-soft);border-color:var(--danger-soft);color:var(--danger);}
-  .btn-sm{padding:6px 10px;font-size:13px;border-radius:6px;}
-  .btn-block{width:100%;}
-  .btn-whatsapp{background:#25D366;border-color:#25D366;color:#fff;}
-  .btn-whatsapp:hover{background:#1ebe5b;}
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
 
-  /* ---------- layout ---------- */
-  main{max-width:1100px;margin:0 auto;padding:24px 20px 60px;}
-  .card{
-    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
-    padding:20px;margin-bottom:16px;
-  }
-  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
-  @media(max-width:720px){.grid-2,.grid-3{grid-template-columns:1fr;}}
+html{
+  scroll-behavior:smooth;
+}
 
-  h1{font-size:26px;margin:0 0 6px;}
-  h2{font-size:19px;margin:0 0 12px;}
-  h3{font-size:15px;margin:0 0 8px;}
-  p.muted, .muted{color:var(--muted);}
-  label{display:block;font-size:13px;font-weight:600;margin:10px 0 4px;color:var(--text);}
-  input[type=text],input[type=password],input[type=number],input[type=date],input[type=time],
-  select,textarea{
-    width:100%;padding:9px 10px;border:1px solid var(--border);border-radius:8px;background:#fff;color:var(--text);
-  }
-  textarea{resize:vertical;min-height:70px;}
-  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
-  .badge{display:inline-block;padding:2px 9px;border-radius:99px;font-size:12px;font-weight:700;}
-  .badge-good{background:var(--good-soft);color:var(--good);}
-  .badge-warn{background:var(--warn-soft);color:var(--warn);}
-  .badge-bad{background:var(--danger-soft);color:var(--danger);}
-  .badge-muted{background:var(--bg);color:var(--muted);border:1px solid var(--border);}
-  table{width:100%;border-collapse:collapse;font-size:14px;}
-  th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--border);vertical-align:top;}
-  th{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.02em;}
-  .empty{color:var(--muted);font-style:italic;padding:10px 0;}
+body{
+  font-family:Inter,Segoe UI,Arial,sans-serif;
+  background:var(--light);
+  color:var(--text);
+  line-height:1.6;
+}
 
-  /* tabs */
-  .tabs{display:flex;gap:4px;flex-wrap:wrap;border-bottom:1px solid var(--border);margin-bottom:18px;}
-  .tab-btn{
-    background:none;border:none;padding:10px 14px;font-size:14px;font-weight:600;color:var(--muted);
-    border-bottom:2px solid transparent;
-  }
-  .tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);}
-  .tab-panel{display:none;}
-  .tab-panel.active{display:block;}
+button,
+input,
+select,
+textarea{
+  font:inherit;
+}
 
-  /* home page */
+button{
+  cursor:pointer;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+.hidden{
+  display:none!important;
+}
+
+/* =========================
+   PUBLIC WEBSITE
+========================= */
+
+.public-site{
+  min-height:100vh;
+  background:#fff;
+}
+
+.topbar{
+  background:#151b2d;
+  color:#fff;
+  font-size:13px;
+  padding:8px 5%;
+}
+
+.topbar-inner{
+  max-width:1200px;
+  margin:auto;
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  flex-wrap:wrap;
+}
+
+.navbar{
+  position:sticky;
+  top:0;
+  z-index:100;
+  background:rgba(255,255,255,.95);
+  backdrop-filter:blur(15px);
+  border-bottom:1px solid #eee;
+}
+
+.nav-inner{
+  max-width:1200px;
+  margin:auto;
+  min-height:76px;
+  padding:0 24px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:25px;
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-weight:800;
+  font-size:21px;
+  color:var(--dark);
+}
+
+.logo-mark{
+  width:43px;
+  height:43px;
+  border-radius:13px;
+  background:linear-gradient(135deg,var(--primary),#8b7cf6);
+  color:#fff;
+  display:grid;
+  place-items:center;
+  font-weight:900;
+}
+
+.nav-links{
+  display:flex;
+  align-items:center;
+  gap:25px;
+}
+
+.nav-links a{
+  color:#475467;
+  font-weight:600;
+  font-size:14px;
+}
+
+.nav-links a:hover{
+  color:var(--primary);
+}
+
+.btn{
+  border:0;
+  border-radius:10px;
+  padding:11px 17px;
+  font-weight:700;
+  transition:.2s;
+}
+
+.btn:hover{
+  transform:translateY(-1px);
+}
+
+.btn-primary{
+  background:var(--primary);
+  color:#fff;
+}
+
+.btn-primary:hover{
+  background:var(--primary-dark);
+}
+
+.btn-outline{
+  background:#fff;
+  border:1px solid var(--border);
+  color:var(--dark);
+}
+
+.btn-success{
+  background:var(--success);
+  color:#fff;
+}
+
+.btn-danger{
+  background:var(--danger);
+  color:#fff;
+}
+
+.btn-warning{
+  background:var(--warning);
+  color:#fff;
+}
+
+.btn-sm{
+  padding:7px 11px;
+  font-size:12px;
+}
+
+.hero{
+  background:
+    radial-gradient(circle at 85% 20%,rgba(91,75,219,.20),transparent 30%),
+    linear-gradient(135deg,#f8f7ff,#fff);
+  padding:90px 24px 100px;
+}
+
+.hero-inner{
+  max-width:1200px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  align-items:center;
+  gap:70px;
+}
+
+.hero-badge{
+  display:inline-flex;
+  background:#eeecff;
+  color:var(--primary);
+  padding:7px 13px;
+  border-radius:30px;
+  font-weight:700;
+  font-size:13px;
+  margin-bottom:20px;
+}
+
+.hero h1{
+  font-size:clamp(40px,5vw,68px);
+  line-height:1.05;
+  color:var(--dark);
+  letter-spacing:-2px;
+  margin-bottom:22px;
+}
+
+.hero h1 span{
+  color:var(--primary);
+}
+
+.hero p{
+  font-size:18px;
+  color:#667085;
+  max-width:650px;
+  margin-bottom:30px;
+}
+
+.hero-actions{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.hero-card{
+  background:#fff;
+  border:1px solid #eee;
+  border-radius:28px;
+  padding:30px;
+  box-shadow:0 25px 70px rgba(50,40,120,.13);
+}
+
+.hero-card-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:25px;
+}
+
+.hero-card-header h3{
+  color:var(--dark);
+}
+
+.status{
+  width:10px;
+  height:10px;
+  background:#22c55e;
+  border-radius:50%;
+}
+
+.mock-stat{
+  background:#f7f7fb;
+  border-radius:15px;
+  padding:18px;
+  margin-bottom:12px;
+}
+
+.mock-stat strong{
+  display:block;
+  font-size:24px;
+  color:var(--dark);
+}
+
+.section{
+  padding:85px 24px;
+}
+
+.section-inner{
+  max-width:1200px;
+  margin:auto;
+}
+
+.section-heading{
+  text-align:center;
+  max-width:700px;
+  margin:0 auto 45px;
+}
+
+.section-heading .eyebrow{
+  color:var(--primary);
+  font-weight:800;
+  text-transform:uppercase;
+  font-size:12px;
+  letter-spacing:1.5px;
+}
+
+.section-heading h2{
+  font-size:38px;
+  line-height:1.15;
+  color:var(--dark);
+  margin:10px 0 14px;
+}
+
+.section-heading p{
+  color:var(--muted);
+}
+
+.feature-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
+
+.feature-card{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:28px;
+  box-shadow:var(--shadow);
+}
+
+.feature-icon{
+  width:48px;
+  height:48px;
+  border-radius:14px;
+  background:#eeecff;
+  color:var(--primary);
+  display:grid;
+  place-items:center;
+  font-size:22px;
+  margin-bottom:18px;
+}
+
+.feature-card h3{
+  color:var(--dark);
+  margin-bottom:8px;
+}
+
+.feature-card p{
+  color:var(--muted);
+  font-size:14px;
+}
+
+.subject-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:18px;
+}
+
+.subject-card{
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:25px;
+  background:#fff;
+  transition:.2s;
+}
+
+.subject-card:hover{
+  transform:translateY(-4px);
+  box-shadow:var(--shadow);
+}
+
+.subject-card h3{
+  color:var(--dark);
+  margin-bottom:7px;
+}
+
+.subject-card p{
+  color:var(--muted);
+  font-size:14px;
+}
+
+.steps{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:15px;
+}
+
+.step{
+  text-align:center;
+}
+
+.step-number{
+  width:50px;
+  height:50px;
+  border-radius:50%;
+  background:var(--primary);
+  color:#fff;
+  display:grid;
+  place-items:center;
+  margin:0 auto 15px;
+  font-weight:800;
+}
+
+.step h3{
+  color:var(--dark);
+  font-size:16px;
+  margin-bottom:5px;
+}
+
+.step p{
+  color:var(--muted);
+  font-size:13px;
+}
+
+.concerns{
+  background:#151b2d;
+  color:#fff;
+}
+
+.concerns .section-heading h2{
+  color:#fff;
+}
+
+.concern-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
+
+.concern{
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.1);
+  padding:25px;
+  border-radius:18px;
+}
+
+.concern h3{
+  margin-bottom:8px;
+}
+
+.concern p{
+  color:#c7ccda;
+  font-size:14px;
+}
+
+.mode-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:18px;
+}
+
+.mode-card{
+  padding:25px;
+  border-radius:18px;
+  background:#f8f8fc;
+  border:1px solid var(--border);
+}
+
+.cta{
+  margin:30px auto 70px;
+  max-width:1150px;
+  border-radius:28px;
+  padding:60px;
+  background:linear-gradient(135deg,var(--primary),#7567e8);
+  color:#fff;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:30px;
+}
+
+.cta h2{
+  font-size:36px;
+  line-height:1.15;
+  margin-bottom:10px;
+}
+
+.cta p{
+  color:#e9e7ff;
+}
+
+.cta .btn{
+  background:#fff;
+  color:var(--primary);
+  white-space:nowrap;
+}
+
+footer{
+  background:#101522;
+  color:#aab2c5;
+  padding:45px 24px;
+}
+
+.footer-inner{
+  max-width:1200px;
+  margin:auto;
+  display:flex;
+  justify-content:space-between;
+  gap:30px;
+  flex-wrap:wrap;
+}
+
+/* =========================
+   LOGIN
+========================= */
+
+.login-page{
+  min-height:100vh;
+  display:grid;
+  place-items:center;
+  padding:25px;
+  background:
+    radial-gradient(circle at 20% 20%,#e8e5ff,transparent 35%),
+    #f6f7fb;
+}
+
+.login-card{
+  width:min(440px,100%);
+  background:#fff;
+  border-radius:24px;
+  padding:35px;
+  box-shadow:var(--shadow);
+  border:1px solid var(--border);
+}
+
+.login-card h1{
+  color:var(--dark);
+  margin-bottom:5px;
+}
+
+.login-card > p{
+  color:var(--muted);
+  margin-bottom:25px;
+}
+
+/* =========================
+   FORM
+========================= */
+
+.form-group{
+  margin-bottom:16px;
+}
+
+.form-group label{
+  display:block;
+  color:var(--dark);
+  font-size:13px;
+  font-weight:700;
+  margin-bottom:6px;
+}
+
+input,
+select,
+textarea{
+  width:100%;
+  padding:11px 13px;
+  border:1px solid #d0d5dd;
+  border-radius:9px;
+  outline:none;
+  background:#fff;
+  color:var(--dark);
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+  border-color:var(--primary);
+  box-shadow:0 0 0 3px rgba(91,75,219,.1);
+}
+
+textarea{
+  min-height:100px;
+  resize:vertical;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:15px;
+}
+
+.checkbox-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:8px;
+}
+
+.checkbox-item{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  background:#f8f8fb;
+  padding:9px;
+  border-radius:8px;
+  font-size:13px;
+}
+
+.checkbox-item input{
+  width:auto;
+}
+
+/* =========================
+   APP
+========================= */
+
+.app{
+  min-height:100vh;
+  display:flex;
+}
+
+.sidebar{
+  width:250px;
+  background:#151b2d;
+  color:#fff;
+  min-height:100vh;
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  overflow-y:auto;
+  z-index:50;
+}
+
+.sidebar-logo{
+  padding:25px 20px;
+  font-size:20px;
+  font-weight:800;
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.sidebar-nav{
+  padding:15px;
+}
+
+.sidebar-nav button{
+  width:100%;
+  text-align:left;
+  background:none;
+  border:0;
+  color:#aeb6c9;
+  padding:12px 14px;
+  border-radius:9px;
+  margin-bottom:4px;
+  font-weight:600;
+}
+
+.sidebar-nav button:hover,
+.sidebar-nav button.active{
+  background:rgba(255,255,255,.1);
+  color:#fff;
+}
+
+.main{
+  margin-left:250px;
+  width:calc(100% - 250px);
+  min-height:100vh;
+}
+
+.topnav{
+  height:70px;
+  background:#fff;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:0 28px;
+  position:sticky;
+  top:0;
+  z-index:40;
+}
+
+.topnav h2{
+  color:var(--dark);
+  font-size:20px;
+}
+
+.user-area{
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
+
+.avatar{
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  background:#eeecff;
+  color:var(--primary);
+  display:grid;
+  place-items:center;
+  font-weight:800;
+}
+
+.content{
+  padding:30px;
+  max-width:1400px;
+  margin:auto;
+}
+
+.dashboard-header{
+  margin-bottom:25px;
+}
+
+.dashboard-header h1{
+  color:var(--dark);
+  font-size:28px;
+}
+
+.dashboard-header p{
+  color:var(--muted);
+}
+
+.stat-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:16px;
+  margin-bottom:25px;
+}
+
+.stat-card{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:22px;
+  box-shadow:0 5px 20px rgba(16,24,40,.04);
+}
+
+.stat-card small{
+  color:var(--muted);
+}
+
+.stat-card strong{
+  display:block;
+  color:var(--dark);
+  font-size:29px;
+  margin-top:5px;
+}
+
+.card{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:22px;
+  margin-bottom:20px;
+}
+
+.card-title{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-bottom:18px;
+}
+
+.card-title h3{
+  color:var(--dark);
+}
+
+.table-wrap{
+  overflow-x:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:700px;
+}
+
+th,
+td{
+  text-align:left;
+  padding:12px;
+  border-bottom:1px solid #eef0f3;
+  font-size:13px;
+}
+
+th{
+  background:#fafafa;
+  color:#475467;
+}
+
+.badge{
+  display:inline-block;
+  padding:4px 9px;
+  border-radius:20px;
+  background:#eef2ff;
+  color:#4f46e5;
+  font-size:11px;
+  font-weight:700;
+}
+
+.badge-success{
+  background:#e9f9ef;
+  color:#198754;
+}
+
+.badge-warning{
+  background:#fff5db;
+  color:#9a6700;
+}
+
+.badge-danger{
+  background:#fdecec;
+  color:#c62828;
+}
+
+.empty{
+  text-align:center;
+  padding:30px;
+  color:var(--muted);
+}
+
+.action-row{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+}
+
+.alert{
+  padding:12px 15px;
+  border-radius:9px;
+  margin-bottom:15px;
+  font-size:13px;
+}
+
+.alert-success{
+  background:#eaf8ef;
+  color:#176b37;
+}
+
+.alert-danger{
+  background:#fdecec;
+  color:#9e2020;
+}
+
+.alert-info{
+  background:#edf4ff;
+  color:#2457a6;
+}
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.5);
+  z-index:200;
+  display:grid;
+  place-items:center;
+  padding:20px;
+}
+
+.modal-box{
+  width:min(650px,100%);
+  max-height:90vh;
+  overflow:auto;
+  background:#fff;
+  border-radius:18px;
+  padding:25px;
+}
+
+.modal-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+
+.close{
+  background:#f1f1f1;
+  border:0;
+  width:34px;
+  height:34px;
+  border-radius:50%;
+}
+
+.progress{
+  height:8px;
+  background:#eee;
+  border-radius:10px;
+  overflow:hidden;
+}
+
+.progress-bar{
+  height:100%;
+  background:var(--primary);
+}
+
+.question{
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:18px;
+  margin-bottom:15px;
+}
+
+.option{
+  display:block;
+  border:1px solid var(--border);
+  padding:10px;
+  border-radius:8px;
+  margin-top:7px;
+  cursor:pointer;
+}
+
+.option:hover{
+  background:#f8f8ff;
+}
+
+.notice{
+  border-left:4px solid var(--primary);
+  background:#f8f8ff;
+  padding:15px;
+  margin-bottom:12px;
+  border-radius:8px;
+}
+
+.notice h4{
+  color:var(--dark);
+}
+
+.notice small{
+  color:var(--muted);
+}
+
+.mobile-menu{
+  display:none;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:1000px){
+  .hero-inner{
+    grid-template-columns:1fr;
+  }
+
+  .feature-grid,
+  .concern-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .subject-grid,
+  .mode-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .steps{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .stat-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:750px){
+  .topbar{
+    display:none;
+  }
+
+  .nav-links{
+    display:none;
+  }
+
+  .nav-inner{
+    min-height:65px;
+  }
+
   .hero{
-    background:linear-gradient(160deg,var(--accent) 0%,var(--accent-dark) 100%);
-    color:#fff;border-radius:14px;padding:44px 30px;margin-bottom:24px;
-  }
-  .hero h1{font-size:34px;color:#fff;}
-  .hero p{max-width:560px;color:#d9efe9;font-size:16px;}
-  .hero .row{margin-top:18px;}
-  .feature{padding:16px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);}
-  .feature h3{color:var(--accent-dark);}
-  .whatsapp-float{
-    position:fixed;bottom:20px;right:20px;background:#25D366;color:#fff;border-radius:50px;
-    padding:13px 18px;font-weight:700;box-shadow:0 4px 14px rgba(0,0,0,.2);display:flex;gap:8px;align-items:center;
-    z-index:60;text-decoration:none;font-size:14px;
+    padding:60px 20px;
   }
 
-  /* login */
-  .login-wrap{max-width:380px;margin:60px auto;}
-  .login-toggle{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:16px;}
-  .login-toggle button{flex:1;padding:10px;border:none;background:var(--surface);font-weight:700;color:var(--muted);}
-  .login-toggle button.active{background:var(--accent);color:#fff;}
-  .err-msg{color:var(--danger);font-size:13px;margin-top:8px;}
-
-  /* notif dot */
-  .dot{
-    background:var(--danger);color:#fff;border-radius:99px;font-size:11px;font-weight:800;
-    padding:1px 6px;margin-left:6px;
+  .hero h1{
+    font-size:42px;
   }
-  .notif-item{padding:10px;border:1px solid var(--border);border-radius:8px;margin-bottom:8px;font-size:14px;}
-  .notif-item.unread{background:var(--accent-soft);border-color:var(--accent);}
 
-  .msg-bubble{max-width:75%;padding:9px 12px;border-radius:12px;margin-bottom:8px;font-size:14px;}
-  .msg-from-admin{background:var(--accent-soft);margin-right:auto;border-bottom-left-radius:2px;}
-  .msg-from-student{background:var(--bg);border:1px solid var(--border);margin-left:auto;border-bottom-right-radius:2px;}
-  .msg-time{font-size:11px;color:var(--muted);margin-top:3px;}
-
-  .q-block{border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:10px;}
-  .opt-row{display:flex;align-items:center;gap:8px;margin:4px 0;}
-
-  footer.appfoot{text-align:center;color:var(--muted);font-size:13px;padding:30px 0 10px;}
-
-  @media print{
-    header.topbar,.tabs,.whatsapp-float,.no-print{display:none !important;}
-    main{max-width:100%;padding:0;}
-    body{background:#fff;}
+  .section{
+    padding:60px 20px;
   }
+
+  .feature-grid,
+  .concern-grid,
+  .subject-grid,
+  .mode-grid,
+  .steps,
+  .stat-grid,
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .cta{
+    margin:20px;
+    padding:35px 25px;
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .sidebar{
+    transform:translateX(-100%);
+    transition:.25s;
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .main{
+    margin-left:0;
+    width:100%;
+  }
+
+  .mobile-menu{
+    display:block;
+    border:0;
+    background:#f1f2f6;
+    border-radius:8px;
+    width:38px;
+    height:38px;
+  }
+
+  .content{
+    padding:20px 15px;
+  }
+
+  .topnav{
+    padding:0 15px;
+  }
+
+  .checkbox-grid{
+    grid-template-columns:1fr;
+  }
+}
 </style>
 </head>
+
 <body>
 
-<header class="topbar" id="topbar">
-  <div class="brand"><div class="brand-mark">P</div> Phos Academy</div>
-  <div class="topbar-actions" id="topbarActions"></div>
-</header>
+<!-- =====================================================
+     PUBLIC WEBSITE
+===================================================== -->
 
-<main id="app"></main>
+<div id="publicPage" class="public-site">
 
-<a class="whatsapp-float" id="waFloat" target="_blank">💬 Chat on WhatsApp</a>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <span>Personalized tutoring. Structured learning. Measurable progress.</span>
+      <span>Phos Academy</span>
+    </div>
+  </div>
 
-<footer class="appfoot">Phos Academy Learning Portal</footer>
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="#" class="logo">
+        <span class="logo-mark">P</span>
+        <span>Phos Academy</span>
+      </a>
+
+      <div class="nav-links">
+        <a href="#why">Why Phos</a>
+        <a href="#subjects">Subjects</a>
+        <a href="#how">How It Works</a>
+        <a href="#parents">For Parents</a>
+        <button class="btn btn-primary" onclick="showLogin()">Student Login</button>
+      </div>
+
+      <button class="mobile-menu" onclick="showLogin()">☰</button>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-inner">
+
+      <div>
+        <div class="hero-badge">PERSONALIZED PRIVATE TUTORING</div>
+
+        <h1>
+          Helping Learners Build
+          <span>Confidence, Skills</span>
+          and Strong Foundations.
+        </h1>
+
+        <p>
+          Phos Academy provides structured private tutoring designed to help
+          students understand what they learn, practise with purpose and
+          steadily improve their academic performance.
+        </p>
+
+        <div class="hero-actions">
+          <button class="btn btn-primary" onclick="contactWhatsApp()">
+            Talk to Us
+          </button>
+
+          <button class="btn btn-outline" onclick="showLogin()">
+            Student Portal
+          </button>
+        </div>
+      </div>
+
+      <div class="hero-card">
+
+        <div class="hero-card-header">
+          <h3>Learning at Phos</h3>
+          <span class="status"></span>
+        </div>
+
+        <div class="mock-stat">
+          <small>Personalized Learning</small>
+          <strong>Built Around the Learner</strong>
+        </div>
+
+        <div class="mock-stat">
+          <small>Regular Assessment</small>
+          <strong>Know What Needs Attention</strong>
+        </div>
+
+        <div class="mock-stat">
+          <small>Parent Visibility</small>
+          <strong>Stay Informed</strong>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <section id="why" class="section">
+    <div class="section-inner">
+
+      <div class="section-heading">
+        <span class="eyebrow">Why Parents Choose Us</span>
+        <h2>More Than Just Extra Lessons</h2>
+        <p>
+          Effective tutoring is not only about spending more hours with a
+          teacher. It is about knowing what a learner needs and creating a
+          structured environment that helps them improve.
+        </p>
+      </div>
+
+      <div class="feature-grid">
+
+        <div class="feature-card">
+          <div class="feature-icon">◎</div>
+          <h3>Individual Attention</h3>
+          <p>
+            Learning needs differ from student to student. Our tutoring
+            approach allows attention to be directed toward the learner's
+            actual needs.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">✓</div>
+          <h3>Structured Learning</h3>
+          <p>
+            Lessons follow a clear structure so students know what they are
+            learning, practising and expected to understand.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">↗</div>
+          <h3>Progress Monitoring</h3>
+          <p>
+            Assessments and reports make it easier to identify strengths,
+            weaknesses and areas that require more attention.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">◆</div>
+          <h3>Flexible Learning</h3>
+          <p>
+            Learning can be arranged through available modes including home,
+            after-school and online sessions.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">▣</div>
+          <h3>Regular Practice</h3>
+          <p>
+            Students are given opportunities to practise and demonstrate
+            understanding instead of simply listening to lessons.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">♡</div>
+          <h3>Parent Communication</h3>
+          <p>
+            Parents can stay connected with important announcements,
+            schedules, reports and other learning information.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="subjects" class="section" style="background:#f8f8fc;">
+    <div class="section-inner">
+
+      <div class="section-heading">
+        <span class="eyebrow">What We Teach</span>
+        <h2>Learning Designed Around Individual Needs</h2>
+        <p>
+          Subjects are selected for each learner based on their learning needs
+          rather than automatically assigning every subject to an entire class.
+        </p>
+      </div>
+
+      <div id="publicSubjects" class="subject-grid">
+        <div class="subject-card">
+          <h3>Mathematics</h3>
+          <p>Build stronger mathematical understanding and problem-solving skills.</p>
+        </div>
+
+        <div class="subject-card">
+          <h3>Further Mathematics</h3>
+          <p>Develop deeper mathematical reasoning and advanced problem-solving.</p>
+        </div>
+
+        <div class="subject-card">
+          <h3>Coding</h3>
+          <p>Learn computational thinking and practical programming skills.</p>
+        </div>
+
+        <div class="subject-card">
+          <h3>English Language</h3>
+          <p>Strengthen communication, comprehension, grammar and writing skills.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="how" class="section">
+    <div class="section-inner">
+
+      <div class="section-heading">
+        <span class="eyebrow">The Learning Process</span>
+        <h2>A Simple, Structured Approach</h2>
+      </div>
+
+      <div class="steps">
+
+        <div class="step">
+          <div class="step-number">01</div>
+          <h3>Enrol</h3>
+          <p>We understand the learner's needs and select appropriate subjects.</p>
+        </div>
+
+        <div class="step">
+          <div class="step-number">02</div>
+          <h3>Learn</h3>
+          <p>Lessons are delivered according to the learner's schedule.</p>
+        </div>
+
+        <div class="step">
+          <div class="step-number">03</div>
+          <h3>Practise</h3>
+          <p>Students practise concepts through exercises and assessments.</p>
+        </div>
+
+        <div class="step">
+          <div class="step-number">04</div>
+          <h3>Track</h3>
+          <p>Performance information helps identify areas of progress and difficulty.</p>
+        </div>
+
+        <div class="step">
+          <div class="step-number">05</div>
+          <h3>Improve</h3>
+          <p>Teaching and practice can be adjusted according to learning needs.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="parents" class="section concerns">
+    <div class="section-inner">
+
+      <div class="section-heading">
+        <span class="eyebrow">For Parents</span>
+        <h2>Questions Parents Often Have</h2>
+      </div>
+
+      <div class="concern-grid">
+
+        <div class="concern">
+          <h3>How do I know my child is improving?</h3>
+          <p>
+            The learning portal provides assessment records and reports that
+            make academic progress easier to monitor.
+          </p>
+        </div>
+
+        <div class="concern">
+          <h3>What if my child struggles with a subject?</h3>
+          <p>
+            Subjects are assigned individually, allowing the learning plan to
+            focus on the subjects the learner actually needs.
+          </p>
+        </div>
+
+        <div class="concern">
+          <h3>Will I know what is happening?</h3>
+          <p>
+            Important schedules, announcements, reports and learning
+            information can be managed through the academy's system.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-inner">
+
+      <div class="section-heading">
+        <span class="eyebrow">Flexible Options</span>
+        <h2>Learning That Fits Your Situation</h2>
+      </div>
+
+      <div class="mode-grid">
+
+        <div class="mode-card">
+          <h3>Home Tutoring</h3>
+          <p>Learning sessions can be arranged at home where available.</p>
+        </div>
+
+        <div class="mode-card">
+          <h3>After School</h3>
+          <p>Students can receive additional academic support after school.</p>
+        </div>
+
+        <div class="mode-card">
+          <h3>Online</h3>
+          <p>Students can participate in lessons remotely where appropriate.</p>
+        </div>
+
+        <div class="mode-card">
+          <h3>Hybrid</h3>
+          <p>A combination of available learning modes can be used.</p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <div class="cta">
+    <div>
+      <h2>Give Your Child a Stronger Foundation for the Future.</h2>
+      <p>
+        Start a conversation with Phos Academy and find out how structured
+        private tutoring can support your learner.
+      </p>
+    </div>
+
+    <button class="btn" onclick="contactWhatsApp()">Talk to Phos Academy</button>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <strong style="color:#fff;">Phos Academy</strong>
+        <p>Structured learning. Personal attention. Better foundations.</p>
+      </div>
+
+      <div>
+        <p>© <span id="year"></span> Phos Academy. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+
+<!-- =====================================================
+     LOGIN PAGE
+===================================================== -->
+
+<div id="loginPage" class="login-page hidden">
+
+  <div class="login-card">
+
+    <div class="logo" style="margin-bottom:20px;">
+      <span class="logo-mark">P</span>
+      <span>Phos Academy</span>
+    </div>
+
+    <h1>Welcome Back</h1>
+    <p>Sign in to access the learning portal.</p>
+
+    <div id="loginAlert"></div>
+
+    <form onsubmit="login(event)">
+
+      <div class="form-group">
+        <label>Username</label>
+        <input id="loginUsername" required autocomplete="username">
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <input id="loginPassword" type="password" required autocomplete="current-password">
+      </div>
+
+      <button class="btn btn-primary" style="width:100%;">
+        Sign In
+      </button>
+
+    </form>
+
+    <button
+      class="btn btn-outline"
+      style="width:100%;margin-top:12px;"
+      onclick="showPublic()">
+      Back to Website
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     APPLICATION
+===================================================== -->
+
+<div id="appPage" class="app hidden">
+
+  <aside id="sidebar" class="sidebar">
+
+    <div class="sidebar-logo">
+      <span>Phos Academy</span>
+    </div>
+
+    <div id="sidebarNav" class="sidebar-nav"></div>
+
+    <div style="padding:15px;">
+      <button
+        class="btn btn-danger"
+        style="width:100%;"
+        onclick="logout()">
+        Logout
+      </button>
+    </div>
+
+  </aside>
+
+  <main class="main">
+
+    <div class="topnav">
+
+      <div style="display:flex;align-items:center;gap:12px;">
+        <button class="mobile-menu" onclick="toggleSidebar()">☰</button>
+        <h2 id="pageTitle">Dashboard</h2>
+      </div>
+
+      <div class="user-area">
+        <span id="topUserName"></span>
+        <div class="avatar" id="topAvatar">P</div>
+      </div>
+
+    </div>
+
+    <div id="content" class="content"></div>
+
+  </main>
+
+</div>
+
+
+<!-- =====================================================
+     MODAL
+===================================================== -->
+
+<div id="modal" class="modal hidden">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3 id="modalTitle">Modal</h3>
+      <button class="close" onclick="closeModal()">×</button>
+    </div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
 
 <script>
-/* ============================================================================
-   CONFIG — edit these before you deploy
-   ========================================================================== */
-const ACADEMY_NAME = "Phos Academy";
-const WHATSAPP_NUMBER = "2347030589293"; // no + sign, no spaces
-const ADMIN_USERNAME = "phosadmin";
-const ADMIN_PASSWORD = "phosacad";
 
-// PASTE YOUR FIREBASE CONFIG HERE (see instructions in the <head> comment)
-
+/* =====================================================
+   FIREBASE
+===================================================== */
 
 const FIREBASE_CONFIG = {
-  apiKey: "AIzaSyCoxi8SmYDyXBi2AJyYXB0EUPygyJlcaKk",
+  apiKey: "AIzaSyCoxi8SmDyXBi2AJyYXB0EUPygyJlcaKk",
   authDomain: "phos-lms.firebaseapp.com",
   projectId: "phos-lms",
   storageBucket: "phos-lms.firebasestorage.app",
@@ -231,1235 +1508,3757 @@ const FIREBASE_CONFIG = {
   measurementId: "G-60FT7XGB2E"
 };
 
-// Initialize Firebase
-//const app = initializeApp(firebaseConfig);
-//const analytics = getAnalytics(app);
-
-const CLASS_LEVELS = ["JSS1","JSS2","JSS3","SS1","SS2","SS3"];
-const SUBJECTS = ["Mathematics","Further Mathematics","Coding","English Language"];
-const MODES = ["Home","After School at QLS","Online","Hybrid"];
-
-/* ============================================================================
-   FIREBASE INIT
-   ========================================================================== */
 let db = null;
 let firebaseReady = false;
-try{
-  if(FIREBASE_CONFIG.apiKey && FIREBASE_CONFIG.apiKey !== "YOUR_API_KEY"){
-    firebase.initializeApp(FIREBASE_CONFIG);
-    db = firebase.firestore();
-    firebaseReady = true;
-  }
-}catch(e){ console.error("Firebase init failed", e); }
 
-function col(name){ return db.collection(name); }
-function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,8); }
-function nowISO(){ return new Date().toISOString(); }
-function fmtDate(iso){ if(!iso) return "—"; const d=new Date(iso); return d.toLocaleDateString(undefined,{day:"2-digit",month:"short",year:"numeric"})+" "+d.toLocaleTimeString(undefined,{hour:"2-digit",minute:"2-digit"}); }
-function esc(s){ return (s||"").toString().replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-
-/* ============================================================================
-   SESSION
-   ========================================================================== */
-function getSession(){ try{ return JSON.parse(localStorage.getItem("phos_session")||"null"); }catch(e){ return null; } }
-function setSession(s){ localStorage.setItem("phos_session", JSON.stringify(s)); }
-function clearSession(){ localStorage.removeItem("phos_session"); }
-
-/* ============================================================================
-   ROOT RENDER
-   ========================================================================== */
-const app = document.getElementById("app");
-const topbarActions = document.getElementById("topbarActions");
-document.getElementById("waFloat").href = "https://wa.me/"+WHATSAPP_NUMBER+"?text="+encodeURIComponent("Hello "+ACADEMY_NAME+", I'd like to enquire about lessons.");
-
-let route = "home"; // home | login | admin | student
-
-function render(){
-  const session = getSession();
-  renderTopbar(session);
-
-  if(!firebaseReady && route !== "home"){
-    app.innerHTML = `<div class="card"><h2>Setup needed</h2>
-      <p class="muted">This portal isn't connected to a database yet. Open this file's source code and paste your Firebase project config where it says "PASTE YOUR FIREBASE CONFIG HERE" near the top of the &lt;script&gt; section. Setup steps are in a comment at the top of the file.</p></div>`;
-    return;
-  }
-
-  if(session && session.role === "admin" && route !== "home"){ renderAdmin(); return; }
-  if(session && session.role === "student" && route !== "home"){ renderStudent(); return; }
-
-  if(route === "login"){ renderLogin(); return; }
-  renderHome();
+try {
+  firebase.initializeApp(FIREBASE_CONFIG);
+  db = firebase.firestore();
+  firebaseReady = true;
+} catch(error) {
+  console.error("Firebase initialization failed:", error);
 }
 
-function renderTopbar(session){
-  let html = "";
-  if(session && session.role === "admin"){
-    html = `<span class="muted" style="font-size:14px;">Admin</span> <button class="btn btn-sm" onclick="logout()">Log out</button>`;
-  } else if(session && session.role === "student"){
-    html = `<span class="muted" style="font-size:14px;">${esc(session.name||session.id)}</span> <button class="btn btn-sm" onclick="logout()">Log out</button>`;
-  } else {
-    html = `<button class="btn" onclick="goto('home')">Home</button> <button class="btn btn-primary" onclick="goto('login')">Log in</button>`;
+
+/* =====================================================
+   CONSTANTS
+===================================================== */
+
+const CLASS_LEVELS = [
+  "JSS1",
+  "JSS2",
+  "JSS3",
+  "SS1",
+  "SS2",
+  "SS3"
+];
+
+const MODES = [
+  "Home",
+  "After School at QLS",
+  "Online",
+  "Hybrid"
+];
+
+const DEFAULT_SUBJECTS = [
+  {
+    name:"Mathematics",
+    description:"Mathematical understanding and problem-solving skills."
+  },
+  {
+    name:"Further Mathematics",
+    description:"Advanced mathematical reasoning and problem-solving."
+  },
+  {
+    name:"Coding",
+    description:"Programming, computational thinking and practical technology skills."
+  },
+  {
+    name:"English Language",
+    description:"Communication, comprehension, grammar and writing."
   }
-  topbarActions.innerHTML = html;
+];
+
+
+/* =====================================================
+   STATE
+===================================================== */
+
+let session = null;
+
+let adminCache = {
+  students:[],
+  subjects:[],
+  schedule:[],
+  announcements:[],
+  messages:[],
+  assessments:[],
+  submissions:[],
+  notifications:[]
+};
+
+let studentCache = {
+  schedule:[],
+  announcements:[],
+  messages:[],
+  assessments:[],
+  submissions:[],
+  notifications:[]
+};
+
+
+/* =====================================================
+   BASIC HELPERS
+===================================================== */
+
+function nowISO(){
+  return new Date().toISOString();
 }
 
-function goto(r){ route = r; render(); window.scrollTo(0,0); }
-function logout(){ clearSession(); goto("home"); }
-
-/* ============================================================================
-   HOME PAGE
-   ========================================================================== */
-function renderHome(){
-  app.innerHTML = `
-    <div class="hero">
-      <h1>${esc(ACADEMY_NAME)}</h1>
-      <p>Focused, personal tutoring in Mathematics, Further Mathematics, Coding and English Language for JSS1–SS3 students — taught the way your child actually learns best.</p>
-      <div class="row">
-        <a class="btn btn-whatsapp" href="https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent('Hello '+ACADEMY_NAME+', I would like to enquire about lessons.')}" target="_blank">💬 Message us on WhatsApp</a>
-        <button class="btn" style="background:#fff;" onclick="goto('login')">Student / Admin Login</button>
-      </div>
-    </div>
-
-    <div class="grid-3">
-      <div class="feature"><h3>Small, personal classes</h3><p class="muted">Every learner is tracked individually — no one gets lost in a crowd.</p></div>
-      <div class="feature"><h3>Flexible modes</h3><p class="muted">Learn at home, after school at QLS, fully online, or a hybrid mix — whatever fits your family.</p></div>
-      <div class="feature"><h3>Real results, tracked</h3><p class="muted">Assessments, instant CBT feedback, and progress reports you and your child can actually see.</p></div>
-    </div>
-
-    <div class="card">
-      <h2>Why parents choose ${esc(ACADEMY_NAME)}</h2>
-      <ul>
-        <li>Curriculum aligned to WAEC / NECO / BECE requirements from JSS1 through SS3.</li>
-        <li>Subjects taught by a dedicated tutor who tracks every student's progress personally.</li>
-        <li>Computer-based tests (CBT) with instant grading for objective assessments, and reviewed feedback on written work.</li>
-        <li>Transparent, easy-to-reach communication — announcements, direct messages and a WhatsApp line always open.</li>
-        <li>Clear fee tracking, so there's never confusion about what's owed or paid.</li>
-      </ul>
-    </div>
-
-    <div class="card">
-      <h2>Subjects &amp; Modes</h2>
-      <div class="row" style="margin-bottom:10px;">
-        ${SUBJECTS.map(s=>`<span class="badge badge-muted">${esc(s)}</span>`).join(" ")}
-      </div>
-      <div class="row">
-        ${MODES.map(m=>`<span class="badge badge-good">${esc(m)}</span>`).join(" ")}
-      </div>
-    </div>
-
-    <div class="card" style="text-align:center;">
-      <h2>Already enrolled?</h2>
-      <p class="muted">Students and the academy admin can log in below to access schedules, classes, assessments and reports.</p>
-      <button class="btn btn-primary" onclick="goto('login')">Go to Login</button>
-    </div>
-  `;
+function escapeHTML(value){
+  if(value === undefined || value === null) return "";
+  return String(value)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 }
 
-/* ============================================================================
-   LOGIN PAGE
-   ========================================================================== */
-let loginMode = "student";
-function renderLogin(){
-  app.innerHTML = `
-    <div class="login-wrap">
-      <div class="card">
-        <h2 style="text-align:center;">Log in to ${esc(ACADEMY_NAME)}</h2>
-        <div class="login-toggle">
-          <button id="tglStudent" class="${loginMode==='student'?'active':''}" onclick="setLoginMode('student')">Student</button>
-          <button id="tglAdmin" class="${loginMode==='admin'?'active':''}" onclick="setLoginMode('admin')">Admin</button>
-        </div>
-        <label>${loginMode==='admin'?'Username':'Student ID'}</label>
-        <input type="text" id="loginId" autocomplete="username">
-        <label>Password</label>
-        <input type="password" id="loginPw" autocomplete="current-password">
-        <button class="btn btn-primary btn-block" style="margin-top:16px;" onclick="doLogin()">Log in</button>
-        <div class="err-msg hidden" id="loginErr"></div>
-      </div>
-    </div>
-  `;
+function col(name){
+  return db.collection(name);
 }
-function setLoginMode(m){ loginMode=m; renderLogin(); }
 
-async function doLogin(){
-  const idVal = document.getElementById("loginId").value.trim();
-  const pw = document.getElementById("loginPw").value;
-  const errEl = document.getElementById("loginErr");
-  errEl.classList.add("hidden");
+function docData(doc){
+  return {
+    id:doc.id,
+    ...doc.data()
+  };
+}
 
-  if(loginMode === "admin"){
-    if(idVal === ADMIN_USERNAME && pw === ADMIN_PASSWORD){
-      setSession({role:"admin"});
-      goto("admin");
-    } else {
-      errEl.textContent = "Incorrect admin username or password.";
-      errEl.classList.remove("hidden");
-    }
-    return;
-  }
+function formatDate(value){
+  if(!value) return "-";
 
-  if(!idVal || !pw){
-    errEl.textContent = "Enter your student ID and password.";
-    errEl.classList.remove("hidden");
-    return;
-  }
   try{
-    const doc = await col("students").doc(idVal).get();
-    if(!doc.exists){
-      errEl.textContent = "No student found with that ID.";
-      errEl.classList.remove("hidden");
-      return;
-    }
-    const data = doc.data();
-    if(data.password !== pw){
-      errEl.textContent = "Incorrect password.";
-      errEl.classList.remove("hidden");
-      return;
-    }
-    setSession({role:"student", id: idVal, name: data.name});
-    goto("student");
-  }catch(e){
-    console.error(e);
-    errEl.textContent = "Couldn't reach the database. Check your connection.";
-    errEl.classList.remove("hidden");
+    const date = new Date(value);
+
+    if(isNaN(date)) return value;
+
+    return date.toLocaleDateString(
+      "en-NG",
+      {
+        day:"2-digit",
+        month:"short",
+        year:"numeric"
+      }
+    );
+  }catch{
+    return value;
   }
 }
 
-/* ============================================================================
-   SHARED HELPERS: notifications
-   ========================================================================== */
-async function addNotification({audience, target, type, message, relatedId}){
-  await col("notifications").add({
-    audience, target: target||null, type, message, relatedId: relatedId||null,
-    read:false, timestamp: nowISO()
+function formatDateTime(value){
+  if(!value) return "-";
+
+  try{
+    const date = new Date(value);
+
+    if(isNaN(date)) return value;
+
+    return date.toLocaleString(
+      "en-NG",
+      {
+        day:"2-digit",
+        month:"short",
+        year:"numeric",
+        hour:"2-digit",
+        minute:"2-digit"
+      }
+    );
+  }catch{
+    return value;
+  }
+}
+
+function showAlert(elementId,message,type="info"){
+  const el = document.getElementById(elementId);
+
+  if(!el) return;
+
+  el.innerHTML = `
+    <div class="alert alert-${type}">
+      ${escapeHTML(message)}
+    </div>
+  `;
+}
+
+function openModal(title,body){
+  document.getElementById("modalTitle").textContent = title;
+  document.getElementById("modalBody").innerHTML = body;
+  document.getElementById("modal").classList.remove("hidden");
+}
+
+function closeModal(){
+  document.getElementById("modal").classList.add("hidden");
+}
+
+function subjectNames(ids=[]){
+  return ids.map(id => {
+    const subject = adminCache.subjects.find(s => s.id === id || s.name === id);
+    return subject ? subject.name : id;
   });
 }
-async function markNotifRead(id){
-  await col("notifications").doc(id).update({read:true});
+
+function subjectExists(name){
+  return adminCache.subjects.some(
+    s => s.name.toLowerCase() === name.trim().toLowerCase()
+  );
 }
 
-/* ============================================================================
-   ============================  ADMIN AREA  ==================================
-   ============================================================================ */
-let adminTab = "overview";
-let adminCache = { students:[], schedule:[], announcements:[], messages:[], assessments:[], submissions:[], notifications:[] };
+
+/* =====================================================
+   NAVIGATION
+===================================================== */
+
+function showPublic(){
+  document.getElementById("publicPage").classList.remove("hidden");
+  document.getElementById("loginPage").classList.add("hidden");
+  document.getElementById("appPage").classList.add("hidden");
+}
+
+function showLogin(){
+  document.getElementById("publicPage").classList.add("hidden");
+  document.getElementById("loginPage").classList.remove("hidden");
+  document.getElementById("appPage").classList.add("hidden");
+}
+
+function toggleSidebar(){
+  document.getElementById("sidebar").classList.toggle("open");
+}
+
+function contactWhatsApp(){
+  const number = "2340000000000";
+  const message = encodeURIComponent(
+    "Hello Phos Academy, I would like to make an enquiry about private tutoring."
+  );
+
+  window.open(
+    `https://wa.me/${number}?text=${message}`,
+    "_blank"
+  );
+}
+
+
+/* =====================================================
+   DEFAULT SUBJECTS
+===================================================== */
+
+async function ensureDefaultSubjects(){
+
+  if(!firebaseReady) return;
+
+  const snapshot = await col("subjects").limit(1).get();
+
+  if(!snapshot.empty) return;
+
+  for(const subject of DEFAULT_SUBJECTS){
+
+    const id = subject.name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g,"-")
+      .replace(/^-|-$/g,"");
+
+    await col("subjects").doc(id).set({
+      name:subject.name,
+      description:subject.description,
+      createdAt:nowISO()
+    });
+  }
+}
+
+
+/* =====================================================
+   PUBLIC SUBJECTS
+===================================================== */
+
+async function loadPublicSubjects(){
+
+  if(!firebaseReady) return;
+
+  try{
+
+    const snapshot = await col("subjects").get();
+
+    if(snapshot.empty) return;
+
+    const subjects = snapshot.docs.map(docData);
+
+    const container = document.getElementById("publicSubjects");
+
+    if(!container) return;
+
+    container.innerHTML = subjects.map(subject => `
+      <div class="subject-card">
+        <h3>${escapeHTML(subject.name)}</h3>
+        <p>
+          ${escapeHTML(
+            subject.description ||
+            "Structured learning and practical support."
+          )}
+        </p>
+      </div>
+    `).join("");
+
+  }catch(error){
+    console.error(error);
+  }
+}
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
+
+async function login(event){
+
+  event.preventDefault();
+
+  const username =
+    document.getElementById("loginUsername").value.trim();
+
+  const password =
+    document.getElementById("loginPassword").value;
+
+  if(
+    username.toLowerCase() === "admin" &&
+    password === "admin123"
+  ){
+
+    session = {
+      role:"admin",
+      id:"admin",
+      name:"Administrator"
+    };
+
+    localStorage.setItem(
+      "phosSession",
+      JSON.stringify(session)
+    );
+
+    await openAdmin();
+
+    return;
+  }
+
+  if(!firebaseReady){
+
+    showAlert(
+      "loginAlert",
+      "Firebase is not connected.",
+      "danger"
+    );
+
+    return;
+  }
+
+  try{
+
+    const snapshot = await col("students")
+      .where("username","==",username)
+      .limit(1)
+      .get();
+
+    if(snapshot.empty){
+
+      showAlert(
+        "loginAlert",
+        "Invalid username or password.",
+        "danger"
+      );
+
+      return;
+    }
+
+    const student = docData(snapshot.docs[0]);
+
+    if(student.password !== password){
+
+      showAlert(
+        "loginAlert",
+        "Invalid username or password.",
+        "danger"
+      );
+
+      return;
+    }
+
+    session = {
+      role:"student",
+      id:student.id,
+      name:student.name
+    };
+
+    localStorage.setItem(
+      "phosSession",
+      JSON.stringify(session)
+    );
+
+    await openStudent(student);
+
+  }catch(error){
+
+    console.error(error);
+
+    showAlert(
+      "loginAlert",
+      "Unable to sign in. Check your Firebase connection and Firestore rules.",
+      "danger"
+    );
+  }
+}
+
+function logout(){
+
+  session = null;
+
+  localStorage.removeItem("phosSession");
+
+  showPublic();
+}
+
+
+/* =====================================================
+   SESSION RESTORE
+===================================================== */
+
+async function restoreSession(){
+
+  const saved = localStorage.getItem("phosSession");
+
+  if(!saved) return;
+
+  try{
+
+    session = JSON.parse(saved);
+
+    if(session.role === "admin"){
+
+      await openAdmin();
+
+    }else if(session.role === "student"){
+
+      if(firebaseReady){
+
+        const doc =
+          await col("students").doc(session.id).get();
+
+        if(doc.exists){
+
+          await openStudent({
+            id:doc.id,
+            ...doc.data()
+          });
+
+        }else{
+
+          logout();
+
+        }
+
+      }
+
+    }
+
+  }catch(error){
+
+    console.error(error);
+
+    logout();
+  }
+}
+
+
+/* =====================================================
+   ADMIN DATA
+===================================================== */
 
 async function loadAdminData(){
-  const [studentsSnap, scheduleSnap, annSnap, msgSnap, assessSnap, subSnap, notifSnap] = await Promise.all([
-    col("students").get(),
+
+  if(!firebaseReady) return;
+
+  const collections = [
+    "students",
+    "subjects",
+    "schedule",
+    "announcements",
+    "messages",
+    "assessments",
+    "submissions",
+    "notifications"
+  ];
+
+  const results = await Promise.all(
+    collections.map(name => col(name).get())
+  );
+
+  collections.forEach((name,index)=>{
+    adminCache[name] =
+      results[index].docs.map(docData);
+  });
+}
+
+
+/* =====================================================
+   STUDENT DATA
+===================================================== */
+
+async function loadStudentData(student){
+
+  if(!firebaseReady) return;
+
+  const [
+    schedule,
+    announcements,
+    messages,
+    assessments,
+    submissions,
+    notifications
+  ] = await Promise.all([
     col("schedule").get(),
     col("announcements").get(),
     col("messages").get(),
     col("assessments").get(),
     col("submissions").get(),
-    col("notifications").where("audience","==","admin").get()
+    col("notifications").get()
   ]);
-  adminCache.students = studentsSnap.docs.map(d=>({id:d.id,...d.data()}));
-  adminCache.schedule = scheduleSnap.docs.map(d=>({id:d.id,...d.data()}));
-  adminCache.announcements = annSnap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>b.timestamp.localeCompare(a.timestamp));
-  adminCache.messages = msgSnap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>a.timestamp.localeCompare(b.timestamp));
-  adminCache.assessments = assessSnap.docs.map(d=>({id:d.id,...d.data()}));
-  adminCache.submissions = subSnap.docs.map(d=>({id:d.id,...d.data()}));
-  adminCache.notifications = notifSnap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>b.timestamp.localeCompare(a.timestamp));
+
+  studentCache.schedule =
+    schedule.docs.map(docData);
+
+  studentCache.announcements =
+    announcements.docs.map(docData);
+
+  studentCache.messages =
+    messages.docs.map(docData);
+
+  studentCache.assessments =
+    assessments.docs.map(docData);
+
+  studentCache.submissions =
+    submissions.docs.map(docData);
+
+  studentCache.notifications =
+    notifications.docs.map(docData);
 }
 
-async function renderAdmin(){
-  app.innerHTML = `<div class="card">Loading admin dashboard…</div>`;
+
+/* =====================================================
+   ADMIN OPEN
+===================================================== */
+
+async function openAdmin(){
+
+  document.getElementById("publicPage").classList.add("hidden");
+  document.getElementById("loginPage").classList.add("hidden");
+  document.getElementById("appPage").classList.remove("hidden");
+
+  await ensureDefaultSubjects();
   await loadAdminData();
-  const unread = adminCache.notifications.filter(n=>!n.read).length;
 
-  app.innerHTML = `
-    <h1>Admin Dashboard</h1>
-    <div class="tabs">
-      ${tabBtn("overview","Overview"+(unread?` <span class="dot">${unread}</span>`:""))}
-      ${tabBtn("students","Students")}
-      ${tabBtn("schedule","Schedule")}
-      ${tabBtn("announcements","Announcements")}
-      ${tabBtn("messages","Messages")}
-      ${tabBtn("assessments","Assessments")}
-      ${tabBtn("fees","Fees")}
-      ${tabBtn("reports","Reports")}
-    </div>
-    <div id="adminTabBody"></div>
+  document.getElementById("topUserName").textContent =
+    "Administrator";
+
+  document.getElementById("topAvatar").textContent = "A";
+
+  renderAdminSidebar();
+
+  showAdminSection("overview");
+}
+
+
+/* =====================================================
+   STUDENT OPEN
+===================================================== */
+
+async function openStudent(student){
+
+  document.getElementById("publicPage").classList.add("hidden");
+  document.getElementById("loginPage").classList.add("hidden");
+  document.getElementById("appPage").classList.remove("hidden");
+
+  await loadStudentData(student);
+
+  document.getElementById("topUserName").textContent =
+    student.name;
+
+  document.getElementById("topAvatar").textContent =
+    student.name.charAt(0).toUpperCase();
+
+  renderStudentSidebar();
+
+  showStudentSection("dashboard");
+}
+
+
+/* =====================================================
+   ADMIN SIDEBAR
+===================================================== */
+
+function renderAdminSidebar(){
+
+  document.getElementById("sidebarNav").innerHTML = `
+
+    <button onclick="showAdminSection('overview')" data-section="overview">
+      Overview
+    </button>
+
+    <button onclick="showAdminSection('students')" data-section="students">
+      Students
+    </button>
+
+    <button onclick="showAdminSection('subjects')" data-section="subjects">
+      Subjects
+    </button>
+
+    <button onclick="showAdminSection('schedule')" data-section="schedule">
+      Schedule
+    </button>
+
+    <button onclick="showAdminSection('announcements')" data-section="announcements">
+      Announcements
+    </button>
+
+    <button onclick="showAdminSection('messages')" data-section="messages">
+      Messages
+    </button>
+
+    <button onclick="showAdminSection('assessments')" data-section="assessments">
+      Assessments
+    </button>
+
+    <button onclick="showAdminSection('fees')" data-section="fees">
+      Fees
+    </button>
+
+    <button onclick="showAdminSection('reports')" data-section="reports">
+      Reports
+    </button>
+
   `;
-  renderAdminTabBody();
-}
-function tabBtn(key,label){
-  return `<button class="tab-btn ${adminTab===key?'active':''}" onclick="setAdminTab('${key}')">${label}</button>`;
-}
-function setAdminTab(k){ adminTab=k; renderAdmin(); }
-
-function renderAdminTabBody(){
-  const el = document.getElementById("adminTabBody");
-  if(adminTab==="overview") el.innerHTML = adminOverviewHTML();
-  else if(adminTab==="students") el.innerHTML = adminStudentsHTML();
-  else if(adminTab==="schedule") el.innerHTML = adminScheduleHTML();
-  else if(adminTab==="announcements") el.innerHTML = adminAnnouncementsHTML();
-  else if(adminTab==="messages") el.innerHTML = adminMessagesHTML();
-  else if(adminTab==="assessments") el.innerHTML = adminAssessmentsHTML();
-  else if(adminTab==="fees") el.innerHTML = adminFeesHTML();
-  else if(adminTab==="reports") el.innerHTML = adminReportsHTML();
-  wireAdminTabEvents();
 }
 
-/* ---------- Overview / Notifications ---------- */
-function adminOverviewHTML(){
-  const pendingReview = adminCache.submissions.filter(s=>s.status==="pending").length;
-  const totalStudents = adminCache.students.length;
-  const notifs = adminCache.notifications;
-  return `
-    <div class="grid-3">
-      <div class="card"><h3>Total students</h3><p style="font-size:28px;font-weight:800;margin:0;">${totalStudents}</p></div>
-      <div class="card"><h3>Theory submissions awaiting review</h3><p style="font-size:28px;font-weight:800;margin:0;color:${pendingReview?'var(--danger)':'var(--good)'};">${pendingReview}</p></div>
-      <div class="card"><h3>Unread notifications</h3><p style="font-size:28px;font-weight:800;margin:0;">${notifs.filter(n=>!n.read).length}</p></div>
+
+/* =====================================================
+   STUDENT SIDEBAR
+===================================================== */
+
+function renderStudentSidebar(){
+
+  document.getElementById("sidebarNav").innerHTML = `
+
+    <button onclick="showStudentSection('dashboard')">
+      Dashboard
+    </button>
+
+    <button onclick="showStudentSection('schedule')">
+      My Schedule
+    </button>
+
+    <button onclick="showStudentSection('announcements')">
+      Announcements
+    </button>
+
+    <button onclick="showStudentSection('messages')">
+      Messages
+    </button>
+
+    <button onclick="showStudentSection('assessments')">
+      Assessments
+    </button>
+
+    <button onclick="showStudentSection('reports')">
+      My Reports
+    </button>
+
+    <button onclick="showStudentSection('fees')">
+      Fees
+    </button>
+
+  `;
+}
+
+
+/* =====================================================
+   ADMIN SECTION ROUTER
+===================================================== */
+
+async function showAdminSection(section){
+
+  document.querySelectorAll(".sidebar-nav button")
+    .forEach(btn=>btn.classList.remove("active"));
+
+  const button =
+    document.querySelector(
+      `.sidebar-nav button[data-section="${section}"]`
+    );
+
+  if(button) button.classList.add("active");
+
+  const titles = {
+    overview:"Overview",
+    students:"Students",
+    subjects:"Subjects",
+    schedule:"Schedule",
+    announcements:"Announcements",
+    messages:"Messages",
+    assessments:"Assessments",
+    fees:"Fees",
+    reports:"Reports"
+  };
+
+  document.getElementById("pageTitle").textContent =
+    titles[section] || "Dashboard";
+
+  if(section === "overview")
+    adminOverview();
+
+  if(section === "students")
+    adminStudents();
+
+  if(section === "subjects")
+    adminSubjects();
+
+  if(section === "schedule")
+    adminSchedule();
+
+  if(section === "announcements")
+    adminAnnouncements();
+
+  if(section === "messages")
+    adminMessages();
+
+  if(section === "assessments")
+    adminAssessments();
+
+  if(section === "fees")
+    adminFees();
+
+  if(section === "reports")
+    adminReports();
+}
+
+
+/* =====================================================
+   STUDENT SECTION ROUTER
+===================================================== */
+
+function showStudentSection(section){
+
+  document.getElementById("pageTitle").textContent =
+    section.charAt(0).toUpperCase() + section.slice(1);
+
+  if(section === "dashboard")
+    studentDashboard();
+
+  if(section === "schedule")
+    studentSchedule();
+
+  if(section === "announcements")
+    studentAnnouncements();
+
+  if(section === "messages")
+    studentMessages();
+
+  if(section === "assessments")
+    studentAssessments();
+
+  if(section === "reports")
+    studentReports();
+
+  if(section === "fees")
+    studentFees();
+}
+
+
+/* =====================================================
+   ADMIN OVERVIEW
+===================================================== */
+
+function adminOverview(){
+
+  const pendingReviews =
+    adminCache.submissions.filter(
+      s => s.reviewed !== true
+    ).length;
+
+  document.getElementById("content").innerHTML = `
+
+    <div class="dashboard-header">
+      <h1>Welcome, Administrator</h1>
+      <p>Manage Phos Academy from one place.</p>
     </div>
+
+    <div class="stat-grid">
+
+      <div class="stat-card">
+        <small>Total Students</small>
+        <strong>${adminCache.students.length}</strong>
+      </div>
+
+      <div class="stat-card">
+        <small>Total Subjects</small>
+        <strong>${adminCache.subjects.length}</strong>
+      </div>
+
+      <div class="stat-card">
+        <small>Assessments</small>
+        <strong>${adminCache.assessments.length}</strong>
+      </div>
+
+      <div class="stat-card">
+        <small>Pending Reviews</small>
+        <strong>${pendingReviews}</strong>
+      </div>
+
+    </div>
+
     <div class="card">
-      <h2>Notifications</h2>
-      ${notifs.length? notifs.map(n=>`
-        <div class="notif-item ${n.read?'':'unread'}">
-          <div>${esc(n.message)}</div>
-          <div class="row" style="justify-content:space-between;margin-top:4px;">
-            <span class="muted" style="font-size:12px;">${fmtDate(n.timestamp)}</span>
-            ${n.read?'':`<button class="btn btn-sm" data-notif="${n.id}">Mark read</button>`}
+
+      <div class="card-title">
+        <h3>Quick Actions</h3>
+      </div>
+
+      <div class="action-row">
+
+        <button
+          class="btn btn-primary"
+          onclick="showAdminSection('students')">
+          Add Student
+        </button>
+
+        <button
+          class="btn btn-outline"
+          onclick="showAdminSection('subjects')">
+          Manage Subjects
+        </button>
+
+        <button
+          class="btn btn-outline"
+          onclick="showAdminSection('schedule')">
+          Add Schedule
+        </button>
+
+        <button
+          class="btn btn-outline"
+          onclick="showAdminSection('assessments')">
+          Create Assessment
+        </button>
+
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <div class="card-title">
+        <h3>Recent Students</h3>
+      </div>
+
+      ${
+        adminCache.students.length
+        ?
+        `<div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Class</th>
+                <th>Mode</th>
+                <th>Subjects</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              ${adminCache.students.slice(-5).reverse().map(student=>`
+
+                <tr>
+                  <td>${escapeHTML(student.name)}</td>
+                  <td>${escapeHTML(student.classLevel)}</td>
+                  <td>${escapeHTML(student.mode)}</td>
+                  <td>${subjectNames(student.subjects || []).map(escapeHTML).join(", ") || "-"}</td>
+                </tr>
+
+              `).join("")}
+            </tbody>
+
+          </table>
+        </div>`
+        :
+        `<div class="empty">No students registered yet.</div>`
+      }
+
+    </div>
+  `;
+}
+
+
+/* =====================================================
+   SUBJECT MANAGEMENT
+===================================================== */
+
+function adminSubjects(){
+
+  const rows = adminCache.subjects.map(subject=>{
+
+    const enrolled =
+      adminCache.students.filter(
+        s => (s.subjects || []).includes(subject.id) ||
+             (s.subjects || []).includes(subject.name)
+      ).length;
+
+    return `
+      <tr>
+
+        <td>
+          <strong>${escapeHTML(subject.name)}</strong>
+        </td>
+
+        <td>
+          ${escapeHTML(subject.description || "-")}
+        </td>
+
+        <td>
+          <span class="badge">${enrolled} student(s)</span>
+        </td>
+
+        <td>
+
+          <div class="action-row">
+
+            <button
+              class="btn btn-outline btn-sm"
+              onclick="editSubject('${subject.id}')">
+              Edit
+            </button>
+
+            <button
+              class="btn btn-danger btn-sm"
+              onclick="deleteSubject('${subject.id}')">
+              Delete
+            </button>
+
           </div>
-        </div>`).join('') : `<div class="empty">No notifications yet.</div>`}
+
+        </td>
+
+      </tr>
+    `;
+  }).join("");
+
+  document.getElementById("content").innerHTML = `
+
+    <div class="dashboard-header">
+      <h1>Subjects</h1>
+      <p>
+        Create and manage the subjects available for individual learners.
+      </p>
+    </div>
+
+    <div class="card">
+
+      <div class="card-title">
+
+        <h3>Subject List</h3>
+
+        <button
+          class="btn btn-primary"
+          onclick="addSubject()">
+          + New Subject
+        </button>
+
+      </div>
+
+      ${
+        adminCache.subjects.length
+        ?
+        `<div class="table-wrap">
+
+          <table>
+
+            <thead>
+              <tr>
+                <th>Subject</th>
+                <th>Description</th>
+                <th>Enrolled Students</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              ${rows}
+            </tbody>
+
+          </table>
+
+        </div>`
+        :
+        `<div class="empty">
+          No subjects created yet.
+        </div>`
+      }
+
+    </div>
+
+    <div class="alert alert-info">
+      Subjects are assigned to individual students. A student's class level
+      does not automatically give the student access to any subject.
     </div>
   `;
 }
 
-/* ---------- Students ---------- */
-function adminStudentsHTML(){
-  return `
-    <div class="card">
-      <h2>Register a new student</h2>
-      <div class="grid-2">
-        <div>
-          <label>Student ID (used to log in)</label>
-          <input type="text" id="stuId" placeholder="e.g. phos001">
-          <label>Full name</label>
-          <input type="text" id="stuName">
-          <label>Password</label>
-          <input type="text" id="stuPw">
-        </div>
-        <div>
-          <label>Class level</label>
-          <select id="stuClass">${CLASS_LEVELS.map(c=>`<option>${c}</option>`).join('')}</select>
-          <label>Learning mode</label>
-          <select id="stuMode">${MODES.map(m=>`<option>${m}</option>`).join('')}</select>
-          <label>Parent/Guardian WhatsApp (optional)</label>
-          <input type="text" id="stuWa" placeholder="e.g. 2348012345678">
-        </div>
-      </div>
-      <label>Subjects enrolled</label>
-      <div class="row">
-        ${SUBJECTS.map(s=>`<label style="display:flex;align-items:center;gap:5px;font-weight:400;"><input type="checkbox" class="stuSubjChk" value="${s}"> ${s}</label>`).join('')}
-      </div>
-      <button class="btn btn-primary" style="margin-top:14px;" id="btnRegisterStudent">Register student</button>
-      <div class="err-msg hidden" id="regErr"></div>
-    </div>
 
-    <div class="card">
-      <h2>All students (${adminCache.students.length})</h2>
-      ${adminCache.students.length ? `
-      <table>
-        <tr><th>ID</th><th>Name</th><th>Class</th><th>Subjects</th><th>Mode</th><th></th></tr>
-        ${adminCache.students.map(s=>`
-          <tr>
-            <td>${esc(s.id)}</td>
-            <td>${esc(s.name)}</td>
-            <td>${esc(s.classLevel)}</td>
-            <td>${(s.subjects||[]).map(x=>`<span class="badge badge-muted">${esc(x)}</span>`).join(' ')}</td>
-            <td>${esc(s.mode)}</td>
-            <td><button class="btn btn-sm" data-edit-student="${s.id}">Edit</button>
-                <button class="btn btn-sm btn-danger" data-del-student="${s.id}">Delete</button></td>
-          </tr>`).join('')}
-      </table>` : `<div class="empty">No students registered yet.</div>`}
-    </div>
-    <div id="editStudentModalHost"></div>
-  `;
+function addSubject(){
+
+  openModal(
+    "Create New Subject",
+    `
+
+      <form onsubmit="saveNewSubject(event)">
+
+        <div class="form-group">
+          <label>Subject Name</label>
+          <input id="newSubjectName" required>
+        </div>
+
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="newSubjectDescription"
+            placeholder="Brief description of the subject"></textarea>
+        </div>
+
+        <button class="btn btn-primary">
+          Create Subject
+        </button>
+
+      </form>
+
+    `
+  );
 }
 
-async function registerStudent(){
-  const id = document.getElementById("stuId").value.trim();
-  const name = document.getElementById("stuName").value.trim();
-  const pw = document.getElementById("stuPw").value.trim();
-  const classLevel = document.getElementById("stuClass").value;
-  const mode = document.getElementById("stuMode").value;
-  const wa = document.getElementById("stuWa").value.trim();
-  const subjects = [...document.querySelectorAll(".stuSubjChk:checked")].map(c=>c.value);
-  const errEl = document.getElementById("regErr");
-  if(!id || !name || !pw){
-    errEl.textContent = "Student ID, name and password are required.";
-    errEl.classList.remove("hidden");
+
+async function saveNewSubject(event){
+
+  event.preventDefault();
+
+  const name =
+    document.getElementById("newSubjectName").value.trim();
+
+  const description =
+    document.getElementById("newSubjectDescription").value.trim();
+
+  if(!name) return;
+
+  if(subjectExists(name)){
+
+    alert("A subject with this name already exists.");
+
     return;
   }
-  const existing = await col("students").doc(id).get();
-  if(existing.exists){
-    errEl.textContent = "A student with that ID already exists.";
-    errEl.classList.remove("hidden");
+
+  const id = name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g,"-")
+    .replace(/^-|-$/g,"")
+    + "-" + Date.now();
+
+  try{
+
+    await col("subjects").doc(id).set({
+      name,
+      description,
+      createdAt:nowISO()
+    });
+
+    closeModal();
+
+    await loadAdminData();
+
+    adminSubjects();
+
+  }catch(error){
+
+    console.error(error);
+
+    alert("Unable to create subject.");
+  }
+}
+
+
+function editSubject(id){
+
+  const subject =
+    adminCache.subjects.find(s=>s.id===id);
+
+  if(!subject) return;
+
+  openModal(
+    "Edit Subject",
+    `
+
+      <form onsubmit="saveSubjectEdit(event,'${id}')">
+
+        <div class="form-group">
+          <label>Subject Name</label>
+
+          <input
+            id="editSubjectName"
+            value="${escapeHTML(subject.name)}"
+            required>
+        </div>
+
+        <div class="form-group">
+
+          <label>Description</label>
+
+          <textarea id="editSubjectDescription">${escapeHTML(
+            subject.description || ""
+          )}</textarea>
+
+        </div>
+
+        <button class="btn btn-primary">
+          Save Changes
+        </button>
+
+      </form>
+
+    `
+  );
+}
+
+
+async function saveSubjectEdit(event,id){
+
+  event.preventDefault();
+
+  const subject =
+    adminCache.subjects.find(s=>s.id===id);
+
+  if(!subject) return;
+
+  const name =
+    document.getElementById("editSubjectName").value.trim();
+
+  const description =
+    document.getElementById("editSubjectDescription").value.trim();
+
+  if(!name) return;
+
+  const duplicate =
+    adminCache.subjects.some(
+      s => s.id !== id &&
+      s.name.toLowerCase() === name.toLowerCase()
+    );
+
+  if(duplicate){
+
+    alert("Another subject already has this name.");
+
     return;
   }
-  await col("students").doc(id).set({
-    name, password: pw, classLevel, mode, subjects, whatsapp: wa,
-    feesRecords: [], createdAt: nowISO()
+
+  await col("subjects").doc(id).update({
+    name,
+    description,
+    updatedAt:nowISO()
   });
-  await addNotification({audience:"admin", type:"info", message:`New student registered: ${name} (${id}).`});
-  renderAdmin();
+
+  /*
+    Update students that stored the old subject name.
+    New records use the subject document ID.
+  */
+
+  const students =
+    adminCache.students.filter(
+      s => (s.subjects || []).includes(subject.name)
+    );
+
+  for(const student of students){
+
+    const updatedSubjects =
+      (student.subjects || []).map(
+        s => s === subject.name ? id : s
+      );
+
+    await col("students")
+      .doc(student.id)
+      .update({
+        subjects:updatedSubjects
+      });
+  }
+
+  closeModal();
+
+  await loadAdminData();
+
+  adminSubjects();
 }
+
+
+async function deleteSubject(id){
+
+  const subject =
+    adminCache.subjects.find(s=>s.id===id);
+
+  if(!subject) return;
+
+  const usedByStudent =
+    adminCache.students.some(
+      s => (s.subjects || []).includes(id) ||
+           (s.subjects || []).includes(subject.name)
+    );
+
+  const usedBySchedule =
+    adminCache.schedule.some(
+      s => s.subject === id ||
+           s.subject === subject.name
+    );
+
+  const usedByAssessment =
+    adminCache.assessments.some(
+      a => a.subject === id ||
+           a.subject === subject.name
+    );
+
+  if(usedByStudent || usedBySchedule || usedByAssessment){
+
+    alert(
+      "This subject is currently being used. Remove it from students, schedules and assessments before deleting it."
+    );
+
+    return;
+  }
+
+  if(!confirm(
+    `Delete "${subject.name}"?`
+  )) return;
+
+  await col("subjects").doc(id).delete();
+
+  await loadAdminData();
+
+  adminSubjects();
+}
+
+
+/* =====================================================
+   STUDENTS
+===================================================== */
+
+function subjectCheckboxes(selected=[]){
+
+  if(!adminCache.subjects.length){
+
+    return `
+      <div class="alert alert-info">
+        No subjects exist yet.
+        Create subjects from the Subjects tab first.
+      </div>
+    `;
+  }
+
+  return `
+    <div class="checkbox-grid">
+
+      ${adminCache.subjects.map(subject=>`
+
+        <label class="checkbox-item">
+
+          <input
+            type="checkbox"
+            name="studentSubjects"
+            value="${escapeHTML(subject.id)}"
+            ${selected.includes(subject.id) || selected.includes(subject.name) ? "checked":""}>
+
+          <span>${escapeHTML(subject.name)}</span>
+
+        </label>
+
+      `).join("")}
+
+    </div>
+  `;
+}
+
+
+function adminStudents(){
+
+  document.getElementById("content").innerHTML = `
+
+    <div class="dashboard-header">
+      <h1>Students</h1>
+      <p>Register learners and assign subjects individually.</p>
+    </div>
+
+    <div class="card">
+
+      <div class="card-title">
+        <h3>Student List</h3>
+
+        <button
+          class="btn btn-primary"
+          onclick="registerStudent()">
+          + Register Student
+        </button>
+      </div>
+
+      ${
+        adminCache.students.length
+        ?
+        `<div class="table-wrap">
+
+          <table>
+
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Class</th>
+                <th>Subjects</th>
+                <th>Mode</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              ${adminCache.students.map(student=>`
+
+                <tr>
+
+                  <td>
+                    <strong>${escapeHTML(student.name)}</strong>
+                  </td>
+
+                  <td>${escapeHTML(student.username || "-")}</td>
+
+                  <td>${escapeHTML(student.classLevel || "-")}</td>
+
+                  <td>
+                    ${subjectNames(student.subjects || [])
+                      .map(
+                        s => `<span class="badge">${escapeHTML(s)}</span>`
+                      )
+                      .join(" ")}
+                  </td>
+
+                  <td>${escapeHTML(student.mode || "-")}</td>
+
+                  <td>
+
+                    <div class="action-row">
+
+                      <button
+                        class="btn btn-outline btn-sm"
+                        onclick="editStudent('${student.id}')">
+                        Edit
+                      </button>
+
+                      <button
+                        class="btn btn-danger btn-sm"
+                        onclick="deleteStudent('${student.id}')">
+                        Delete
+                      </button>
+
+                    </div>
+
+                  </td>
+
+                </tr>
+
+              `).join("")}
+
+            </tbody>
+
+          </table>
+
+        </div>`
+        :
+        `<div class="empty">
+          No students registered yet.
+        </div>`
+      }
+
+    </div>
+  `;
+}
+
+
+function registerStudent(){
+
+  openModal(
+    "Register Student",
+    `
+
+      <form onsubmit="saveStudent(event)">
+
+        <div class="form-grid">
+
+          <div class="form-group">
+            <label>Full Name</label>
+            <input id="studentName" required>
+          </div>
+
+          <div class="form-group">
+            <label>Username</label>
+            <input id="studentUsername" required>
+          </div>
+
+          <div class="form-group">
+            <label>Password</label>
+            <input id="studentPassword" required>
+          </div>
+
+          <div class="form-group">
+            <label>Class Level</label>
+
+            <select id="studentClass" required>
+
+              <option value="">Select class</option>
+
+              ${CLASS_LEVELS.map(
+                c => `<option>${c}</option>`
+              ).join("")}
+
+            </select>
+
+          </div>
+
+          <div class="form-group">
+            <label>Learning Mode</label>
+
+            <select id="studentMode">
+
+              ${MODES.map(
+                m => `<option>${m}</option>`
+              ).join("")}
+
+            </select>
+
+          </div>
+
+          <div class="form-group">
+            <label>WhatsApp</label>
+            <input id="studentWhatsapp">
+          </div>
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Subjects for this Student</label>
+
+          ${subjectCheckboxes([])}
+
+        </div>
+
+        <button class="btn btn-primary">
+          Register Student
+        </button>
+
+      </form>
+
+    `
+  );
+}
+
+
+async function saveStudent(event){
+
+  event.preventDefault();
+
+  const name =
+    document.getElementById("studentName").value.trim();
+
+  const username =
+    document.getElementById("studentUsername").value.trim();
+
+  const password =
+    document.getElementById("studentPassword").value;
+
+  const classLevel =
+    document.getElementById("studentClass").value;
+
+  const mode =
+    document.getElementById("studentMode").value;
+
+  const whatsapp =
+    document.getElementById("studentWhatsapp").value.trim();
+
+  const subjects =
+    [...document.querySelectorAll(
+      'input[name="studentSubjects"]:checked'
+    )].map(input=>input.value);
+
+  const duplicate =
+    adminCache.students.some(
+      s => (s.username || "").toLowerCase() === username.toLowerCase()
+    );
+
+  if(duplicate){
+
+    alert("That username is already being used.");
+
+    return;
+  }
+
+  const id =
+    "student-" + Date.now();
+
+  await col("students").doc(id).set({
+
+    name,
+    username,
+    password,
+    classLevel,
+    mode,
+    subjects,
+    whatsapp,
+    feesRecords:[],
+    createdAt:nowISO()
+
+  });
+
+  closeModal();
+
+  await loadAdminData();
+
+  adminStudents();
+}
+
+
+function editStudent(id){
+
+  const student =
+    adminCache.students.find(s=>s.id===id);
+
+  if(!student) return;
+
+  openModal(
+    "Edit Student",
+    `
+
+      <form onsubmit="updateStudent(event,'${id}')">
+
+        <div class="form-grid">
+
+          <div class="form-group">
+            <label>Full Name</label>
+
+            <input
+              id="editStudentName"
+              value="${escapeHTML(student.name)}"
+              required>
+          </div>
+
+          <div class="form-group">
+            <label>Username</label>
+
+            <input
+              id="editStudentUsername"
+              value="${escapeHTML(student.username || "")}"
+              required>
+          </div>
+
+          <div class="form-group">
+            <label>Password</label>
+
+            <input
+              id="editStudentPassword"
+              value="${escapeHTML(student.password || "")}"
+              required>
+          </div>
+
+          <div class="form-group">
+            <label>Class Level</label>
+
+            <select id="editStudentClass">
+
+              ${CLASS_LEVELS.map(
+                c => `
+                  <option
+                    ${student.classLevel === c ? "selected":""}>
+                    ${c}
+                  </option>
+                `
+              ).join("")}
+
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Learning Mode</label>
+
+            <select id="editStudentMode">
+
+              ${MODES.map(
+                m => `
+                  <option
+                    ${student.mode === m ? "selected":""}>
+                    ${m}
+                  </option>
+                `
+              ).join("")}
+
+            </select>
+
+          </div>
+
+          <div class="form-group">
+            <label>WhatsApp</label>
+
+            <input
+              id="editStudentWhatsapp"
+              value="${escapeHTML(student.whatsapp || "")}">
+
+          </div>
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Subjects Assigned to this Student</label>
+
+          ${subjectCheckboxes(student.subjects || [])}
+
+        </div>
+
+        <button class="btn btn-primary">
+          Save Changes
+        </button>
+
+      </form>
+
+    `
+  );
+}
+
+
+async function updateStudent(event,id){
+
+  event.preventDefault();
+
+  const subjects =
+    [...document.querySelectorAll(
+      'input[name="studentSubjects"]:checked'
+    )].map(input=>input.value);
+
+  await col("students").doc(id).update({
+
+    name:
+      document.getElementById("editStudentName").value.trim(),
+
+    username:
+      document.getElementById("editStudentUsername").value.trim(),
+
+    password:
+      document.getElementById("editStudentPassword").value,
+
+    classLevel:
+      document.getElementById("editStudentClass").value,
+
+    mode:
+      document.getElementById("editStudentMode").value,
+
+    whatsapp:
+      document.getElementById("editStudentWhatsapp").value.trim(),
+
+    subjects,
+
+    updatedAt:nowISO()
+
+  });
+
+  closeModal();
+
+  await loadAdminData();
+
+  adminStudents();
+}
+
 
 async function deleteStudent(id){
-  if(!confirm("Delete this student? This cannot be undone.")) return;
+
+  const student =
+    adminCache.students.find(s=>s.id===id);
+
+  if(!student) return;
+
+  if(!confirm(
+    `Delete ${student.name}? This cannot be undone.`
+  )) return;
+
   await col("students").doc(id).delete();
-  renderAdmin();
+
+  await loadAdminData();
+
+  adminStudents();
 }
 
-function openEditStudent(id){
-  const s = adminCache.students.find(x=>x.id===id);
-  if(!s) return;
-  document.getElementById("editStudentModalHost").innerHTML = `
-    <div class="card" style="border-color:var(--accent);">
-      <h2>Edit ${esc(s.name)} (${esc(s.id)})</h2>
-      <div class="grid-2">
-        <div>
-          <label>Full name</label><input type="text" id="editName" value="${esc(s.name)}">
-          <label>Password</label><input type="text" id="editPw" value="${esc(s.password)}">
-        </div>
-        <div>
-          <label>Class level</label>
-          <select id="editClass">${CLASS_LEVELS.map(c=>`<option ${c===s.classLevel?'selected':''}>${c}</option>`).join('')}</select>
-          <label>Mode</label>
-          <select id="editMode">${MODES.map(m=>`<option ${m===s.mode?'selected':''}>${m}</option>`).join('')}</select>
-        </div>
+
+/* =====================================================
+   SCHEDULE
+===================================================== */
+
+function subjectSelectHTML(id="scheduleSubject",selected=""){
+
+  return `
+    <select id="${id}" required>
+
+      <option value="">Select subject</option>
+
+      ${adminCache.subjects.map(subject=>`
+
+        <option
+          value="${escapeHTML(subject.id)}"
+          ${selected === subject.id || selected === subject.name ? "selected":""}>
+
+          ${escapeHTML(subject.name)}
+
+        </option>
+
+      `).join("")}
+
+    </select>
+  `;
+}
+
+
+function adminSchedule(){
+
+  document.getElementById("content").innerHTML = `
+
+    <div class="dashboard-header">
+      <h1>Schedule</h1>
+      <p>Manage lessons and class information.</p>
+    </div>
+
+    <div class="card">
+
+      <div class="card-title">
+
+        <h3>Lesson Schedule</h3>
+
+        <button
+          class="btn btn-primary"
+          onclick="addSchedule()">
+          + Add Lesson
+        </button>
+
       </div>
-      <label>Subjects enrolled</label>
-      <div class="row">
-        ${SUBJECTS.map(subj=>`<label style="display:flex;align-items:center;gap:5px;font-weight:400;"><input type="checkbox" class="editSubjChk" value="${subj}" ${(s.subjects||[]).includes(subj)?'checked':''}> ${subj}</label>`).join('')}
-      </div>
-      <div class="row" style="margin-top:14px;">
-        <button class="btn btn-primary" id="btnSaveStudentEdit" data-id="${s.id}">Save changes</button>
-        <button class="btn" onclick="document.getElementById('editStudentModalHost').innerHTML=''">Cancel</button>
-      </div>
+
+      ${
+        adminCache.schedule.length
+        ?
+        `<div class="table-wrap">
+
+          <table>
+
+            <thead>
+              <tr>
+                <th>Subject</th>
+                <th>Class</th>
+                <th>Mode</th>
+                <th>Day</th>
+                <th>Time</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              ${adminCache.schedule.map(item=>`
+
+                <tr>
+
+                  <td>${escapeHTML(
+                    adminCache.subjects.find(
+                      s=>s.id===item.subject
+                    )?.name || item.subject
+                  )}</td>
+
+                  <td>${escapeHTML(item.classLevel || "All")}</td>
+
+                  <td>${escapeHTML(item.mode || "-")}</td>
+
+                  <td>${escapeHTML(item.day || "-")}</td>
+
+                  <td>${escapeHTML(item.time || "-")}</td>
+
+                  <td>
+
+                    <button
+                      class="btn btn-danger btn-sm"
+                      onclick="deleteSchedule('${item.id}')">
+                      Delete
+                    </button>
+
+                  </td>
+
+                </tr>
+
+              `).join("")}
+
+            </tbody>
+
+          </table>
+
+        </div>`
+        :
+        `<div class="empty">No schedule entries yet.</div>`
+      }
+
     </div>
   `;
-  document.getElementById("btnSaveStudentEdit").onclick = ()=>saveStudentEdit(s.id);
 }
 
-async function saveStudentEdit(id){
-  const name = document.getElementById("editName").value.trim();
-  const password = document.getElementById("editPw").value.trim();
-  const classLevel = document.getElementById("editClass").value;
-  const mode = document.getElementById("editMode").value;
-  const subjects = [...document.querySelectorAll(".editSubjChk:checked")].map(c=>c.value);
-  await col("students").doc(id).update({name,password,classLevel,mode,subjects});
-  renderAdmin();
-}
 
-/* ---------- Schedule ---------- */
-function adminScheduleHTML(){
-  return `
-    <div class="card">
-      <h2>Add a schedule entry</h2>
-      <div class="grid-2">
-        <div>
-          <label>Class level</label>
-          <select id="schClass"><option value="all">All classes</option>${CLASS_LEVELS.map(c=>`<option>${c}</option>`).join('')}</select>
+function addSchedule(){
+
+  openModal(
+    "Add Lesson",
+    `
+
+      <form onsubmit="saveSchedule(event)">
+
+        <div class="form-group">
+
           <label>Subject</label>
-          <select id="schSubject">${SUBJECTS.map(s=>`<option>${s}</option>`).join('')}</select>
-          <label>Mode</label>
-          <select id="schMode">${MODES.map(m=>`<option>${m}</option>`).join('')}</select>
-        </div>
-        <div>
-          <label>Day of week</label>
-          <select id="schDay">${["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"].map(d=>`<option>${d}</option>`).join('')}</select>
-          <label>Time</label>
-          <input type="time" id="schTime">
-          <label>Online class link (if applicable)</label>
-          <input type="text" id="schLink" placeholder="https://meet.google.com/... or Zoom link">
-        </div>
-      </div>
-      <button class="btn btn-primary" style="margin-top:14px;" id="btnAddSchedule">Add to schedule</button>
-    </div>
-    <div class="card">
-      <h2>Current schedule</h2>
-      ${adminCache.schedule.length ? `
-      <table>
-        <tr><th>Class</th><th>Subject</th><th>Day</th><th>Time</th><th>Mode</th><th>Link</th><th></th></tr>
-        ${adminCache.schedule.map(s=>`
-          <tr>
-            <td>${esc(s.classLevel)}</td><td>${esc(s.subject)}</td><td>${esc(s.day)}</td><td>${esc(s.time)}</td><td>${esc(s.mode)}</td>
-            <td>${s.onlineLink?`<a href="${esc(s.onlineLink)}" target="_blank">Link</a>`:'—'}</td>
-            <td><button class="btn btn-sm btn-danger" data-del-schedule="${s.id}">Delete</button></td>
-          </tr>`).join('')}
-      </table>` : `<div class="empty">No schedule entries yet.</div>`}
-    </div>
-  `;
-}
-async function addScheduleEntry(){
-  const classLevel = document.getElementById("schClass").value;
-  const subject = document.getElementById("schSubject").value;
-  const mode = document.getElementById("schMode").value;
-  const day = document.getElementById("schDay").value;
-  const time = document.getElementById("schTime").value;
-  const onlineLink = document.getElementById("schLink").value.trim();
-  if(!time){ alert("Please set a time."); return; }
-  await col("schedule").add({classLevel,subject,mode,day,time,onlineLink,createdAt:nowISO()});
-  renderAdmin();
-}
-async function deleteSchedule(id){
-  await col("schedule").doc(id).delete();
-  renderAdmin();
-}
 
-/* ---------- Announcements ---------- */
-let annAudienceType = "all";
-function setAnnAudienceType(v){ annAudienceType=v; renderAdmin(); }
-function announcementAudienceLabel(a){
-  if(a.audienceType==='all') return 'All students';
-  if(a.audienceType==='subject') return a.subject;
-  if(a.audienceType==='specific') return `${(a.targets||[]).length} selected student(s)`;
-  return a.subject==='all' ? 'All students' : a.subject; // backward compat
-}
-function adminAnnouncementsHTML(){
-  return `
-    <div class="card">
-      <h2>New announcement</h2>
-      <label>Audience</label>
-      <select id="annAudienceType" onchange="setAnnAudienceType(this.value)">
-        <option value="all" ${annAudienceType==='all'?'selected':''}>All students</option>
-        <option value="subject" ${annAudienceType==='subject'?'selected':''}>Everyone taking a subject</option>
-        <option value="specific" ${annAudienceType==='specific'?'selected':''}>Specific students</option>
-      </select>
-      ${annAudienceType==='subject' ? `
-        <label>Subject</label>
-        <select id="annSubjectPick">${SUBJECTS.map(s=>`<option>${s}</option>`).join('')}</select>
-      ` : ''}
-      ${annAudienceType==='specific' ? `
-        <label>Select students</label>
-        <div style="max-height:180px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;padding:8px;">
-          ${adminCache.students.length ? adminCache.students.map(s=>`<label style="display:flex;align-items:center;gap:6px;font-weight:400;padding:3px 0;"><input type="checkbox" class="annTargetChk" value="${s.id}"> ${esc(s.name)} (${s.id}) <span class="muted">— ${(s.subjects||[]).join(', ')}</span></label>`).join('') : '<span class="muted">No students registered yet.</span>'}
+          ${subjectSelectHTML()}
+
         </div>
-      ` : ''}
-      <label>Message</label>
-      <textarea id="annMsg" placeholder="e.g. There will be no class this Saturday due to..."></textarea>
-      <button class="btn btn-primary" style="margin-top:12px;" id="btnPostAnnouncement">Publish announcement</button>
-    </div>
-    <div class="card">
-      <h2>Published announcements</h2>
-      ${adminCache.announcements.length ? adminCache.announcements.map(a=>`
-        <div class="notif-item">
-          <div class="row" style="justify-content:space-between;">
-            <span class="badge badge-muted">${announcementAudienceLabel(a)}</span>
-            <span class="muted" style="font-size:12px;">${fmtDate(a.timestamp)}</span>
+
+        <div class="form-grid">
+
+          <div class="form-group">
+
+            <label>Class Level</label>
+
+            <select id="scheduleClass">
+
+              <option value="all">All Classes</option>
+
+              ${CLASS_LEVELS.map(
+                c=>`<option>${c}</option>`
+              ).join("")}
+
+            </select>
+
           </div>
-          <div style="margin-top:6px;">${esc(a.message)}</div>
-        </div>`).join('') : `<div class="empty">No announcements yet.</div>`}
-    </div>
-  `;
-}
-async function postAnnouncement(){
-  const message = document.getElementById("annMsg").value.trim();
-  if(!message){ alert("Write a message first."); return; }
-  const doc = {audienceType: annAudienceType, message, timestamp: nowISO()};
-  let recipients = [];
-  if(annAudienceType==='all'){
-    recipients = adminCache.students.map(s=>s.id);
-  } else if(annAudienceType==='subject'){
-    const subject = document.getElementById("annSubjectPick").value;
-    doc.subject = subject;
-    recipients = adminCache.students.filter(s=>(s.subjects||[]).includes(subject)).map(s=>s.id);
-  } else if(annAudienceType==='specific'){
-    const targets = [...document.querySelectorAll(".annTargetChk:checked")].map(c=>c.value);
-    if(targets.length===0){ alert("Select at least one student."); return; }
-    doc.targets = targets;
-    recipients = targets;
-  }
-  await col("announcements").add(doc);
-  for(const id of recipients){
-    await addNotification({audience:id, type:"announcement", message:"New announcement posted — check the Announcements tab."});
-  }
-  await addNotification({audience:"admin", type:"info", message:`Announcement posted to ${recipients.length} student(s).`});
-  document.getElementById("annMsg").value = "";
-  renderAdmin();
+
+          <div class="form-group">
+
+            <label>Mode</label>
+
+            <select id="scheduleMode">
+
+              ${MODES.map(
+                m=>`<option>${m}</option>`
+              ).join("")}
+
+            </select>
+
+          </div>
+
+          <div class="form-group">
+
+            <label>Day</label>
+
+            <select id="scheduleDay">
+
+              ${[
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday",
+                "Saturday",
+                "Sunday"
+              ].map(
+                d=>`<option>${d}</option>`
+              ).join("")}
+
+            </select>
+
+          </div>
+
+          <div class="form-group">
+
+            <label>Time</label>
+
+            <input
+              id="scheduleTime"
+              placeholder="4:00 PM - 5:00 PM"
+              required>
+
+          </div>
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Online Link</label>
+
+          <input
+            id="scheduleLink"
+            placeholder="Optional">
+
+        </div>
+
+        <button class="btn btn-primary">
+          Save Schedule
+        </button>
+
+      </form>
+
+    `
+  );
 }
 
-/* ---------- Messages ---------- */
-let selectedMessageThread = null; // studentId or {subjectBroadcast: name} or null (compose new)
-function adminMessagesHTML(){
-  const studentThreads = adminCache.students.map(s=>{
-    const msgs = adminCache.messages.filter(m => (m.direction==="student-to-admin" && m.studentId===s.id) || (m.direction==="admin-to-student" && m.audience==="direct" && m.target===s.id));
-    const lastMsg = msgs[msgs.length-1];
-    const unread = adminCache.messages.filter(m=>m.direction==="student-to-admin" && m.studentId===s.id && !m.read).length;
-    return {id:s.id, name:s.name, lastMsg, unread};
+
+async function saveSchedule(event){
+
+  event.preventDefault();
+
+  await col("schedule").add({
+
+    subject:
+      document.getElementById("scheduleSubject").value,
+
+    classLevel:
+      document.getElementById("scheduleClass").value,
+
+    mode:
+      document.getElementById("scheduleMode").value,
+
+    day:
+      document.getElementById("scheduleDay").value,
+
+    time:
+      document.getElementById("scheduleTime").value,
+
+    onlineLink:
+      document.getElementById("scheduleLink").value.trim(),
+
+    createdAt:nowISO()
+
   });
-  return `
-    <div class="grid-2">
-      <div class="card">
-        <h2>Conversations</h2>
-        ${studentThreads.map(t=>`
-          <div class="row" style="justify-content:space-between;padding:8px 4px;border-bottom:1px solid var(--border);cursor:pointer;" data-open-thread="${t.id}">
-            <span>${esc(t.name)} ${t.unread?`<span class="dot">${t.unread}</span>`:''}</span>
-            <span class="muted" style="font-size:12px;">${t.lastMsg?fmtDate(t.lastMsg.timestamp):''}</span>
-          </div>`).join('')}
-      </div>
-      <div class="card">
-        <h2>Send a message</h2>
-        <label>Send to</label>
-        <select id="msgTargetType" onchange="renderAdmin()">
-          <option value="direct">One student</option>
-          <option value="subject">Everyone in a subject</option>
-          <option value="all">All students</option>
-        </select>
-        <div id="msgTargetStudentWrap">
-          <label>Student</label>
-          <select id="msgTargetStudent">${adminCache.students.map(s=>`<option value="${s.id}">${esc(s.name)} (${s.id})</option>`).join('')}</select>
-        </div>
-        <label>Message</label>
-        <textarea id="msgBody" placeholder="Type your message..."></textarea>
-        <button class="btn btn-primary" style="margin-top:10px;" id="btnSendAdminMsg">Send</button>
-      </div>
+
+  closeModal();
+
+  await loadAdminData();
+
+  adminSchedule();
+}
+
+
+async function deleteSchedule(id){
+
+  if(!confirm("Delete this schedule entry?")) return;
+
+  await col("schedule").doc(id).delete();
+
+  await loadAdminData();
+
+  adminSchedule();
+}
+
+
+/* =====================================================
+   ANNOUNCEMENTS
+===================================================== */
+
+function adminAnnouncements(){
+
+  document.getElementById("content").innerHTML = `
+
+    <div class="dashboard-header">
+      <h1>Announcements</h1>
+      <p>Share important information with learners.</p>
     </div>
-    <div class="card" id="threadView">
-      ${selectedMessageThread ? renderThreadMessages(selectedMessageThread) : `<div class="empty">Select a conversation to view it, or send a new message.</div>`}
+
+    <div class="card">
+
+      <div class="card-title">
+
+        <h3>Announcements</h3>
+
+        <button
+          class="btn btn-primary"
+          onclick="addAnnouncement()">
+          + New Announcement
+        </button>
+
+      </div>
+
+      ${
+        adminCache.announcements.length
+        ?
+        adminCache.announcements.map(a=>`
+
+          <div class="notice">
+
+            <h4>${escapeHTML(a.title)}</h4>
+
+            <small>
+              ${formatDateTime(a.createdAt)}
+            </small>
+
+            <p style="margin-top:8px;">
+              ${escapeHTML(a.body)}
+            </p>
+
+            <button
+              class="btn btn-danger btn-sm"
+              style="margin-top:10px;"
+              onclick="deleteAnnouncement('${a.id}')">
+              Delete
+            </button>
+
+          </div>
+
+        `).join("")
+        :
+        `<div class="empty">No announcements yet.</div>`
+      }
+
     </div>
   `;
 }
-function renderThreadMessages(studentId){
-  const s = adminCache.students.find(x=>x.id===studentId);
-  const msgs = adminCache.messages.filter(m => (m.direction==="student-to-admin" && m.studentId===studentId) || (m.direction==="admin-to-student" && m.audience==="direct" && m.target===studentId));
-  return `<h2>Conversation with ${s?esc(s.name):studentId}</h2>` + (msgs.length? msgs.map(m=>`
-      <div class="msg-bubble ${m.direction==='admin-to-student'?'msg-from-admin':'msg-from-student'}">
-        <div>${esc(m.message)}</div>
-        <div class="msg-time">${m.direction==='admin-to-student'?'You':esc(s?s.name:'Student')} · ${fmtDate(m.timestamp)}</div>
-      </div>`).join('') : `<div class="empty">No messages yet.</div>`);
+
+
+function addAnnouncement(){
+
+  openModal(
+    "New Announcement",
+    `
+
+      <form onsubmit="saveAnnouncement(event)">
+
+        <div class="form-group">
+          <label>Title</label>
+          <input id="announcementTitle" required>
+        </div>
+
+        <div class="form-group">
+          <label>Message</label>
+          <textarea id="announcementBody" required></textarea>
+        </div>
+
+        <div class="form-group">
+
+          <label>Audience</label>
+
+          <select id="announcementAudience">
+
+            <option value="all">All Students</option>
+            <option value="subject">Students Taking a Subject</option>
+            <option value="specific">Specific Student</option>
+
+          </select>
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Subject (if applicable)</label>
+
+          ${subjectSelectHTML("announcementSubject")}
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Student ID (if applicable)</label>
+
+          <select id="announcementStudent">
+
+            <option value="">Select student</option>
+
+            ${adminCache.students.map(
+              s=>`
+                <option value="${s.id}">
+                  ${escapeHTML(s.name)}
+                </option>
+              `
+            ).join("")}
+
+          </select>
+
+        </div>
+
+        <button class="btn btn-primary">
+          Publish
+        </button>
+
+      </form>
+
+    `
+  );
 }
-function openThread(id){ selectedMessageThread = id; renderAdmin(); }
 
-/* ---------- Assessments ---------- */
-let newAssessQuestions = [];
-let asAudienceType = "subject";
-function setAsAudienceType(v){ asAudienceType=v; renderAdmin(); }
-function adminAssessmentsHTML(){
-  const pending = adminCache.submissions.filter(s=>s.status==="pending");
-  return `
+
+async function saveAnnouncement(event){
+
+  event.preventDefault();
+
+  await col("announcements").add({
+
+    title:
+      document.getElementById("announcementTitle").value.trim(),
+
+    body:
+      document.getElementById("announcementBody").value.trim(),
+
+    audience:
+      document.getElementById("announcementAudience").value,
+
+    subject:
+      document.getElementById("announcementSubject").value,
+
+    studentId:
+      document.getElementById("announcementStudent").value,
+
+    createdAt:nowISO()
+
+  });
+
+  closeModal();
+
+  await loadAdminData();
+
+  adminAnnouncements();
+}
+
+
+async function deleteAnnouncement(id){
+
+  if(!confirm("Delete this announcement?")) return;
+
+  await col("announcements").doc(id).delete();
+
+  await loadAdminData();
+
+  adminAnnouncements();
+}
+
+
+/* =====================================================
+   MESSAGES
+===================================================== */
+
+function adminMessages(){
+
+  document.getElementById("content").innerHTML = `
+
+    <div class="dashboard-header">
+      <h1>Messages</h1>
+      <p>Send direct messages to learners.</p>
+    </div>
+
     <div class="card">
-      <h2>Create assessment</h2>
-      <div class="grid-2">
-        <div>
-          <label>Title</label><input type="text" id="asTitle" placeholder="e.g. Simultaneous Equations Test">
-          <label>Subject</label><select id="asSubject">${SUBJECTS.map(s=>`<option>${s}</option>`).join('')}</select>
-        </div>
-        <div>
-          <label>Type</label><select id="asType" onchange="renderAdmin()"><option value="mcq">Multiple Choice (auto-graded)</option><option value="theory">Theory (reviewed by you)</option></select>
-          <label>Due date (optional)</label>
-          <input type="date" id="asDue">
-        </div>
+
+      <div class="card-title">
+
+        <h3>Messages</h3>
+
+        <button
+          class="btn btn-primary"
+          onclick="addMessage()">
+          + New Message
+        </button>
+
       </div>
 
-      <label>Assign to</label>
-      <select id="asAudienceType" onchange="setAsAudienceType(this.value)">
-        <option value="subject" ${asAudienceType==='subject'?'selected':''}>Everyone taking this subject</option>
-        <option value="specific" ${asAudienceType==='specific'?'selected':''}>Specific students</option>
-      </select>
-      ${asAudienceType==='subject' ? `
-        <label>Class level</label>
-        <select id="asClass">
-          <option value="all">All classes</option>
-          ${CLASS_LEVELS.map(c=>`<option>${c}</option>`).join('')}
-        </select>
-      ` : `
-        <label>Select students (subject shown above is used for grouping/reports)</label>
-        <div style="max-height:180px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;padding:8px;">
-          ${adminCache.students.length ? adminCache.students.map(s=>`<label style="display:flex;align-items:center;gap:6px;font-weight:400;padding:3px 0;"><input type="checkbox" class="asTargetChk" value="${s.id}"> ${esc(s.name)} (${s.id}) <span class="muted">— ${(s.subjects||[]).join(', ')}</span></label>`).join('') : '<span class="muted">No students registered yet.</span>'}
-        </div>
-      `}
+      ${
+        adminCache.messages.length
+        ?
+        adminCache.messages.map(m=>`
 
-      <h3 style="margin-top:16px;">Questions</h3>
-      <div id="asQuestionsList">${renderQuestionBuilder()}</div>
-      <button class="btn btn-sm" id="btnAddQuestion" style="margin-top:8px;">+ Add question</button>
-      <div>
-        <button class="btn btn-primary" style="margin-top:16px;" id="btnCreateAssessment">Publish assessment</button>
-      </div>
-    </div>
+          <div class="notice">
 
-    <div class="card">
-      <h2>Theory submissions awaiting review ${pending.length?`<span class="dot">${pending.length}</span>`:''}</h2>
-      ${pending.length ? pending.map(sub=>{
-        const a = adminCache.assessments.find(x=>x.id===sub.assessmentId);
-        const stu = adminCache.students.find(x=>x.id===sub.studentId);
-        return `<div class="notif-item">
-          <div><strong>${esc(stu?stu.name:sub.studentId)}</strong> — ${esc(a?a.title:'Assessment')}</div>
-          <div class="muted" style="font-size:12px;">Submitted ${fmtDate(sub.submittedAt)}</div>
-          <button class="btn btn-sm" style="margin-top:6px;" data-grade-sub="${sub.id}">Review &amp; grade</button>
-        </div>`;
-      }).join('') : `<div class="empty">Nothing awaiting review.</div>`}
-    </div>
+            <h4>${escapeHTML(m.subject || "Message")}</h4>
 
-    <div class="card">
-      <h2>All assessments</h2>
-      ${adminCache.assessments.length ? `
-      <table>
-        <tr><th>Title</th><th>Subject</th><th>Class</th><th>Type</th><th>Submissions</th></tr>
-        ${adminCache.assessments.map(a=>{
-          const count = adminCache.submissions.filter(s=>s.assessmentId===a.id).length;
-          const audienceCell = a.assignedTo ? `${a.assignedTo.length} student(s)` : (a.classLevel==='all' ? 'All classes' : esc(a.classLevel));
-          return `<tr><td>${esc(a.title)}</td><td>${esc(a.subject)}</td><td>${audienceCell}</td><td>${a.type==='mcq'?'MCQ':'Theory'}</td><td>${count}</td></tr>`;
-        }).join('')}
-      </table>`: `<div class="empty">No assessments created yet.</div>`}
+            <small>
+              ${formatDateTime(m.createdAt)}
+            </small>
+
+            <p style="margin-top:8px;">
+              ${escapeHTML(m.body)}
+            </p>
+
+          </div>
+
+        `).join("")
+        :
+        `<div class="empty">No messages yet.</div>`
+      }
+
     </div>
-    <div id="gradeModalHost"></div>
   `;
 }
-function renderQuestionBuilder(){
-  const type = document.getElementById("asType")?.value || "mcq";
-  if(newAssessQuestions.length===0) newAssessQuestions.push(blankQuestion(type));
-  return newAssessQuestions.map((q,i)=>{
-    if(type==="mcq"){
-      return `<div class="q-block">
-        <label>Question ${i+1}</label>
-        <input type="text" class="qText" data-i="${i}" value="${esc(q.q)}">
-        ${[0,1,2,3].map(oi=>`
-          <div class="opt-row">
-            <input type="radio" name="correct${i}" ${q.correctIndex===oi?'checked':''} class="qCorrect" data-i="${i}" data-oi="${oi}">
-            <input type="text" class="qOpt" data-i="${i}" data-oi="${oi}" placeholder="Option ${oi+1}" value="${esc(q.options[oi]||'')}" style="flex:1;">
-          </div>`).join('')}
-        ${newAssessQuestions.length>1?`<button class="btn btn-sm btn-danger" data-rm-q="${i}">Remove question</button>`:''}
-      </div>`;
-    } else {
-      return `<div class="q-block">
-        <label>Question ${i+1}</label>
-        <input type="text" class="qText" data-i="${i}" value="${esc(q.q)}">
-        ${newAssessQuestions.length>1?`<button class="btn btn-sm btn-danger" data-rm-q="${i}">Remove question</button>`:''}
-      </div>`;
-    }
-  }).join('');
+
+
+function addMessage(){
+
+  openModal(
+    "Send Message",
+    `
+
+      <form onsubmit="saveMessage(event)">
+
+        <div class="form-group">
+          <label>Subject</label>
+          <input id="messageSubject" required>
+        </div>
+
+        <div class="form-group">
+          <label>Message</label>
+          <textarea id="messageBody" required></textarea>
+        </div>
+
+        <div class="form-group">
+
+          <label>Recipient</label>
+
+          <select id="messageRecipient">
+
+            <option value="all">All Students</option>
+
+            ${adminCache.students.map(
+              s=>`
+                <option value="${s.id}">
+                  ${escapeHTML(s.name)}
+                </option>
+              `
+            ).join("")}
+
+          </select>
+
+        </div>
+
+        <button class="btn btn-primary">
+          Send Message
+        </button>
+
+      </form>
+
+    `
+  );
 }
-function blankQuestion(type){
-  return type==="mcq" ? {q:"",options:["","","",""],correctIndex:0} : {q:""};
+
+
+async function saveMessage(event){
+
+  event.preventDefault();
+
+  await col("messages").add({
+
+    subject:
+      document.getElementById("messageSubject").value.trim(),
+
+    body:
+      document.getElementById("messageBody").value.trim(),
+
+    recipient:
+      document.getElementById("messageRecipient").value,
+
+    createdAt:nowISO()
+
+  });
+
+  closeModal();
+
+  await loadAdminData();
+
+  adminMessages();
 }
-async function createAssessment(){
-  const title = document.getElementById("asTitle").value.trim();
-  const subject = document.getElementById("asSubject").value;
-  const type = document.getElementById("asType").value;
-  const dueDate = document.getElementById("asDue").value;
-  if(!title || newAssessQuestions.some(q=>!q.q.trim())){
-    alert("Give the assessment a title and make sure every question has text.");
+
+
+/* =====================================================
+   ASSESSMENTS
+===================================================== */
+
+function adminAssessments(){
+
+  document.getElementById("content").innerHTML = `
+
+    <div class="dashboard-header">
+
+      <h1>Assessments</h1>
+
+      <p>
+        Create tests based on subject enrolment.
+        Class level does not determine assessment access.
+      </p>
+
+    </div>
+
+    <div class="card">
+
+      <div class="card-title">
+
+        <h3>Assessment List</h3>
+
+        <button
+          class="btn btn-primary"
+          onclick="createAssessment()">
+          + Create Assessment
+        </button>
+
+      </div>
+
+      ${
+        adminCache.assessments.length
+        ?
+        `<div class="table-wrap">
+
+          <table>
+
+            <thead>
+
+              <tr>
+                <th>Title</th>
+                <th>Subject</th>
+                <th>Type</th>
+                <th>Due Date</th>
+                <th>Actions</th>
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              ${adminCache.assessments.map(a=>`
+
+                <tr>
+
+                  <td>${escapeHTML(a.title)}</td>
+
+                  <td>${escapeHTML(
+                    adminCache.subjects.find(
+                      s=>s.id===a.subject
+                    )?.name || a.subject || "-"
+                  )}</td>
+
+                  <td>${escapeHTML(a.type || "-")}</td>
+
+                  <td>${formatDate(a.dueDate)}</td>
+
+                  <td>
+
+                    <button
+                      class="btn btn-danger btn-sm"
+                      onclick="deleteAssessment('${a.id}')">
+                      Delete
+                    </button>
+
+                  </td>
+
+                </tr>
+
+              `).join("")}
+
+            </tbody>
+
+          </table>
+
+        </div>`
+        :
+        `<div class="empty">
+          No assessments created yet.
+        </div>`
+      }
+
+    </div>
+  `;
+}
+
+
+function createAssessment(){
+
+  openModal(
+    "Create Assessment",
+    `
+
+      <form onsubmit="saveAssessment(event)">
+
+        <div class="form-grid">
+
+          <div class="form-group">
+            <label>Title</label>
+            <input id="assessmentTitle" required>
+          </div>
+
+          <div class="form-group">
+
+            <label>Subject</label>
+
+            ${subjectSelectHTML("assessmentSubject")}
+
+          </div>
+
+          <div class="form-group">
+
+            <label>Type</label>
+
+            <select id="assessmentType">
+
+              <option value="MCQ">Multiple Choice</option>
+              <option value="Theory">Theory</option>
+
+            </select>
+
+          </div>
+
+          <div class="form-group">
+
+            <label>Due Date</label>
+
+            <input
+              id="assessmentDueDate"
+              type="date">
+
+          </div>
+
+        </div>
+
+        <div class="form-group">
+
+          <label>
+            Questions
+          </label>
+
+          <textarea
+            id="assessmentQuestions"
+            placeholder="For MCQ use JSON format. Example:
+[
+  {
+    &quot;question&quot;:&quot;What is 2 + 2?&quot;,
+    &quot;options&quot;:[&quot;3&quot;,&quot;4&quot;,&quot;5&quot;],
+    &quot;answer&quot;:&quot;4&quot;
+  }
+]
+
+For theory:
+[
+  {
+    &quot;question&quot;:&quot;Explain photosynthesis.&quot;
+  }
+]"
+            required></textarea>
+
+        </div>
+
+        <div class="alert alert-info">
+
+          Every student who is enrolled in the selected subject will
+          automatically be eligible for this assessment.
+
+          Class level is not used to determine eligibility.
+
+        </div>
+
+        <button class="btn btn-primary">
+          Create Assessment
+        </button>
+
+      </form>
+
+    `
+  );
+}
+
+
+async function saveAssessment(event){
+
+  event.preventDefault();
+
+  const title =
+    document.getElementById("assessmentTitle").value.trim();
+
+  const subject =
+    document.getElementById("assessmentSubject").value;
+
+  const type =
+    document.getElementById("assessmentType").value;
+
+  const dueDate =
+    document.getElementById("assessmentDueDate").value;
+
+  let questions;
+
+  try{
+
+    questions =
+      JSON.parse(
+        document.getElementById("assessmentQuestions").value
+      );
+
+    if(!Array.isArray(questions))
+      throw new Error();
+
+  }catch{
+
+    alert("Questions must be valid JSON in the format shown.");
+
     return;
   }
-  const doc = {title,subject,type,questions:newAssessQuestions,dueDate:dueDate||null,createdAt:nowISO()};
-  let recipients = [];
-  if(asAudienceType==='subject'){
-    const classLevel = document.getElementById("asClass").value;
-    doc.classLevel = classLevel;
-    recipients = adminCache.students.filter(s=>(s.subjects||[]).includes(subject) && (classLevel==='all' || s.classLevel===classLevel)).map(s=>s.id);
-  } else {
-    const targets = [...document.querySelectorAll(".asTargetChk:checked")].map(c=>c.value);
-    if(targets.length===0){ alert("Select at least one student."); return; }
-    doc.classLevel = "all";
-    doc.assignedTo = targets;
-    recipients = targets;
-  }
-  await col("assessments").add(doc);
-  newAssessQuestions = [];
-  for(const id of recipients){
-    await addNotification({audience:id, type:"announcement", message:`New ${type==='mcq'?'CBT':'assessment'} available: ${title}.`});
-  }
-  renderAdmin();
-}
 
-function openGradeModal(submissionId){
-  const sub = adminCache.submissions.find(s=>s.id===submissionId);
-  const a = adminCache.assessments.find(x=>x.id===sub.assessmentId);
-  const stu = adminCache.students.find(x=>x.id===sub.studentId);
-  document.getElementById("gradeModalHost").innerHTML = `
-    <div class="card" style="border-color:var(--accent);">
-      <h2>Grade: ${esc(a.title)} — ${esc(stu?stu.name:sub.studentId)}</h2>
-      ${a.questions.map((q,i)=>`
-        <div class="q-block">
-          <div style="font-weight:600;">Q${i+1}: ${esc(q.q)}</div>
-          <div style="margin:6px 0;padding:8px;background:var(--bg);border-radius:6px;">${esc(sub.answers[i]||'(no answer)')}</div>
-        </div>`).join('')}
-      <label>Score (out of 100)</label>
-      <input type="number" id="gradeScore" min="0" max="100" value="${sub.theoryScore!=null?sub.theoryScore:''}">
-      <label>Feedback for student</label>
-      <textarea id="gradeFeedback">${esc(sub.feedback||'')}</textarea>
-      <div class="row" style="margin-top:12px;">
-        <button class="btn btn-primary" id="btnSaveGrade" data-sub="${sub.id}">Save grade</button>
-        <button class="btn" onclick="document.getElementById('gradeModalHost').innerHTML=''">Cancel</button>
-      </div>
-    </div>
-  `;
-  document.getElementById("btnSaveGrade").onclick = ()=>saveGrade(sub.id);
-}
-async function saveGrade(subId){
-  const score = Number(document.getElementById("gradeScore").value);
-  const feedback = document.getElementById("gradeFeedback").value.trim();
-  const sub = adminCache.submissions.find(s=>s.id===subId);
-  await col("submissions").doc(subId).update({status:"graded", theoryScore:score, feedback, gradedAt: nowISO()});
-  await addNotification({audience:sub.studentId, type:"grade", message:"Your submission has been graded. Check your results."});
-  renderAdmin();
-}
+  /*
+    IMPORTANT:
+    Students are selected by subject enrolment only.
+    classLevel is intentionally NOT used here.
+  */
 
-/* ---------- Fees ---------- */
-function adminFeesHTML(){
-  return `
-    <div class="card">
-      <h2>Fees tracking</h2>
-      ${adminCache.students.length ? `
-      <table>
-        <tr><th>Student</th><th>Class</th><th>Records</th><th>Balance</th><th></th></tr>
-        ${adminCache.students.map(s=>{
-          const recs = s.feesRecords||[];
-          const totalDue = recs.reduce((a,r)=>a+Number(r.amountDue||0),0);
-          const totalPaid = recs.reduce((a,r)=>a+Number(r.amountPaid||0),0);
-          const balance = totalDue-totalPaid;
-          return `<tr>
-            <td>${esc(s.name)}</td><td>${esc(s.classLevel)}</td>
-            <td>${recs.length} record(s)</td>
-            <td><span class="badge ${balance>0?'badge-bad':'badge-good'}">₦${balance.toLocaleString()}</span></td>
-            <td><button class="btn btn-sm" data-fees-student="${s.id}">Manage</button></td>
-          </tr>`;
-        }).join('')}
-      </table>` : `<div class="empty">No students yet.</div>`}
-    </div>
-    <div id="feesModalHost"></div>
-  `;
-}
-function openFeesModal(id){
-  const s = adminCache.students.find(x=>x.id===id);
-  const recs = s.feesRecords||[];
-  document.getElementById("feesModalHost").innerHTML = `
-    <div class="card" style="border-color:var(--accent);">
-      <h2>Fees — ${esc(s.name)}</h2>
-      <table>
-        <tr><th>Term/Note</th><th>Amount due</th><th>Amount paid</th><th>Date</th><th></th></tr>
-        ${recs.map((r,i)=>`<tr><td>${esc(r.term)}</td><td>₦${Number(r.amountDue||0).toLocaleString()}</td><td>₦${Number(r.amountPaid||0).toLocaleString()}</td><td>${esc(r.date||'')}</td>
-          <td><button class="btn btn-sm btn-danger" data-rm-fee="${i}" data-fee-student="${s.id}">Remove</button></td></tr>`).join('')}
-      </table>
-      <h3 style="margin-top:14px;">Add record</h3>
-      <div class="grid-2">
-        <div><label>Term / note</label><input type="text" id="feeTerm" placeholder="e.g. 1st Term 2026"></div>
-        <div><label>Date</label><input type="date" id="feeDate"></div>
-        <div><label>Amount due (₦)</label><input type="number" id="feeDue"></div>
-        <div><label>Amount paid (₦)</label><input type="number" id="feePaid"></div>
-      </div>
-      <div class="row" style="margin-top:12px;">
-        <button class="btn btn-primary" id="btnAddFee" data-id="${s.id}">Add record</button>
-        <button class="btn" onclick="document.getElementById('feesModalHost').innerHTML=''">Close</button>
-      </div>
-    </div>
-  `;
-  document.getElementById("btnAddFee").onclick = ()=>addFeeRecord(s.id);
-}
-async function addFeeRecord(studentId){
-  const term = document.getElementById("feeTerm").value.trim();
-  const date = document.getElementById("feeDate").value;
-  const amountDue = Number(document.getElementById("feeDue").value||0);
-  const amountPaid = Number(document.getElementById("feePaid").value||0);
-  const s = adminCache.students.find(x=>x.id===studentId);
-  const recs = [...(s.feesRecords||[]), {term,date,amountDue,amountPaid}];
-  await col("students").doc(studentId).update({feesRecords:recs});
-  renderAdmin();
-}
-async function removeFeeRecord(studentId, idx){
-  const s = adminCache.students.find(x=>x.id===studentId);
-  const recs = (s.feesRecords||[]).filter((_,i)=>i!==idx);
-  await col("students").doc(studentId).update({feesRecords:recs});
-  renderAdmin();
-}
+  const recipients =
+    adminCache.students
+      .filter(
+        student =>
+          (student.subjects || []).includes(subject) ||
+          (student.subjects || []).includes(
+            adminCache.subjects.find(
+              s=>s.id===subject
+            )?.name
+          )
+      )
+      .map(student=>student.id);
 
-/* ---------- Reports ---------- */
-function adminReportsHTML(){
-  return `
-    <div class="card">
-      <h2>Generate student report</h2>
-      <label>Select student</label>
-      <select id="reportStudent">${adminCache.students.map(s=>`<option value="${s.id}">${esc(s.name)} (${s.id})</option>`).join('')}</select>
-      <button class="btn btn-primary" style="margin-top:12px;" id="btnBuildReport">Generate report</button>
-    </div>
-    <div id="reportOutput"></div>
-  `;
-}
-function buildReport(){
-  const id = document.getElementById("reportStudent").value;
-  const s = adminCache.students.find(x=>x.id===id);
-  const subs = adminCache.submissions.filter(x=>x.studentId===id);
-  const bySubject = {};
-  subs.forEach(sub=>{
-    const a = adminCache.assessments.find(x=>x.id===sub.assessmentId);
-    if(!a) return;
-    const score = a.type==='mcq' ? sub.score : sub.theoryScore;
-    if(score==null) return;
-    bySubject[a.subject] = bySubject[a.subject] || [];
-    bySubject[a.subject].push({title:a.title, score, type:a.type});
+  await col("assessments").add({
+
+    title,
+    subject,
+    type,
+    dueDate,
+    questions,
+    assignedTo:recipients,
+    createdAt:nowISO()
+
   });
-  const recs = s.feesRecords||[];
-  const totalDue = recs.reduce((a,r)=>a+Number(r.amountDue||0),0);
-  const totalPaid = recs.reduce((a,r)=>a+Number(r.amountPaid||0),0);
 
-  document.getElementById("reportOutput").innerHTML = `
+  closeModal();
+
+  await loadAdminData();
+
+  adminAssessments();
+}
+
+
+async function deleteAssessment(id){
+
+  if(!confirm("Delete this assessment?")) return;
+
+  await col("assessments").doc(id).delete();
+
+  await loadAdminData();
+
+  adminAssessments();
+}
+
+
+/* =====================================================
+   FEES
+===================================================== */
+
+function adminFees(){
+
+  document.getElementById("content").innerHTML = `
+
+    <div class="dashboard-header">
+
+      <h1>Fees</h1>
+
+      <p>Manage learner fee records.</p>
+
+    </div>
+
     <div class="card">
-      <div class="row no-print" style="justify-content:flex-end;"><button class="btn btn-primary" onclick="window.print()">Print / Save as PDF</button></div>
-      <h1>${esc(ACADEMY_NAME)} — Student Report</h1>
-      <p><strong>${esc(s.name)}</strong> (${esc(s.id)}) — ${esc(s.classLevel)} — Mode: ${esc(s.mode)}</p>
-      <p class="muted">Subjects enrolled: ${(s.subjects||[]).join(', ')}</p>
-      <h2>Assessment performance</h2>
-      ${Object.keys(bySubject).length ? Object.entries(bySubject).map(([subj,items])=>{
-        const avg = (items.reduce((a,i)=>a+Number(i.score||0),0)/items.length).toFixed(1);
-        return `<h3>${esc(subj)} — average ${avg}%</h3>
-          <table><tr><th>Assessment</th><th>Type</th><th>Score</th></tr>
-          ${items.map(i=>`<tr><td>${esc(i.title)}</td><td>${i.type==='mcq'?'CBT':'Theory'}</td><td>${i.score}%</td></tr>`).join('')}
-          </table>`;
-      }).join('') : `<p class="empty">No graded assessments yet.</p>`}
-      <h2>Fees</h2>
-      <p>Total due: ₦${totalDue.toLocaleString()} &nbsp; Total paid: ₦${totalPaid.toLocaleString()} &nbsp; Balance: <strong>₦${(totalDue-totalPaid).toLocaleString()}</strong></p>
-      <p class="muted" style="margin-top:20px;">Generated ${fmtDate(nowISO())}</p>
+
+      <div class="card-title">
+        <h3>Student Fees</h3>
+      </div>
+
+      <div class="table-wrap">
+
+        <table>
+
+          <thead>
+
+            <tr>
+              <th>Student</th>
+              <th>Records</th>
+              <th>Action</th>
+            </tr>
+
+          </thead>
+
+          <tbody>
+
+            ${adminCache.students.map(student=>`
+
+              <tr>
+
+                <td>${escapeHTML(student.name)}</td>
+
+                <td>
+                  ${
+                    (student.feesRecords || []).length
+                  }
+                </td>
+
+                <td>
+
+                  <button
+                    class="btn btn-primary btn-sm"
+                    onclick="addFee('${student.id}')">
+                    Add Fee Record
+                  </button>
+
+                </td>
+
+              </tr>
+
+            `).join("")}
+
+          </tbody>
+
+        </table>
+
+      </div>
+
     </div>
   `;
 }
 
-/* ---------- wire admin events (delegated) ---------- */
-function wireAdminTabEvents(){
-  const el = document.getElementById("adminTabBody");
-  if(!el) return;
 
-  el.querySelectorAll("[data-notif]").forEach(b=>b.onclick=()=>markNotifRead(b.dataset.notif).then(renderAdmin));
-  const regBtn = document.getElementById("btnRegisterStudent"); if(regBtn) regBtn.onclick = registerStudent;
-  el.querySelectorAll("[data-edit-student]").forEach(b=>b.onclick=()=>openEditStudent(b.dataset.editStudent));
-  el.querySelectorAll("[data-del-student]").forEach(b=>b.onclick=()=>deleteStudent(b.dataset.delStudent));
+function addFee(studentId){
 
-  const addSchBtn = document.getElementById("btnAddSchedule"); if(addSchBtn) addSchBtn.onclick = addScheduleEntry;
-  el.querySelectorAll("[data-del-schedule]").forEach(b=>b.onclick=()=>deleteSchedule(b.dataset.delSchedule));
+  const student =
+    adminCache.students.find(s=>s.id===studentId);
 
-  const postAnnBtn = document.getElementById("btnPostAnnouncement"); if(postAnnBtn) postAnnBtn.onclick = postAnnouncement;
-  if(!document.getElementById("annAudienceType")) annAudienceType = "all"; // reset when leaving the tab
+  if(!student) return;
 
-  const targetType = document.getElementById("msgTargetType");
-  if(targetType){
-    const wrap = document.getElementById("msgTargetStudentWrap");
-    if(targetType.value!=="direct" && wrap) wrap.style.display="none";
-    if(targetType.value==="subject" && wrap){
-      wrap.style.display="block";
-      wrap.innerHTML = `<label>Subject group</label><select id="msgTargetStudent">${SUBJECTS.map(s=>`<option>${s}</option>`).join('')}</select>`;
-    } else if(targetType.value==="direct" && wrap){
-      wrap.innerHTML = `<label>Student</label><select id="msgTargetStudent">${adminCache.students.map(s=>`<option value="${s.id}">${esc(s.name)} (${s.id})</option>`).join('')}</select>`;
-    }
-  }
-  const sendBtn = document.getElementById("btnSendAdminMsg");
-  if(sendBtn) sendBtn.onclick = async ()=>{
-    const type = document.getElementById("msgTargetType").value;
-    const body = document.getElementById("msgBody").value.trim();
-    if(!body){ alert("Write a message first."); return; }
-    if(type==="direct"){
-      const target = document.getElementById("msgTargetStudent").value;
-      await col("messages").add({direction:"admin-to-student", audience:"direct", target, message:body, timestamp:nowISO()});
-      await addNotification({audience:target, type:"message", message:"You have a new message from admin."});
-    } else if(type==="subject"){
-      const subject = document.getElementById("msgTargetStudent").value;
-      await col("messages").add({direction:"admin-to-student", audience:"subject", target:subject, message:body, timestamp:nowISO()});
-      const recipients = adminCache.students.filter(s=>(s.subjects||[]).includes(subject));
-      for(const r of recipients) await addNotification({audience:r.id, type:"message", message:`New message for ${subject} students.`});
-    } else if(type==="all"){
-      await col("messages").add({direction:"admin-to-student", audience:"all", target:null, message:body, timestamp:nowISO()});
-      for(const s of adminCache.students) await addNotification({audience:s.id, type:"message", message:"You have a new message from admin."});
-    }
-    document.getElementById("msgBody").value = "";
-    renderAdmin();
+  openModal(
+    "Add Fee Record",
+    `
+
+      <form onsubmit="saveFee(event,'${studentId}')">
+
+        <div class="form-group">
+
+          <label>Amount</label>
+
+          <input
+            id="feeAmount"
+            type="number"
+            min="0"
+            required>
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Status</label>
+
+          <select id="feeStatus">
+
+            <option value="Paid">Paid</option>
+            <option value="Pending">Pending</option>
+
+          </select>
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Note</label>
+
+          <input id="feeNote">
+
+        </div>
+
+        <button class="btn btn-primary">
+          Save Fee
+        </button>
+
+      </form>
+
+    `
+  );
+}
+
+
+async function saveFee(event,studentId){
+
+  event.preventDefault();
+
+  const student =
+    adminCache.students.find(s=>s.id===studentId);
+
+  const records =
+    student.feesRecords || [];
+
+  records.push({
+
+    amount:
+      Number(document.getElementById("feeAmount").value),
+
+    status:
+      document.getElementById("feeStatus").value,
+
+    note:
+      document.getElementById("feeNote").value.trim(),
+
+    date:nowISO()
+
+  });
+
+  await col("students").doc(studentId).update({
+    feesRecords:records
+  });
+
+  closeModal();
+
+  await loadAdminData();
+
+  adminFees();
+}
+
+
+/* =====================================================
+   REPORTS
+===================================================== */
+
+function adminReports(){
+
+  const students = adminCache.students;
+
+  document.getElementById("content").innerHTML = `
+
+    <div class="dashboard-header">
+
+      <h1>Reports</h1>
+
+      <p>Overview of learner activity and assessment results.</p>
+
+    </div>
+
+    <div class="card">
+
+      <div class="card-title">
+        <h3>Student Report Summary</h3>
+      </div>
+
+      ${
+        students.length
+        ?
+        `<div class="table-wrap">
+
+          <table>
+
+            <thead>
+
+              <tr>
+                <th>Student</th>
+                <th>Class</th>
+                <th>Subjects</th>
+                <th>Assessments Submitted</th>
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              ${students.map(student=>{
+
+                const submissions =
+                  adminCache.submissions.filter(
+                    s=>s.studentId===student.id
+                  ).length;
+
+                return `
+
+                  <tr>
+
+                    <td>${escapeHTML(student.name)}</td>
+
+                    <td>${escapeHTML(student.classLevel)}</td>
+
+                    <td>
+                      ${subjectNames(student.subjects || [])
+                        .map(s=>`<span class="badge">${escapeHTML(s)}</span>`)
+                        .join(" ")}
+                    </td>
+
+                    <td>${submissions}</td>
+
+                  </tr>
+
+                `;
+
+              }).join("")}
+
+            </tbody>
+
+          </table>
+
+        </div>`
+        :
+        `<div class="empty">No students available.</div>`
+      }
+
+    </div>
+  `;
+}
+
+
+/* =====================================================
+   STUDENT DASHBOARD
+===================================================== */
+
+async function getCurrentStudent(){
+
+  if(!firebaseReady || !session) return null;
+
+  const doc =
+    await col("students").doc(session.id).get();
+
+  if(!doc.exists) return null;
+
+  return {
+    id:doc.id,
+    ...doc.data()
   };
-  el.querySelectorAll("[data-open-thread]").forEach(b=>b.onclick=()=>openThread(b.dataset.openThread));
-
-  const asType = document.getElementById("asType");
-  if(asType) asType.onchange = ()=>{ newAssessQuestions=[]; renderAdmin(); };
-  const qList = document.getElementById("asQuestionsList");
-  if(qList){
-    qList.querySelectorAll(".qText").forEach(inp=>inp.oninput = ()=>{ newAssessQuestions[inp.dataset.i].q = inp.value; });
-    qList.querySelectorAll(".qOpt").forEach(inp=>inp.oninput = ()=>{ newAssessQuestions[inp.dataset.i].options[inp.dataset.oi] = inp.value; });
-    qList.querySelectorAll(".qCorrect").forEach(inp=>inp.onchange = ()=>{ newAssessQuestions[inp.dataset.i].correctIndex = Number(inp.dataset.oi); });
-    qList.querySelectorAll("[data-rm-q]").forEach(b=>b.onclick=()=>{ newAssessQuestions.splice(Number(b.dataset.rmQ),1); renderAdmin(); });
-  }
-  const addQBtn = document.getElementById("btnAddQuestion");
-  if(addQBtn) addQBtn.onclick = ()=>{ const type=document.getElementById("asType").value; newAssessQuestions.push(blankQuestion(type)); renderAdmin(); };
-  const createAssessBtn = document.getElementById("btnCreateAssessment");
-  if(createAssessBtn) createAssessBtn.onclick = createAssessment;
-  el.querySelectorAll("[data-grade-sub]").forEach(b=>b.onclick=()=>openGradeModal(b.dataset.gradeSub));
-
-  el.querySelectorAll("[data-fees-student]").forEach(b=>b.onclick=()=>openFeesModal(b.dataset.feesStudent));
-  el.querySelectorAll("[data-rm-fee]").forEach(b=>b.onclick=()=>removeFeeRecord(b.dataset.feeStudent, Number(b.dataset.rmFee)));
-
-  const buildReportBtn = document.getElementById("btnBuildReport");
-  if(buildReportBtn) buildReportBtn.onclick = buildReport;
 }
 
-/* ============================================================================
-   ============================  STUDENT AREA  ================================
-   ============================================================================ */
-let studentTab = "overview";
-let studentCache = {student:null, schedule:[], announcements:[], messages:[], assessments:[], submissions:[], notifications:[]};
 
-async function loadStudentData(){
-  const session = getSession();
-  const studentDoc = await col("students").doc(session.id).get();
-  const student = {id:session.id, ...studentDoc.data()};
-  const [scheduleSnap, annSnap, msgSnap, assessSnap, subSnap, notifSnap] = await Promise.all([
-    col("schedule").get(),
-    col("announcements").get(),
-    col("messages").get(),
-    col("assessments").get(),
-    col("submissions").where("studentId","==",session.id).get(),
-    col("notifications").where("audience","==",session.id).get()
-  ]);
-  studentCache.student = student;
-  studentCache.schedule = scheduleSnap.docs.map(d=>({id:d.id,...d.data()})).filter(s=>(s.classLevel==='all'||s.classLevel===student.classLevel) && (student.subjects||[]).includes(s.subject));
-  studentCache.announcements = annSnap.docs.map(d=>({id:d.id,...d.data()})).filter(a=>{
-    if(a.audienceType==='specific') return (a.targets||[]).includes(session.id);
-    if(a.audienceType==='subject') return (student.subjects||[]).includes(a.subject);
-    if(a.audienceType==='all') return true;
-    return a.subject==='all' || (student.subjects||[]).includes(a.subject); // backward compat
-  }).sort((a,b)=>b.timestamp.localeCompare(a.timestamp));
-  studentCache.messages = msgSnap.docs.map(d=>({id:d.id,...d.data()})).filter(m =>
-      (m.direction==="student-to-admin" && m.studentId===session.id) ||
-      (m.direction==="admin-to-student" && m.audience==="all") ||
-      (m.direction==="admin-to-student" && m.audience==="direct" && m.target===session.id) ||
-      (m.direction==="admin-to-student" && m.audience==="subject" && (student.subjects||[]).includes(m.target))
-    ).sort((a,b)=>a.timestamp.localeCompare(b.timestamp));
-  studentCache.assessments = assessSnap.docs.map(d=>({id:d.id,...d.data()})).filter(a=>{
-    if(a.assignedTo) return a.assignedTo.includes(session.id);
-    return (a.classLevel==='all' || a.classLevel===student.classLevel) && (student.subjects||[]).includes(a.subject);
-  });
-  studentCache.submissions = subSnap.docs.map(d=>({id:d.id,...d.data()}));
-  studentCache.notifications = notifSnap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>b.timestamp.localeCompare(a.timestamp));
-}
+function studentDashboard(){
 
-async function renderStudent(){
-  app.innerHTML = `<div class="card">Loading your portal…</div>`;
-  await loadStudentData();
-  const unread = studentCache.notifications.filter(n=>!n.read).length;
-  app.innerHTML = `
-    <h1>Welcome, ${esc(studentCache.student.name)}</h1>
-    <p class="muted">${esc(studentCache.student.classLevel)} · ${(studentCache.student.subjects||[]).join(', ')} · ${esc(studentCache.student.mode)}</p>
-    <div class="tabs">
-      ${sTabBtn("overview","Overview"+(unread?` <span class="dot">${unread}</span>`:""))}
-      ${sTabBtn("schedule","Schedule & Classes")}
-      ${sTabBtn("assessments","Assessments")}
-      ${sTabBtn("announcements","Announcements")}
-      ${sTabBtn("messages","Messages")}
-      ${sTabBtn("fees","Fees")}
-    </div>
-    <div id="studentTabBody"></div>
-  `;
-  renderStudentTabBody();
-}
-function sTabBtn(key,label){ return `<button class="tab-btn ${studentTab===key?'active':''}" onclick="setStudentTab('${key}')">${label}</button>`; }
-function setStudentTab(k){ studentTab=k; renderStudent(); }
+  getCurrentStudent().then(student=>{
 
-function renderStudentTabBody(){
-  const el = document.getElementById("studentTabBody");
-  if(studentTab==="overview") el.innerHTML = studentOverviewHTML();
-  else if(studentTab==="schedule") el.innerHTML = studentScheduleHTML();
-  else if(studentTab==="assessments") el.innerHTML = studentAssessmentsHTML();
-  else if(studentTab==="announcements") el.innerHTML = studentAnnouncementsHTML();
-  else if(studentTab==="messages") el.innerHTML = studentMessagesHTML();
-  else if(studentTab==="fees") el.innerHTML = studentFeesHTML();
-  wireStudentTabEvents();
-}
+    if(!student) return;
 
-function studentOverviewHTML(){
-  const notifs = studentCache.notifications;
-  return `
-    <div class="card">
-      <h2>Notifications</h2>
-      ${notifs.length? notifs.map(n=>`
-        <div class="notif-item ${n.read?'':'unread'}">
-          <div>${esc(n.message)}</div>
-          <div class="row" style="justify-content:space-between;margin-top:4px;">
-            <span class="muted" style="font-size:12px;">${fmtDate(n.timestamp)}</span>
-            ${n.read?'':`<button class="btn btn-sm" data-snotif="${n.id}">Mark read</button>`}
-          </div>
-        </div>`).join('') : `<div class="empty">Nothing new right now.</div>`}
-    </div>
-  `;
-}
+    const subjects =
+      subjectNames(student.subjects || []);
 
-function studentScheduleHTML(){
-  return `
-    <div class="card">
-      <h2>Your class schedule</h2>
-      ${studentCache.schedule.length ? `
-      <table>
-        <tr><th>Subject</th><th>Day</th><th>Time</th><th>Mode</th><th></th></tr>
-        ${studentCache.schedule.map(s=>`
-          <tr><td>${esc(s.subject)}</td><td>${esc(s.day)}</td><td>${esc(s.time)}</td><td>${esc(s.mode)}</td>
-          <td>${s.onlineLink?`<a class="btn btn-sm btn-primary" href="${esc(s.onlineLink)}" target="_blank">Join class</a>`:'—'}</td></tr>`).join('')}
-      </table>` : `<div class="empty">No schedule set yet — check back soon.</div>`}
-    </div>
-  `;
-}
+    /*
+      Assessment eligibility is based on subject enrolment only.
+    */
 
-function studentAnnouncementsHTML(){
-  return `
-    <div class="card">
-      <h2>Announcements</h2>
-      ${studentCache.announcements.length ? studentCache.announcements.map(a=>`
-        <div class="notif-item">
-          <span class="badge badge-muted">${a.audienceType==='specific' ? 'Just for you' : (a.audienceType==='subject' ? a.subject : (a.audienceType==='all' ? 'General' : (a.subject==='all'?'General':a.subject)))}</span>
-          <div style="margin-top:6px;">${esc(a.message)}</div>
-          <div class="muted" style="font-size:12px;margin-top:4px;">${fmtDate(a.timestamp)}</div>
-        </div>`).join('') : `<div class="empty">No announcements yet.</div>`}
-    </div>
-  `;
-}
+    const availableAssessments =
+      studentCache.assessments.filter(a=>{
 
-function studentMessagesHTML(){
-  return `
-    <div class="card">
-      <h2>Messages with the academy</h2>
-      <div style="max-height:340px;overflow-y:auto;margin-bottom:12px;">
-        ${studentCache.messages.length ? studentCache.messages.map(m=>`
-          <div class="msg-bubble ${m.direction==='admin-to-student'?'msg-from-admin':'msg-from-student'}">
-            <div>${esc(m.message)}</div>
-            <div class="msg-time">${m.direction==='admin-to-student'?'Admin':'You'} · ${fmtDate(m.timestamp)}</div>
-          </div>`).join('') : `<div class="empty">No messages yet — say hello!</div>`}
-      </div>
-      <textarea id="stuMsgBody" placeholder="Type a message to the admin..."></textarea>
-      <button class="btn btn-primary" style="margin-top:8px;" id="btnStudentSendMsg">Send</button>
-    </div>
-  `;
-}
+        if(a.assignedTo){
 
-function studentFeesHTML(){
-  const recs = studentCache.student.feesRecords || [];
-  const totalDue = recs.reduce((a,r)=>a+Number(r.amountDue||0),0);
-  const totalPaid = recs.reduce((a,r)=>a+Number(r.amountPaid||0),0);
-  return `
-    <div class="card">
-      <h2>Fees</h2>
-      ${recs.length ? `
-      <table><tr><th>Term/Note</th><th>Amount due</th><th>Amount paid</th><th>Date</th></tr>
-        ${recs.map(r=>`<tr><td>${esc(r.term)}</td><td>₦${Number(r.amountDue||0).toLocaleString()}</td><td>₦${Number(r.amountPaid||0).toLocaleString()}</td><td>${esc(r.date||'')}</td></tr>`).join('')}
-      </table>
-      <p style="margin-top:10px;">Balance: <span class="badge ${totalDue-totalPaid>0?'badge-bad':'badge-good'}">₦${(totalDue-totalPaid).toLocaleString()}</span></p>
-      ` : `<div class="empty">No fee records yet.</div>`}
-    </div>
-  `;
-}
+          return a.assignedTo.includes(student.id);
 
-function studentAssessmentsHTML(){
-  return `
-    <div class="card">
-      <h2>Available assessments</h2>
-      ${studentCache.assessments.length ? studentCache.assessments.map(a=>{
-        const mySub = studentCache.submissions.find(s=>s.assessmentId===a.id);
-        let status;
-        if(!mySub) status = `<span class="badge badge-warn">Not attempted</span>`;
-        else if(a.type==='mcq') status = `<span class="badge badge-good">Score: ${mySub.score}%</span>`;
-        else if(mySub.status==='pending') status = `<span class="badge badge-warn">Awaiting review</span>`;
-        else status = `<span class="badge badge-good">Graded: ${mySub.theoryScore}%</span>`;
-        return `<div class="notif-item">
-          <div class="row" style="justify-content:space-between;">
-            <div><strong>${esc(a.title)}</strong> <span class="muted">(${esc(a.subject)} · ${a.type==='mcq'?'CBT':'Theory'})</span></div>
-            ${status}
-          </div>
-          ${a.dueDate?`<div class="muted" style="font-size:12px;">Due ${esc(a.dueDate)}</div>`:''}
-          ${mySub && mySub.status==='graded' && mySub.feedback ? `<div style="margin-top:6px;padding:8px;background:var(--bg);border-radius:6px;">Feedback: ${esc(mySub.feedback)}</div>` : ''}
-          <div style="margin-top:8px;">
-            ${!mySub ? `<button class="btn btn-sm btn-primary" data-take-assess="${a.id}">Take assessment</button>` : `<button class="btn btn-sm" data-view-assess="${a.id}">View</button>`}
-          </div>
-        </div>`;
-      }).join('') : `<div class="empty">No assessments assigned yet.</div>`}
-    </div>
-    <div id="assessModalHost"></div>
-  `;
-}
-
-let currentAssessAnswers = [];
-function openTakeAssessment(assessId){
-  const a = studentCache.assessments.find(x=>x.id===assessId);
-  currentAssessAnswers = a.questions.map(()=> a.type==='mcq' ? null : "");
-  document.getElementById("assessModalHost").innerHTML = `
-    <div class="card" style="border-color:var(--accent);">
-      <h2>${esc(a.title)}</h2>
-      ${a.questions.map((q,i)=>{
-        if(a.type==='mcq'){
-          return `<div class="q-block">
-            <div style="font-weight:600;">Q${i+1}: ${esc(q.q)}</div>
-            ${q.options.map((opt,oi)=>`
-              <div class="opt-row"><input type="radio" name="ans${i}" class="ansMcq" data-i="${i}" data-oi="${oi}"> <span>${esc(opt)}</span></div>`).join('')}
-          </div>`;
-        } else {
-          return `<div class="q-block">
-            <div style="font-weight:600;">Q${i+1}: ${esc(q.q)}</div>
-            <textarea class="ansTheory" data-i="${i}" placeholder="Type your answer..."></textarea>
-          </div>`;
         }
-      }).join('')}
-      <div class="row" style="margin-top:12px;">
-        <button class="btn btn-primary" id="btnSubmitAssess" data-id="${a.id}">Submit</button>
-        <button class="btn" onclick="document.getElementById('assessModalHost').innerHTML=''">Cancel</button>
+
+        return (
+          student.subjects || []
+        ).includes(a.subject);
+
+      });
+
+    const upcoming =
+      studentCache.schedule.filter(s=>{
+
+        return (
+          s.classLevel === "all" ||
+          s.classLevel === student.classLevel
+        )
+        &&
+        (
+          student.subjects || []
+        ).includes(s.subject);
+
+      });
+
+    document.getElementById("content").innerHTML = `
+
+      <div class="dashboard-header">
+
+        <h1>
+          Welcome, ${escapeHTML(student.name)}
+        </h1>
+
+        <p>
+          Here is your learning overview.
+        </p>
+
       </div>
+
+      <div class="stat-grid">
+
+        <div class="stat-card">
+          <small>Class</small>
+          <strong>${escapeHTML(student.classLevel)}</strong>
+        </div>
+
+        <div class="stat-card">
+          <small>Subjects</small>
+          <strong>${subjects.length}</strong>
+        </div>
+
+        <div class="stat-card">
+          <small>Assessments</small>
+          <strong>${availableAssessments.length}</strong>
+        </div>
+
+        <div class="stat-card">
+          <small>Notifications</small>
+          <strong>${studentCache.notifications.length}</strong>
+        </div>
+
+      </div>
+
+      <div class="card">
+
+        <div class="card-title">
+          <h3>My Subjects</h3>
+        </div>
+
+        ${
+          subjects.length
+          ?
+          subjects.map(
+            s=>`<span class="badge" style="margin:4px;">
+              ${escapeHTML(s)}
+            </span>`
+          ).join("")
+          :
+          `<div class="empty">
+            No subjects have been assigned yet.
+          </div>`
+        }
+
+      </div>
+
+      <div class="card">
+
+        <div class="card-title">
+          <h3>Upcoming Lessons</h3>
+
+          <button
+            class="btn btn-outline btn-sm"
+            onclick="showStudentSection('schedule')">
+            View Schedule
+          </button>
+
+        </div>
+
+        ${
+          upcoming.length
+          ?
+          `<div class="table-wrap">
+
+            <table>
+
+              <thead>
+
+                <tr>
+                  <th>Subject</th>
+                  <th>Day</th>
+                  <th>Time</th>
+                  <th>Mode</th>
+                </tr>
+
+              </thead>
+
+              <tbody>
+
+                ${upcoming.slice(0,5).map(s=>`
+
+                  <tr>
+
+                    <td>${escapeHTML(
+                      adminCache.subjects.find(
+                        x=>x.id===s.subject
+                      )?.name || s.subject
+                    )}</td>
+
+                    <td>${escapeHTML(s.day)}</td>
+
+                    <td>${escapeHTML(s.time)}</td>
+
+                    <td>${escapeHTML(s.mode)}</td>
+
+                  </tr>
+
+                `).join("")}
+
+              </tbody>
+
+            </table>
+
+          </div>`
+          :
+          `<div class="empty">
+            No upcoming lessons available.
+          </div>`
+        }
+
+      </div>
+
+    `;
+
+  });
+}
+
+
+/* =====================================================
+   STUDENT SCHEDULE
+===================================================== */
+
+async function studentSchedule(){
+
+  const student =
+    await getCurrentStudent();
+
+  if(!student) return;
+
+  const rows =
+    studentCache.schedule.filter(s=>{
+
+      const classMatches =
+        s.classLevel === "all" ||
+        s.classLevel === student.classLevel;
+
+      const subjectMatches =
+        (student.subjects || []).includes(s.subject) ||
+        (student.subjects || []).includes(
+          adminCache.subjects.find(
+            x=>x.id===s.subject
+          )?.name
+        );
+
+      return classMatches && subjectMatches;
+
+    });
+
+  document.getElementById("content").innerHTML = `
+
+    <div class="dashboard-header">
+
+      <h1>My Schedule</h1>
+
+      <p>
+        Lessons for the subjects assigned to you.
+      </p>
+
+    </div>
+
+    <div class="card">
+
+      ${
+        rows.length
+        ?
+        `<div class="table-wrap">
+
+          <table>
+
+            <thead>
+
+              <tr>
+                <th>Subject</th>
+                <th>Day</th>
+                <th>Time</th>
+                <th>Mode</th>
+                <th>Link</th>
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              ${rows.map(s=>`
+
+                <tr>
+
+                  <td>${escapeHTML(
+                    adminCache.subjects.find(
+                      x=>x.id===s.subject
+                    )?.name || s.subject
+                  )}</td>
+
+                  <td>${escapeHTML(s.day)}</td>
+
+                  <td>${escapeHTML(s.time)}</td>
+
+                  <td>${escapeHTML(s.mode)}</td>
+
+                  <td>
+
+                    ${
+                      s.onlineLink
+                      ?
+                      `<a
+                        href="${escapeHTML(s.onlineLink)}"
+                        target="_blank"
+                        class="btn btn-primary btn-sm">
+                        Join
+                      </a>`
+                      :
+                      "-"
+                    }
+
+                  </td>
+
+                </tr>
+
+              `).join("")}
+
+            </tbody>
+
+          </table>
+
+        </div>`
+        :
+        `<div class="empty">
+          No lessons are currently scheduled for your subjects.
+        </div>`
+      }
+
     </div>
   `;
-  document.getElementById("assessModalHost").querySelectorAll(".ansMcq").forEach(r=>r.onchange=()=>{ currentAssessAnswers[r.dataset.i]=Number(r.dataset.oi); });
-  document.getElementById("assessModalHost").querySelectorAll(".ansTheory").forEach(t=>t.oninput=()=>{ currentAssessAnswers[t.dataset.i]=t.value; });
-  document.getElementById("btnSubmitAssess").onclick = ()=>submitAssessment(a.id);
 }
-async function submitAssessment(assessId){
-  const a = studentCache.assessments.find(x=>x.id===assessId);
-  const session = getSession();
-  const submission = {
-    assessmentId: assessId, studentId: session.id, answers: currentAssessAnswers,
-    submittedAt: nowISO()
-  };
-  if(a.type==='mcq'){
+
+
+/* =====================================================
+   STUDENT ANNOUNCEMENTS
+===================================================== */
+
+async function studentAnnouncements(){
+
+  const student =
+    await getCurrentStudent();
+
+  if(!student) return;
+
+  const list =
+    studentCache.announcements.filter(a=>{
+
+      if(a.audience === "all")
+        return true;
+
+      if(a.studentId === student.id)
+        return true;
+
+      if(a.audience === "subject"){
+
+        return (
+          (student.subjects || []).includes(a.subject)
+        );
+
+      }
+
+      return false;
+
+    });
+
+  document.getElementById("content").innerHTML = `
+
+    <div class="dashboard-header">
+
+      <h1>Announcements</h1>
+
+      <p>Important information from Phos Academy.</p>
+
+    </div>
+
+    <div class="card">
+
+      ${
+        list.length
+        ?
+        list.map(a=>`
+
+          <div class="notice">
+
+            <h4>${escapeHTML(a.title)}</h4>
+
+            <small>${formatDateTime(a.createdAt)}</small>
+
+            <p style="margin-top:8px;">
+              ${escapeHTML(a.body)}
+            </p>
+
+          </div>
+
+        `).join("")
+        :
+        `<div class="empty">
+          No announcements available.
+        </div>`
+      }
+
+    </div>
+  `;
+}
+
+
+/* =====================================================
+   STUDENT MESSAGES
+===================================================== */
+
+async function studentMessages(){
+
+  const student =
+    await getCurrentStudent();
+
+  if(!student) return;
+
+  const messages =
+    studentCache.messages.filter(m=>{
+
+      return (
+        m.recipient === "all" ||
+        m.recipient === student.id
+      );
+
+    });
+
+  document.getElementById("content").innerHTML = `
+
+    <div class="dashboard-header">
+
+      <h1>Messages</h1>
+
+      <p>Your messages from Phos Academy.</p>
+
+    </div>
+
+    <div class="card">
+
+      ${
+        messages.length
+        ?
+        messages.map(m=>`
+
+          <div class="notice">
+
+            <h4>${escapeHTML(m.subject)}</h4>
+
+            <small>
+              ${formatDateTime(m.createdAt)}
+            </small>
+
+            <p style="margin-top:8px;">
+              ${escapeHTML(m.body)}
+            </p>
+
+          </div>
+
+        `).join("")
+        :
+        `<div class="empty">
+          No messages available.
+        </div>`
+      }
+
+    </div>
+  `;
+}
+
+
+/* =====================================================
+   STUDENT ASSESSMENTS
+===================================================== */
+
+async function studentAssessments(){
+
+  const student =
+    await getCurrentStudent();
+
+  if(!student) return;
+
+  const assessments =
+    studentCache.assessments.filter(a=>{
+
+      /*
+        Explicit assignment wins.
+      Otherwise subject enrolment determines access.
+      Class level is NOT used.
+      */
+
+      if(a.assignedTo){
+
+        return a.assignedTo.includes(student.id);
+
+      }
+
+      return (
+        (student.subjects || []).includes(a.subject)
+      );
+
+    });
+
+  document.getElementById("content").innerHTML = `
+
+    <div class="dashboard-header">
+
+      <h1>Assessments</h1>
+
+      <p>
+        Tests and assignments for your enrolled subjects.
+      </p>
+
+    </div>
+
+    <div class="card">
+
+      ${
+        assessments.length
+        ?
+        `<div class="table-wrap">
+
+          <table>
+
+            <thead>
+
+              <tr>
+                <th>Title</th>
+                <th>Subject</th>
+                <th>Type</th>
+                <th>Due Date</th>
+                <th>Action</th>
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              ${assessments.map(a=>{
+
+                const submitted =
+                  studentCache.submissions.some(
+                    s =>
+                      s.assessmentId === a.id &&
+                      s.studentId === student.id
+                  );
+
+                return `
+
+                  <tr>
+
+                    <td>${escapeHTML(a.title)}</td>
+
+                    <td>${escapeHTML(
+                      adminCache.subjects.find(
+                        s=>s.id===a.subject
+                      )?.name || a.subject
+                    )}</td>
+
+                    <td>${escapeHTML(a.type)}</td>
+
+                    <td>${formatDate(a.dueDate)}</td>
+
+                    <td>
+
+                      ${
+                        submitted
+                        ?
+                        `<span class="badge badge-success">
+                          Submitted
+                        </span>`
+                        :
+                        `<button
+                          class="btn btn-primary btn-sm"
+                          onclick="takeAssessment('${a.id}')">
+                          Take Assessment
+                        </button>`
+                      }
+
+                    </td>
+
+                  </tr>
+
+                `;
+
+              }).join("")}
+
+            </tbody>
+
+          </table>
+
+        </div>`
+        :
+        `<div class="empty">
+          No assessments are currently available.
+        </div>`
+      }
+
+    </div>
+  `;
+}
+
+
+async function takeAssessment(id){
+
+  const assessment =
+    studentCache.assessments.find(
+      a=>a.id===id
+    );
+
+  if(!assessment) return;
+
+  openModal(
+    assessment.title,
+    `
+
+      <form onsubmit="submitAssessment(event,'${id}')">
+
+        ${
+          (assessment.questions || []).map((q,index)=>`
+
+            <div class="question">
+
+              <strong>
+                ${index+1}. ${escapeHTML(q.question)}
+              </strong>
+
+              ${
+                assessment.type === "MCQ"
+                ?
+                (q.options || []).map(option=>`
+
+                  <label class="option">
+
+                    <input
+                      type="radio"
+                      name="q${index}"
+                      value="${escapeHTML(option)}"
+                      required>
+
+                    ${escapeHTML(option)}
+
+                  </label>
+
+                `).join("")
+                :
+                `<textarea
+                  name="q${index}"
+                  required
+                  placeholder="Write your answer here..."></textarea>`
+              }
+
+            </div>
+
+          `).join("")
+        }
+
+        <button class="btn btn-primary">
+          Submit Assessment
+        </button>
+
+      </form>
+
+    `
+  );
+}
+
+
+async function submitAssessment(event,assessmentId){
+
+  event.preventDefault();
+
+  const student =
+    await getCurrentStudent();
+
+  const assessment =
+    studentCache.assessments.find(
+      a=>a.id===assessmentId
+    );
+
+  if(!student || !assessment) return;
+
+  const answers = [];
+
+  assessment.questions.forEach((q,index)=>{
+
+    const field =
+      document.querySelector(
+        `[name="q${index}"]`
+      );
+
+    answers.push(
+      field ? field.value : ""
+    );
+
+  });
+
+  let score = null;
+
+  if(assessment.type === "MCQ"){
+
     let correct = 0;
-    a.questions.forEach((q,i)=>{ if(currentAssessAnswers[i]===q.correctIndex) correct++; });
-    const score = Math.round((correct/a.questions.length)*100);
-    submission.status = "graded";
-    submission.score = score;
-  } else {
-    submission.status = "pending";
-    await addNotification({audience:"admin", type:"assessment-submitted", message:`${session.name} submitted "${a.title}" for review.`});
+
+    assessment.questions.forEach((q,index)=>{
+
+      if(
+        answers[index] &&
+        String(answers[index]).trim().toLowerCase() ===
+        String(q.answer || "").trim().toLowerCase()
+      ){
+
+        correct++;
+
+      }
+
+    });
+
+    score =
+      assessment.questions.length
+      ?
+      Math.round(
+        correct /
+        assessment.questions.length *
+        100
+      )
+      :
+      0;
   }
-  await col("submissions").add(submission);
-  document.getElementById("assessModalHost").innerHTML = "";
-  renderStudent();
+
+  await col("submissions").add({
+
+    assessmentId,
+    studentId:student.id,
+    answers,
+    score,
+    reviewed:assessment.type === "MCQ",
+    submittedAt:nowISO()
+
+  });
+
+  closeModal();
+
+  await loadStudentData(student);
+
+  studentAssessments();
+
+  alert(
+    score !== null
+    ? `Assessment submitted. Score: ${score}%`
+    : "Assessment submitted successfully."
+  );
 }
-function viewAssessResult(assessId){
-  const a = studentCache.assessments.find(x=>x.id===assessId);
-  const sub = studentCache.submissions.find(s=>s.assessmentId===assessId);
-  document.getElementById("assessModalHost").innerHTML = `
-    <div class="card" style="border-color:var(--accent);">
-      <h2>${esc(a.title)} — your submission</h2>
-      ${a.questions.map((q,i)=>`
-        <div class="q-block">
-          <div style="font-weight:600;">Q${i+1}: ${esc(q.q)}</div>
-          <div style="margin-top:4px;">Your answer: ${a.type==='mcq' ? esc(q.options[sub.answers[i]] ?? '(none)') : esc(sub.answers[i]||'(none)')}</div>
-          ${a.type==='mcq' ? `<div class="muted">Correct answer: ${esc(q.options[q.correctIndex])}</div>` : ''}
-        </div>`).join('')}
-      <p>${a.type==='mcq' ? `Score: <strong>${sub.score}%</strong>` : (sub.status==='pending' ? 'Awaiting review.' : `Score: <strong>${sub.theoryScore}%</strong>${sub.feedback?` — Feedback: ${esc(sub.feedback)}`:''}`)}</p>
-      <button class="btn" onclick="document.getElementById('assessModalHost').innerHTML=''">Close</button>
+
+
+/* =====================================================
+   STUDENT REPORTS
+===================================================== */
+
+async function studentReports(){
+
+  const student =
+    await getCurrentStudent();
+
+  if(!student) return;
+
+  const submissions =
+    studentCache.submissions.filter(
+      s=>s.studentId===student.id
+    );
+
+  document.getElementById("content").innerHTML = `
+
+    <div class="dashboard-header">
+
+      <h1>My Reports</h1>
+
+      <p>Your assessment performance.</p>
+
+    </div>
+
+    <div class="card">
+
+      ${
+        submissions.length
+        ?
+        `<div class="table-wrap">
+
+          <table>
+
+            <thead>
+
+              <tr>
+                <th>Assessment</th>
+                <th>Subject</th>
+                <th>Score</th>
+                <th>Date</th>
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              ${submissions.map(s=>{
+
+                const assessment =
+                  studentCache.assessments.find(
+                    a=>a.id===s.assessmentId
+                  );
+
+                return `
+
+                  <tr>
+
+                    <td>
+                      ${escapeHTML(
+                        assessment?.title || "Assessment"
+                      )}
+                    </td>
+
+                    <td>
+                      ${escapeHTML(
+                        adminCache.subjects.find(
+                          x=>x.id===assessment?.subject
+                        )?.name ||
+                        assessment?.subject ||
+                        "-"
+                      )}
+                    </td>
+
+                    <td>
+
+                      ${
+                        s.score !== null &&
+                        s.score !== undefined
+                        ?
+                        `<span class="badge badge-success">
+                          ${s.score}%
+                        </span>`
+                        :
+                        `<span class="badge badge-warning">
+                          Pending Review
+                        </span>`
+                      }
+
+                    </td>
+
+                    <td>
+                      ${formatDate(s.submittedAt)}
+                    </td>
+
+                  </tr>
+
+                `;
+
+              }).join("")}
+
+            </tbody>
+
+          </table>
+
+        </div>`
+        :
+        `<div class="empty">
+          No assessment records yet.
+        </div>`
+      }
+
     </div>
   `;
 }
 
-function wireStudentTabEvents(){
-  const el = document.getElementById("studentTabBody");
-  if(!el) return;
-  el.querySelectorAll("[data-snotif]").forEach(b=>b.onclick=()=>markNotifRead(b.dataset.snotif).then(renderStudent));
-  const sendBtn = document.getElementById("btnStudentSendMsg");
-  if(sendBtn) sendBtn.onclick = async ()=>{
-    const body = document.getElementById("stuMsgBody").value.trim();
-    if(!body) return;
-    const session = getSession();
-    await col("messages").add({direction:"student-to-admin", studentId:session.id, message:body, timestamp:nowISO(), read:false});
-    await addNotification({audience:"admin", type:"message", message:`New message from ${session.name}.`});
-    renderStudent();
-  };
-  el.querySelectorAll("[data-take-assess]").forEach(b=>b.onclick=()=>openTakeAssessment(b.dataset.takeAssess));
-  el.querySelectorAll("[data-view-assess]").forEach(b=>b.onclick=()=>viewAssessResult(b.dataset.viewAssess));
+
+/* =====================================================
+   STUDENT FEES
+===================================================== */
+
+async function studentFees(){
+
+  const student =
+    await getCurrentStudent();
+
+  if(!student) return;
+
+  const records =
+    student.feesRecords || [];
+
+  document.getElementById("content").innerHTML = `
+
+    <div class="dashboard-header">
+
+      <h1>Fees</h1>
+
+      <p>Your fee records.</p>
+
+    </div>
+
+    <div class="card">
+
+      ${
+        records.length
+        ?
+        `<div class="table-wrap">
+
+          <table>
+
+            <thead>
+
+              <tr>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Note</th>
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              ${records.map(record=>`
+
+                <tr>
+
+                  <td>${formatDate(record.date)}</td>
+
+                  <td>
+                    ₦${Number(record.amount || 0).toLocaleString()}
+                  </td>
+
+                  <td>
+
+                    <span class="
+                      badge
+                      ${
+                        record.status === "Paid"
+                        ? "badge-success"
+                        : "badge-warning"
+                      }
+                    ">
+                      ${escapeHTML(record.status)}
+                    </span>
+
+                  </td>
+
+                  <td>${escapeHTML(record.note || "-")}</td>
+
+                </tr>
+
+              `).join("")}
+
+            </tbody>
+
+          </table>
+
+        </div>`
+        :
+        `<div class="empty">
+          No fee records available.
+        </div>`
+      }
+
+    </div>
+  `;
 }
 
-/* ============================================================================
-   BOOT
-   ========================================================================== */
-render();
+
+/* =====================================================
+   STARTUP
+===================================================== */
+
+document.getElementById("year").textContent =
+  new Date().getFullYear();
+
+loadPublicSubjects();
+
+restoreSession();
+
 </script>
+
 </body>
 </html>
