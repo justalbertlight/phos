@@ -12,7 +12,6 @@
 :root{
   --primary:#2563eb;
   --primary-dark:#1d4ed8;
-  --primary-light:#eff6ff;
   --secondary:#0ea5e9;
   --dark:#172033;
   --text:#344054;
@@ -44,10 +43,7 @@ body{
   line-height:1.6;
 }
 
-button,
-input,
-select,
-textarea{
+button,input,select,textarea{
   font:inherit;
 }
 
@@ -65,35 +61,6 @@ a{
 }
 
 /* =========================
-   LOGO
-========================= */
-
-.logo{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  font-weight:800;
-  font-size:21px;
-  color:var(--dark);
-}
-
-.logo-mark{
-  width:43px;
-  height:43px;
-  border-radius:13px;
-  background:linear-gradient(135deg,#2563eb,#38bdf8);
-  color:#fff;
-  display:grid;
-  place-items:center;
-  box-shadow:0 8px 20px rgba(37,99,235,.22);
-}
-
-.logo-mark svg{
-  width:24px;
-  height:24px;
-}
-
-/* =========================
    PUBLIC WEBSITE
 ========================= */
 
@@ -103,7 +70,7 @@ a{
 }
 
 .topbar{
-  background:#10234f;
+  background:#151b2d;
   color:#fff;
   font-size:13px;
   padding:8px 5%;
@@ -122,7 +89,7 @@ a{
   position:sticky;
   top:0;
   z-index:100;
-  background:rgba(255,255,255,.96);
+  background:rgba(255,255,255,.95);
   backdrop-filter:blur(15px);
   border-bottom:1px solid #eee;
 }
@@ -136,6 +103,31 @@ a{
   align-items:center;
   justify-content:space-between;
   gap:25px;
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-weight:800;
+  font-size:21px;
+  color:var(--dark);
+}
+
+.logo-mark{
+  width:43px;
+  height:43px;
+  border-radius:13px;
+  background:linear-gradient(135deg,var(--primary),#38bdf8);
+  color:#fff;
+  display:grid;
+  place-items:center;
+  font-weight:900;
+}
+
+.logo-mark svg{
+  width:25px;
+  height:25px;
 }
 
 .nav-links{
@@ -181,11 +173,6 @@ a{
   color:var(--dark);
 }
 
-.btn-outline:hover{
-  border-color:var(--primary);
-  color:var(--primary);
-}
-
 .btn-success{
   background:var(--success);
   color:#fff;
@@ -206,14 +193,10 @@ a{
   font-size:12px;
 }
 
-/* =========================
-   HERO
-========================= */
-
 .hero{
   background:
-    radial-gradient(circle at 85% 20%,rgba(37,99,235,.16),transparent 30%),
-    linear-gradient(135deg,#f4f8ff,#fff);
+    radial-gradient(circle at 85% 20%,rgba(37,99,235,.18),transparent 30%),
+    linear-gradient(135deg,#f5f9ff,#fff);
   padding:90px 24px 100px;
 }
 
@@ -267,7 +250,7 @@ a{
   border:1px solid #eee;
   border-radius:28px;
   padding:30px;
-  box-shadow:0 25px 70px rgba(20,60,130,.12);
+  box-shadow:0 25px 70px rgba(30,70,140,.13);
 }
 
 .hero-card-header{
@@ -289,7 +272,7 @@ a{
 }
 
 .mock-stat{
-  background:#f4f8ff;
+  background:#f5f8fc;
   border-radius:15px;
   padding:18px;
   margin-bottom:12px;
@@ -300,10 +283,6 @@ a{
   font-size:24px;
   color:var(--dark);
 }
-
-/* =========================
-   SECTIONS
-========================= */
 
 .section{
   padding:85px 24px;
@@ -357,7 +336,7 @@ a{
   width:48px;
   height:48px;
   border-radius:14px;
-  background:var(--primary-light);
+  background:#eaf2ff;
   color:var(--primary);
   display:grid;
   place-items:center;
@@ -438,7 +417,7 @@ a{
 }
 
 .concerns{
-  background:#10234f;
+  background:#151b2d;
   color:#fff;
 }
 
@@ -464,7 +443,7 @@ a{
 }
 
 .concern p{
-  color:#c7d2e5;
+  color:#c7ccda;
   font-size:14px;
 }
 
@@ -477,18 +456,8 @@ a{
 .mode-card{
   padding:25px;
   border-radius:18px;
-  background:#f7faff;
+  background:#f5f8fc;
   border:1px solid var(--border);
-}
-
-.mode-card h3{
-  color:var(--dark);
-  margin-bottom:6px;
-}
-
-.mode-card p{
-  color:var(--muted);
-  font-size:14px;
 }
 
 .cta{
@@ -496,7 +465,7 @@ a{
   max-width:1150px;
   border-radius:28px;
   padding:60px;
-  background:linear-gradient(135deg,#2563eb,#1d4ed8);
+  background:linear-gradient(135deg,var(--primary),#3b82f6);
   color:#fff;
   display:flex;
   justify-content:space-between;
@@ -511,7 +480,7 @@ a{
 }
 
 .cta p{
-  color:#e5efff;
+  color:#e7f0ff;
 }
 
 .cta .btn{
@@ -521,8 +490,8 @@ a{
 }
 
 footer{
-  background:#0c1835;
-  color:#aab9d3;
+  background:#101522;
+  color:#aab2c5;
   padding:45px 24px;
 }
 
@@ -545,7 +514,7 @@ footer{
   place-items:center;
   padding:25px;
   background:
-    radial-gradient(circle at 20% 20%,#dcecff,transparent 35%),
+    radial-gradient(circle at 20% 20%,#dbeafe,transparent 35%),
     #f6f9ff;
 }
 
@@ -569,7 +538,7 @@ footer{
 }
 
 /* =========================
-   FORMS
+   FORM
 ========================= */
 
 .form-group{
@@ -624,7 +593,7 @@ textarea{
   display:flex;
   align-items:center;
   gap:8px;
-  background:#f7faff;
+  background:#f5f8fc;
   padding:9px;
   border-radius:8px;
   font-size:13px;
@@ -635,7 +604,7 @@ textarea{
 }
 
 /* =========================
-   APPLICATION
+   APP
 ========================= */
 
 .app{
@@ -645,7 +614,7 @@ textarea{
 
 .sidebar{
   width:250px;
-  background:#10234f;
+  background:#151b2d;
   color:#fff;
   min-height:100vh;
   position:fixed;
@@ -657,7 +626,7 @@ textarea{
 }
 
 .sidebar-logo{
-  padding:20px;
+  padding:25px 20px;
   font-size:20px;
   font-weight:800;
   border-bottom:1px solid rgba(255,255,255,.08);
@@ -667,10 +636,10 @@ textarea{
 }
 
 .sidebar-logo .mini-light{
-  width:34px;
-  height:34px;
-  border-radius:10px;
-  background:#2563eb;
+  width:32px;
+  height:32px;
+  border-radius:9px;
+  background:var(--primary);
   display:grid;
   place-items:center;
 }
@@ -689,7 +658,7 @@ textarea{
   text-align:left;
   background:none;
   border:0;
-  color:#aebbd0;
+  color:#aeb6c9;
   padding:12px 14px;
   border-radius:9px;
   margin-bottom:4px;
@@ -736,7 +705,7 @@ textarea{
   width:38px;
   height:38px;
   border-radius:50%;
-  background:var(--primary-light);
+  background:#eaf2ff;
   color:var(--primary);
   display:grid;
   place-items:center;
@@ -827,7 +796,7 @@ td{
 }
 
 th{
-  background:#fafcff;
+  background:#fafafa;
   color:#475467;
 }
 
@@ -953,12 +922,12 @@ th{
 }
 
 .option:hover{
-  background:#f4f8ff;
+  background:#f8fbff;
 }
 
 .notice{
   border-left:4px solid var(--primary);
-  background:#f5f9ff;
+  background:#f8fbff;
   padding:15px;
   margin-bottom:12px;
   border-radius:8px;
@@ -981,7 +950,6 @@ th{
 ========================= */
 
 @media(max-width:1000px){
-
   .hero-inner{
     grid-template-columns:1fr;
   }
@@ -1006,7 +974,6 @@ th{
 }
 
 @media(max-width:750px){
-
   .topbar{
     display:none;
   }
@@ -1065,7 +1032,7 @@ th{
   .mobile-menu{
     display:block;
     border:0;
-    background:#f1f5f9;
+    background:#f1f2f6;
     border-radius:8px;
     width:38px;
     height:38px;
@@ -1102,29 +1069,19 @@ th{
   </div>
 
   <nav class="navbar">
-
     <div class="nav-inner">
 
       <a href="#" class="logo">
 
         <span class="logo-mark">
-
-          <svg viewBox="0 0 24 24" fill="none"
-               stroke="currentColor"
-               stroke-width="2"
-               stroke-linecap="round">
-
-            <path d="M12 3v2"/>
-            <path d="M12 19v2"/>
-            <path d="m4.93 4.93 1.41 1.41"/>
-            <path d="m17.66 17.66 1.41 1.41"/>
-            <path d="M3 12h2"/>
-            <path d="M19 12h2"/>
-            <path d="m4.93 19.07 1.41-1.41"/>
-            <path d="m17.66 6.34 1.41-1.41"/>
-            <circle cx="12" cy="12" r="4"/>
+          <svg viewBox="0 0 48 48" fill="none">
+            <circle cx="24" cy="22" r="7" fill="currentColor"/>
+            <path
+              d="M24 4V10M24 34V40M6 22H12M36 22H42M11.3 9.3L15.5 13.5M32.5 30.5L36.7 34.7M36.7 9.3L32.5 13.5M15.5 30.5L11.3 34.7"
+              stroke="currentColor"
+              stroke-width="3"
+              stroke-linecap="round"/>
           </svg>
-
         </span>
 
         <span>Phos Academy</span>
@@ -1132,38 +1089,24 @@ th{
       </a>
 
       <div class="nav-links">
-
         <a href="#why">Why Phos</a>
         <a href="#subjects">Subjects</a>
         <a href="#how">How It Works</a>
         <a href="#parents">For Parents</a>
 
-        <button
-          class="btn btn-outline"
-          onclick="messageAlbert()">
+        <button class="btn btn-outline" onclick="messageAlbert()">
           Message Albert
         </button>
 
-        <button
-          class="btn btn-primary"
-          onclick="showLogin()">
+        <button class="btn btn-primary" onclick="showLogin()">
           Student Login
         </button>
-
       </div>
 
-      <button
-        class="mobile-menu"
-        onclick="showLogin()">
-        ☰
-      </button>
+      <button class="mobile-menu" onclick="showLogin()">☰</button>
 
     </div>
-
   </nav>
-
-
-  <!-- HERO -->
 
   <section class="hero">
 
@@ -1189,15 +1132,11 @@ th{
 
         <div class="hero-actions">
 
-          <button
-            class="btn btn-primary"
-            onclick="messageAlbert()">
-            Speak with Albert
+          <button class="btn btn-primary" onclick="messageAlbert()">
+            Message Albert
           </button>
 
-          <button
-            class="btn btn-outline"
-            onclick="showLogin()">
+          <button class="btn btn-outline" onclick="showLogin()">
             Student Portal
           </button>
 
@@ -1205,45 +1144,26 @@ th{
 
       </div>
 
-
       <div class="hero-card">
 
         <div class="hero-card-header">
-
           <h3>Learning at Phos</h3>
-
           <span class="status"></span>
-
         </div>
 
         <div class="mock-stat">
-
           <small>Personalized Learning</small>
-
-          <strong>
-            Built Around the Learner
-          </strong>
-
+          <strong>Built Around the Learner</strong>
         </div>
 
         <div class="mock-stat">
-
           <small>Regular Assessment</small>
-
-          <strong>
-            Know What Needs Attention
-          </strong>
-
+          <strong>Know What Needs Attention</strong>
         </div>
 
         <div class="mock-stat">
-
           <small>Parent Visibility</small>
-
-          <strong>
-            Stay Informed
-          </strong>
-
+          <strong>Stay Informed</strong>
         </div>
 
       </div>
@@ -1252,22 +1172,15 @@ th{
 
   </section>
 
-
-  <!-- WHY -->
-
   <section id="why" class="section">
 
     <div class="section-inner">
 
       <div class="section-heading">
 
-        <span class="eyebrow">
-          Why Parents Choose Us
-        </span>
+        <span class="eyebrow">Why Parents Choose Us</span>
 
-        <h2>
-          More Than Just Extra Lessons
-        </h2>
+        <h2>More Than Just Extra Lessons</h2>
 
         <p>
           Effective tutoring is not only about spending more hours with a
@@ -1277,91 +1190,61 @@ th{
 
       </div>
 
-
       <div class="feature-grid">
 
         <div class="feature-card">
-
           <div class="feature-icon">◎</div>
-
           <h3>Individual Attention</h3>
-
           <p>
             Learning needs differ from student to student. Our tutoring
             approach allows attention to be directed toward the learner's
             actual needs.
           </p>
-
         </div>
 
-
         <div class="feature-card">
-
           <div class="feature-icon">✓</div>
-
           <h3>Structured Learning</h3>
-
           <p>
             Lessons follow a clear structure so students know what they are
             learning, practising and expected to understand.
           </p>
-
         </div>
 
-
         <div class="feature-card">
-
           <div class="feature-icon">↗</div>
-
           <h3>Progress Monitoring</h3>
-
           <p>
             Assessments and reports make it easier to identify strengths,
             weaknesses and areas that require more attention.
           </p>
-
         </div>
 
-
         <div class="feature-card">
-
           <div class="feature-icon">◆</div>
-
           <h3>Flexible Learning</h3>
-
           <p>
             Learning can be arranged through available modes including home,
             after-school and online sessions.
           </p>
-
         </div>
 
-
         <div class="feature-card">
-
           <div class="feature-icon">▣</div>
-
           <h3>Regular Practice</h3>
-
           <p>
             Students are given opportunities to practise and demonstrate
             understanding instead of simply listening to lessons.
           </p>
-
         </div>
 
-
         <div class="feature-card">
-
           <div class="feature-icon">♡</div>
-
           <h3>Parent Communication</h3>
-
           <p>
             Parents can stay connected with important announcements,
             schedules, reports and other learning information.
           </p>
-
         </div>
 
       </div>
@@ -1370,25 +1253,15 @@ th{
 
   </section>
 
-
-  <!-- SUBJECTS -->
-
-  <section
-    id="subjects"
-    class="section"
-    style="background:#f8fbff;">
+  <section id="subjects" class="section" style="background:#f8fbff;">
 
     <div class="section-inner">
 
       <div class="section-heading">
 
-        <span class="eyebrow">
-          What We Teach
-        </span>
+        <span class="eyebrow">What We Teach</span>
 
-        <h2>
-          Learning Designed Around Individual Needs
-        </h2>
+        <h2>Learning Designed Around Individual Needs</h2>
 
         <p>
           Subjects are selected for each learner based on their learning needs
@@ -1433,22 +1306,15 @@ th{
 
   </section>
 
-
-  <!-- HOW IT WORKS -->
-
   <section id="how" class="section">
 
     <div class="section-inner">
 
       <div class="section-heading">
 
-        <span class="eyebrow">
-          The Learning Process
-        </span>
+        <span class="eyebrow">The Learning Process</span>
 
-        <h2>
-          A Simple, Structured Approach
-        </h2>
+        <h2>A Simple, Structured Approach</h2>
 
       </div>
 
@@ -1500,22 +1366,15 @@ th{
 
   </section>
 
-
-  <!-- PARENTS -->
-
   <section id="parents" class="section concerns">
 
     <div class="section-inner">
 
       <div class="section-heading">
 
-        <span class="eyebrow">
-          For Parents
-        </span>
+        <span class="eyebrow">For Parents</span>
 
-        <h2>
-          Questions Parents Often Have
-        </h2>
+        <h2>Questions Parents Often Have</h2>
 
       </div>
 
@@ -1523,9 +1382,7 @@ th{
 
         <div class="concern">
 
-          <h3>
-            How do I know my child is improving?
-          </h3>
+          <h3>How do I know my child is improving?</h3>
 
           <p>
             The learning portal provides assessment records and reports that
@@ -1534,12 +1391,9 @@ th{
 
         </div>
 
-
         <div class="concern">
 
-          <h3>
-            What if my child struggles with a subject?
-          </h3>
+          <h3>What if my child struggles with a subject?</h3>
 
           <p>
             Subjects are assigned individually, allowing the learning plan to
@@ -1548,12 +1402,9 @@ th{
 
         </div>
 
-
         <div class="concern">
 
-          <h3>
-            Will I know what is happening?
-          </h3>
+          <h3>Will I know what is happening?</h3>
 
           <p>
             Important schedules, announcements, reports and learning
@@ -1568,22 +1419,15 @@ th{
 
   </section>
 
-
-  <!-- FLEXIBLE OPTIONS -->
-
   <section class="section">
 
     <div class="section-inner">
 
       <div class="section-heading">
 
-        <span class="eyebrow">
-          Flexible Options
-        </span>
+        <span class="eyebrow">Flexible Options</span>
 
-        <h2>
-          Learning That Fits Your Situation
-        </h2>
+        <h2>Learning That Fits Your Situation</h2>
 
       </div>
 
@@ -1623,58 +1467,40 @@ th{
 
   </section>
 
-
-  <!-- CTA -->
-
   <div class="cta">
 
     <div>
 
-      <h2>
-        Give Your Child a Stronger Foundation for the Future.
-      </h2>
+      <h2>Give Your Child a Stronger Foundation for the Future.</h2>
 
       <p>
-        Speak with Albert and find out how structured private tutoring can
-        support your learner.
+        Start a conversation with Phos Academy and find out how structured
+        private tutoring can support your learner.
       </p>
 
     </div>
 
-    <button
-      class="btn"
-      onclick="messageAlbert()">
+    <button class="btn" onclick="messageAlbert()">
       Speak with Albert
     </button>
 
   </div>
-
-
-  <!-- FOOTER -->
 
   <footer>
 
     <div class="footer-inner">
 
       <div>
-
-        <strong style="color:#fff;">
-          Phos Academy
-        </strong>
-
+        <strong style="color:#fff;">Phos Academy</strong>
         <p>
           Structured learning. Personal attention. Better foundations.
         </p>
-
       </div>
 
       <div>
-
         <p>
-          © <span id="year"></span>
-          Phos Academy. All rights reserved.
+          © <span id="year"></span> Phos Academy. All rights reserved.
         </p>
-
       </div>
 
     </div>
@@ -1685,7 +1511,7 @@ th{
 
 
 <!-- =====================================================
-     LOGIN
+     LOGIN PAGE
 ===================================================== -->
 
 <div id="loginPage" class="login-page hidden">
@@ -1696,20 +1522,13 @@ th{
 
       <span class="logo-mark">
 
-        <svg viewBox="0 0 24 24" fill="none"
-             stroke="currentColor"
-             stroke-width="2"
-             stroke-linecap="round">
-
-          <path d="M12 3v2"/>
-          <path d="M12 19v2"/>
-          <path d="m4.93 4.93 1.41 1.41"/>
-          <path d="m17.66 17.66 1.41 1.41"/>
-          <path d="M3 12h2"/>
-          <path d="M19 12h2"/>
-          <path d="m4.93 19.07 1.41-1.41"/>
-          <path d="m17.66 6.34 1.41-1.41"/>
-          <circle cx="12" cy="12" r="4"/>
+        <svg viewBox="0 0 48 48" fill="none">
+          <circle cx="24" cy="22" r="7" fill="currentColor"/>
+          <path
+            d="M24 4V10M24 34V40M6 22H12M36 22H42M11.3 9.3L15.5 13.5M32.5 30.5L36.7 34.7M36.7 9.3L32.5 13.5M15.5 30.5L11.3 34.7"
+            stroke="currentColor"
+            stroke-width="3"
+            stroke-linecap="round"/>
         </svg>
 
       </span>
@@ -1729,31 +1548,23 @@ th{
     <form onsubmit="login(event)">
 
       <div class="form-group">
-
         <label>Username</label>
-
         <input
           id="loginUsername"
           required
           autocomplete="username">
-
       </div>
 
       <div class="form-group">
-
         <label>Password</label>
-
         <input
           id="loginPassword"
           type="password"
           required
           autocomplete="current-password">
-
       </div>
 
-      <button
-        class="btn btn-primary"
-        style="width:100%;">
+      <button class="btn btn-primary" style="width:100%;">
         Sign In
       </button>
 
@@ -1783,20 +1594,13 @@ th{
 
       <span class="mini-light">
 
-        <svg viewBox="0 0 24 24" fill="none"
-             stroke="currentColor"
-             stroke-width="2"
-             stroke-linecap="round">
-
-          <path d="M12 3v2"/>
-          <path d="M12 19v2"/>
-          <path d="m4.93 4.93 1.41 1.41"/>
-          <path d="m17.66 17.66 1.41 1.41"/>
-          <path d="M3 12h2"/>
-          <path d="M19 12h2"/>
-          <path d="m4.93 19.07 1.41-1.41"/>
-          <path d="m17.66 6.34 1.41-1.41"/>
-          <circle cx="12" cy="12" r="4"/>
+        <svg viewBox="0 0 48 48" fill="none">
+          <circle cx="24" cy="22" r="7" fill="currentColor"/>
+          <path
+            d="M24 4V10M24 34V40M6 22H12M36 22H42M11.3 9.3L15.5 13.5M32.5 30.5L36.7 34.7M36.7 9.3L32.5 13.5M15.5 30.5L11.3 34.7"
+            stroke="currentColor"
+            stroke-width="3"
+            stroke-linecap="round"/>
         </svg>
 
       </span>
@@ -1820,7 +1624,6 @@ th{
 
   </aside>
 
-
   <main class="main">
 
     <div class="topnav">
@@ -1833,9 +1636,7 @@ th{
           ☰
         </button>
 
-        <h2 id="pageTitle">
-          Dashboard
-        </h2>
+        <h2 id="pageTitle">Dashboard</h2>
 
       </div>
 
@@ -1843,11 +1644,7 @@ th{
 
         <span id="topUserName"></span>
 
-        <div
-          class="avatar"
-          id="topAvatar">
-          P
-        </div>
+        <div class="avatar" id="topAvatar">P</div>
 
       </div>
 
@@ -1870,15 +1667,9 @@ th{
 
     <div class="modal-header">
 
-      <h3 id="modalTitle">
-        Modal
-      </h3>
+      <h3 id="modalTitle">Modal</h3>
 
-      <button
-        class="close"
-        onclick="closeModal()">
-        ×
-      </button>
+      <button class="close" onclick="closeModal()">×</button>
 
     </div>
 
@@ -2020,14 +1811,8 @@ function nowISO(){
 
 function escapeHTML(value){
 
-  if(
-    value === undefined ||
-    value === null
-  ){
-
+  if(value === undefined || value === null)
     return "";
-
-  }
 
   return String(value)
     .replace(/&/g,"&amp;")
@@ -2114,11 +1899,7 @@ function formatDateTime(value){
 }
 
 
-function showAlert(
-  elementId,
-  message,
-  type="info"
-){
+function showAlert(elementId,message,type="info"){
 
   const el =
     document.getElementById(elementId);
@@ -2126,11 +1907,9 @@ function showAlert(
   if(!el) return;
 
   el.innerHTML = `
-
     <div class="alert alert-${type}">
       ${escapeHTML(message)}
     </div>
-
   `;
 
 }
@@ -2138,26 +1917,22 @@ function showAlert(
 
 function openModal(title,body){
 
-  document.getElementById(
-    "modalTitle"
-  ).textContent = title;
+  document.getElementById("modalTitle").textContent =
+    title;
 
-  document.getElementById(
-    "modalBody"
-  ).innerHTML = body;
+  document.getElementById("modalBody").innerHTML =
+    body;
 
-  document.getElementById(
-    "modal"
-  ).classList.remove("hidden");
+  document.getElementById("modal")
+    .classList.remove("hidden");
 
 }
 
 
 function closeModal(){
 
-  document.getElementById(
-    "modal"
-  ).classList.add("hidden");
+  document.getElementById("modal")
+    .classList.add("hidden");
 
 }
 
@@ -2182,6 +1957,51 @@ function subjectNames(ids=[]){
 }
 
 
+function getSubjectName(value){
+
+  if(!value) return "-";
+
+  const subject =
+    adminCache.subjects.find(
+      s =>
+        s.id === value ||
+        s.name === value
+    );
+
+  return subject
+    ? subject.name
+    : value;
+
+}
+
+
+function studentHasSubject(student,subjectValue){
+
+  if(!student || !subjectValue)
+    return false;
+
+  const assigned =
+    student.subjects || [];
+
+  if(assigned.includes(subjectValue))
+    return true;
+
+  const subject =
+    adminCache.subjects.find(
+      s =>
+        s.id === subjectValue ||
+        s.name === subjectValue
+    );
+
+  if(!subject)
+    return false;
+
+  return assigned.includes(subject.id) ||
+         assigned.includes(subject.name);
+
+}
+
+
 function subjectExists(name){
 
   return adminCache.subjects.some(
@@ -2193,65 +2013,42 @@ function subjectExists(name){
 }
 
 
-function getSubjectName(id){
-
-  const subject =
-    adminCache.subjects.find(
-      s =>
-        s.id === id ||
-        s.name === id
-    );
-
-  return subject
-    ? subject.name
-    : id || "-";
-
-}
-
-
 /* =====================================================
    NAVIGATION
 ===================================================== */
 
 function showPublic(){
 
-  document.getElementById(
-    "publicPage"
-  ).classList.remove("hidden");
+  document.getElementById("publicPage")
+    .classList.remove("hidden");
 
-  document.getElementById(
-    "loginPage"
-  ).classList.add("hidden");
+  document.getElementById("loginPage")
+    .classList.add("hidden");
 
-  document.getElementById(
-    "appPage"
-  ).classList.add("hidden");
+  document.getElementById("appPage")
+    .classList.add("hidden");
 
 }
 
 
 function showLogin(){
 
-  document.getElementById(
-    "publicPage"
-  ).classList.add("hidden");
+  document.getElementById("publicPage")
+    .classList.add("hidden");
 
-  document.getElementById(
-    "loginPage"
-  ).classList.remove("hidden");
+  document.getElementById("loginPage")
+    .classList.remove("hidden");
 
-  document.getElementById(
-    "appPage"
-  ).classList.add("hidden");
+  document.getElementById("appPage")
+    .classList.add("hidden");
 
 }
 
 
 function toggleSidebar(){
 
-  document.getElementById(
-    "sidebar"
-  ).classList.toggle("open");
+  document.getElementById("sidebar")
+    .classList.toggle("open");
 
 }
 
@@ -2263,35 +2060,35 @@ function toggleSidebar(){
 function messageAlbert(){
 
   openModal(
-    "Speak with Albert",
+    "Message Albert",
     `
 
-      <p style="color:var(--muted);margin-bottom:18px;">
-        Have a question about tutoring, subjects, schedules or enrolling a
-        learner? Send a message to Albert.
-      </p>
-
-      <form onsubmit="sendAlbertMessage(event)">
+      <form onsubmit="saveVisitorMessage(event)">
 
         <div class="form-group">
-
           <label>Your Name</label>
-
-          <input
-            id="publicMessageName"
-            required>
-
+          <input id="visitorName" required>
         </div>
 
         <div class="form-group">
+          <label>Phone or Email</label>
+          <input id="visitorContact" required>
+        </div>
 
-          <label>Your Message</label>
+        <div class="form-group">
+          <label>Subject</label>
+          <input
+            id="visitorSubject"
+            placeholder="What would you like to discuss?"
+            required>
+        </div>
 
+        <div class="form-group">
+          <label>Message</label>
           <textarea
-            id="publicMessageBody"
-            placeholder="How can Albert help you?"
+            id="visitorMessage"
+            placeholder="Write your message to Albert..."
             required></textarea>
-
         </div>
 
         <button class="btn btn-primary">
@@ -2306,51 +2103,65 @@ function messageAlbert(){
 }
 
 
-async function sendAlbertMessage(event){
+async function saveVisitorMessage(event){
 
   event.preventDefault();
 
   if(!firebaseReady){
 
     alert(
-      "The messaging system is currently unavailable."
+      "Firebase is not connected. Your message could not be sent."
     );
 
     return;
 
   }
 
-  const name =
-    document.getElementById(
-      "publicMessageName"
-    ).value.trim();
+  try{
 
-  const body =
-    document.getElementById(
-      "publicMessageBody"
-    ).value.trim();
+    await col("messages").add({
 
-  await col("messages").add({
+      senderType:"visitor",
 
-    senderName:name,
+      senderName:
+        document.getElementById("visitorName")
+          .value.trim(),
 
-    body,
+      contact:
+        document.getElementById("visitorContact")
+          .value.trim(),
 
-    subject:"Enquiry for Albert",
+      recipient:"Albert",
 
-    recipient:"Albert",
+      subject:
+        document.getElementById("visitorSubject")
+          .value.trim(),
 
-    source:"public",
+      body:
+        document.getElementById("visitorMessage")
+          .value.trim(),
 
-    createdAt:nowISO()
+      read:false,
 
-  });
+      createdAt:nowISO()
 
-  closeModal();
+    });
 
-  alert(
-    "Your message has been sent to Albert."
-  );
+    closeModal();
+
+    alert(
+      "Your message has been sent to Albert."
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    alert(
+      "Unable to send your message."
+    );
+
+  }
 
 }
 
@@ -2368,7 +2179,8 @@ async function ensureDefaultSubjects(){
       .limit(1)
       .get();
 
-  if(!snapshot.empty) return;
+  if(!snapshot.empty)
+    return;
 
   for(const subject of DEFAULT_SUBJECTS){
 
@@ -2383,9 +2195,7 @@ async function ensureDefaultSubjects(){
       .set({
 
         name:subject.name,
-
         description:subject.description,
-
         createdAt:nowISO()
 
       });
@@ -2408,17 +2218,17 @@ async function loadPublicSubjects(){
     const snapshot =
       await col("subjects").get();
 
-    if(snapshot.empty) return;
+    if(snapshot.empty)
+      return;
 
     const subjects =
       snapshot.docs.map(docData);
 
     const container =
-      document.getElementById(
-        "publicSubjects"
-      );
+      document.getElementById("publicSubjects");
 
-    if(!container) return;
+    if(!container)
+      return;
 
     container.innerHTML =
       subjects.map(subject=>`
@@ -2458,36 +2268,27 @@ async function login(event){
   event.preventDefault();
 
   const username =
-    document.getElementById(
-      "loginUsername"
-    ).value.trim();
+    document.getElementById("loginUsername")
+      .value.trim();
 
   const password =
-    document.getElementById(
-      "loginPassword"
-    ).value;
+    document.getElementById("loginPassword")
+      .value;
 
 
-  /*
-    ADMIN LOGIN
-
-    Username: phosadmin
-    Password: phosacad
-  */
+  /* =========================
+     ADMIN LOGIN
+  ========================= */
 
   if(
-    username.toLowerCase() ===
-      "phosadmin" &&
-    password ===
-      "phosacad"
+    username.toLowerCase() === "phosadmin" &&
+    password === "phosacad"
   ){
 
     session = {
 
       role:"admin",
-
       id:"admin",
-
       name:"Albert"
 
     };
@@ -2504,7 +2305,9 @@ async function login(event){
   }
 
 
-  /* STUDENT LOGIN */
+  /* =========================
+     STUDENT LOGIN
+  ========================= */
 
   if(!firebaseReady){
 
@@ -2523,14 +2326,9 @@ async function login(event){
 
     const snapshot =
       await col("students")
-        .where(
-          "username",
-          "==",
-          username
-        )
+        .where("username","==",username)
         .limit(1)
         .get();
-
 
     if(snapshot.empty){
 
@@ -2544,17 +2342,10 @@ async function login(event){
 
     }
 
-
     const student =
-      docData(
-        snapshot.docs[0]
-      );
+      docData(snapshot.docs[0]);
 
-
-    if(
-      student.password !==
-      password
-    ){
+    if(student.password !== password){
 
       showAlert(
         "loginAlert",
@@ -2566,26 +2357,20 @@ async function login(event){
 
     }
 
-
     session = {
 
       role:"student",
-
       id:student.id,
-
       name:student.name
 
     };
-
 
     localStorage.setItem(
       "phosSession",
       JSON.stringify(session)
     );
 
-
     await openStudent(student);
-
 
   }catch(error){
 
@@ -2602,17 +2387,11 @@ async function login(event){
 }
 
 
-/* =====================================================
-   LOGOUT
-===================================================== */
-
 function logout(){
 
   session = null;
 
-  localStorage.removeItem(
-    "phosSession"
-  );
+  localStorage.removeItem("phosSession");
 
   showPublic();
 
@@ -2626,28 +2405,21 @@ function logout(){
 async function restoreSession(){
 
   const saved =
-    localStorage.getItem(
-      "phosSession"
-    );
+    localStorage.getItem("phosSession");
 
-  if(!saved) return;
+  if(!saved)
+    return;
 
   try{
 
     session =
       JSON.parse(saved);
 
-
     if(session.role === "admin"){
 
       await openAdmin();
 
-    }
-
-
-    else if(
-      session.role === "student"
-    ){
+    }else if(session.role === "student"){
 
       if(firebaseReady){
 
@@ -2656,13 +2428,11 @@ async function restoreSession(){
             .doc(session.id)
             .get();
 
-
         if(doc.exists){
 
           await openStudent({
 
             id:doc.id,
-
             ...doc.data()
 
           });
@@ -2694,7 +2464,8 @@ async function restoreSession(){
 
 async function loadAdminData(){
 
-  if(!firebaseReady) return;
+  if(!firebaseReady)
+    return;
 
   const collections = [
 
@@ -2709,16 +2480,12 @@ async function loadAdminData(){
 
   ];
 
-
   const results =
     await Promise.all(
-
       collections.map(
         name => col(name).get()
       )
-
     );
-
 
   collections.forEach(
     (name,index)=>{
@@ -2740,7 +2507,8 @@ async function loadAdminData(){
 
 async function loadStudentData(student){
 
-  if(!firebaseReady) return;
+  if(!firebaseReady)
+    return;
 
   const [
 
@@ -2754,19 +2522,13 @@ async function loadStudentData(student){
   ] = await Promise.all([
 
     col("schedule").get(),
-
     col("announcements").get(),
-
     col("messages").get(),
-
     col("assessments").get(),
-
     col("submissions").get(),
-
     col("notifications").get()
 
   ]);
-
 
   studentCache.schedule =
     schedule.docs.map(docData);
@@ -2790,91 +2552,68 @@ async function loadStudentData(student){
 
 
 /* =====================================================
-   OPEN ADMIN
+   ADMIN OPEN
 ===================================================== */
 
 async function openAdmin(){
 
-  document.getElementById(
-    "publicPage"
-  ).classList.add("hidden");
+  document.getElementById("publicPage")
+    .classList.add("hidden");
 
-  document.getElementById(
-    "loginPage"
-  ).classList.add("hidden");
+  document.getElementById("loginPage")
+    .classList.add("hidden");
 
-  document.getElementById(
-    "appPage"
-  ).classList.remove("hidden");
-
+  document.getElementById("appPage")
+    .classList.remove("hidden");
 
   await ensureDefaultSubjects();
 
   await loadAdminData();
 
+  document.getElementById("topUserName")
+    .textContent = "Albert";
 
-  document.getElementById(
-    "topUserName"
-  ).textContent =
-    "Albert";
-
-
-  document.getElementById(
-    "topAvatar"
-  ).textContent =
-    "A";
-
+  document.getElementById("topAvatar")
+    .textContent = "A";
 
   renderAdminSidebar();
 
-  showAdminSection(
-    "overview"
-  );
+  showAdminSection("overview");
 
 }
 
 
 /* =====================================================
-   OPEN STUDENT
+   STUDENT OPEN
 ===================================================== */
 
 async function openStudent(student){
 
-  document.getElementById(
-    "publicPage"
-  ).classList.add("hidden");
+  document.getElementById("publicPage")
+    .classList.add("hidden");
 
-  document.getElementById(
-    "loginPage"
-  ).classList.add("hidden");
+  document.getElementById("loginPage")
+    .classList.add("hidden");
 
-  document.getElementById(
-    "appPage"
-  ).classList.remove("hidden");
+  document.getElementById("appPage")
+    .classList.remove("hidden");
 
+  await loadAdminData();
 
   await loadStudentData(student);
 
+  document.getElementById("topUserName")
+    .textContent = student.name;
 
-  document.getElementById(
-    "topUserName"
-  ).textContent =
-    student.name;
-
-
-  document.getElementById(
-    "topAvatar"
-  ).textContent =
-    student.name
-      .charAt(0)
-      .toUpperCase();
-
+  document.getElementById("topAvatar")
+    .textContent =
+      student.name
+        .charAt(0)
+        .toUpperCase();
 
   renderStudentSidebar();
 
-  showStudentSection(
-    "dashboard"
-  );
+  showStudentSection("dashboard");
 
 }
 
@@ -2885,9 +2624,7 @@ async function openStudent(student){
 
 function renderAdminSidebar(){
 
-  document.getElementById(
-    "sidebarNav"
-  ).innerHTML = `
+  document.getElementById("sidebarNav").innerHTML = `
 
     <button
       onclick="showAdminSection('overview')"
@@ -2954,9 +2691,7 @@ function renderAdminSidebar(){
 
 function renderStudentSidebar(){
 
-  document.getElementById(
-    "sidebarNav"
-  ).innerHTML = `
+  document.getElementById("sidebarNav").innerHTML = `
 
     <button onclick="showStudentSection('dashboard')">
       Dashboard
@@ -2997,55 +2732,37 @@ function renderStudentSidebar(){
 
 async function showAdminSection(section){
 
-  document
-    .querySelectorAll(
-      ".sidebar-nav button"
-    )
-    .forEach(
-      btn =>
-        btn.classList.remove("active")
-    );
-
+  document.querySelectorAll(
+    ".sidebar-nav button"
+  ).forEach(
+    btn => btn.classList.remove("active")
+  );
 
   const button =
     document.querySelector(
       `.sidebar-nav button[data-section="${section}"]`
     );
 
-
   if(button)
     button.classList.add("active");
-
 
   const titles = {
 
     overview:"Overview",
-
     students:"Students",
-
     subjects:"Subjects",
-
     schedule:"Schedule",
-
     announcements:"Announcements",
-
     messages:"Messages",
-
     assessments:"Assessments",
-
     fees:"Fees",
-
     reports:"Reports"
 
   };
 
-
-  document.getElementById(
-    "pageTitle"
-  ).textContent =
-    titles[section] ||
-    "Dashboard";
-
+  document.getElementById("pageTitle")
+    .textContent =
+      titles[section] || "Dashboard";
 
   if(section === "overview")
     adminOverview();
@@ -3083,12 +2800,10 @@ async function showAdminSection(section){
 
 function showStudentSection(section){
 
-  document.getElementById(
-    "pageTitle"
-  ).textContent =
-    section.charAt(0).toUpperCase() +
-    section.slice(1);
-
+  document.getElementById("pageTitle")
+    .textContent =
+      section.charAt(0).toUpperCase() +
+      section.slice(1);
 
   if(section === "dashboard")
     studentDashboard();
@@ -3125,16 +2840,18 @@ function adminOverview(){
       s => s.reviewed !== true
     ).length;
 
+  const incomingMessages =
+    adminCache.messages.filter(
+      m =>
+        m.senderType === "student" ||
+        m.senderType === "visitor"
+    ).length;
 
-  document.getElementById(
-    "content"
-  ).innerHTML = `
+  document.getElementById("content").innerHTML = `
 
     <div class="dashboard-header">
 
-      <h1>
-        Welcome, Albert
-      </h1>
+      <h1>Welcome, Albert</h1>
 
       <p>
         Manage Phos Academy from one place.
@@ -3142,65 +2859,35 @@ function adminOverview(){
 
     </div>
 
-
     <div class="stat-grid">
 
       <div class="stat-card">
-
         <small>Total Students</small>
-
-        <strong>
-          ${adminCache.students.length}
-        </strong>
-
+        <strong>${adminCache.students.length}</strong>
       </div>
 
-
       <div class="stat-card">
-
         <small>Total Subjects</small>
-
-        <strong>
-          ${adminCache.subjects.length}
-        </strong>
-
+        <strong>${adminCache.subjects.length}</strong>
       </div>
 
-
       <div class="stat-card">
-
         <small>Assessments</small>
-
-        <strong>
-          ${adminCache.assessments.length}
-        </strong>
-
+        <strong>${adminCache.assessments.length}</strong>
       </div>
 
-
       <div class="stat-card">
-
-        <small>Pending Reviews</small>
-
-        <strong>
-          ${pendingReviews}
-        </strong>
-
+        <small>Messages</small>
+        <strong>${incomingMessages}</strong>
       </div>
 
     </div>
 
-
     <div class="card">
 
       <div class="card-title">
-
-        <h3>
-          Quick Actions
-        </h3>
-
+        <h3>Quick Actions</h3>
       </div>
-
 
       <div class="action-row">
 
@@ -3232,23 +2919,15 @@ function adminOverview(){
 
     </div>
 
-
     <div class="card">
 
       <div class="card-title">
-
-        <h3>
-          Recent Students
-        </h3>
-
+        <h3>Recent Students</h3>
       </div>
-
 
       ${
         adminCache.students.length
-
         ?
-
         `<div class="table-wrap">
 
           <table>
@@ -3256,15 +2935,12 @@ function adminOverview(){
             <thead>
 
               <tr>
-
                 <th>Name</th>
                 <th>Mode</th>
                 <th>Subjects</th>
-
               </tr>
 
             </thead>
-
 
             <tbody>
 
@@ -3273,35 +2949,34 @@ function adminOverview(){
                 .reverse()
                 .map(student=>`
 
-                  <tr>
+                <tr>
 
-                    <td>
-                      ${escapeHTML(student.name)}
-                    </td>
+                  <td>
+                    ${escapeHTML(student.name)}
+                  </td>
 
-                    <td>
-                      ${escapeHTML(
-                        student.mode || "-"
-                      )}
-                    </td>
+                  <td>
+                    ${escapeHTML(student.mode || "-")}
+                  </td>
 
-                    <td>
-                      ${
-                        subjectNames(
-                          student.subjects || []
-                        )
-                        .map(
-                          escapeHTML
-                        )
-                        .join(", ")
-                        || "-"
-                      }
-                    </td>
+                  <td>
+                    ${
+                      subjectNames(
+                        student.subjects || []
+                      )
+                      .map(
+                        s =>
+                          `<span class="badge">
+                            ${escapeHTML(s)}
+                          </span>`
+                      )
+                      .join(" ") || "-"
+                    }
+                  </td>
 
-                  </tr>
+                </tr>
 
-                `)
-                .join("")}
+              `).join("")}
 
             </tbody>
 
@@ -3318,7 +2993,6 @@ function adminOverview(){
       }
 
     </div>
-
   `;
 
 }
@@ -3336,12 +3010,11 @@ function adminSubjects(){
       const enrolled =
         adminCache.students.filter(
           s =>
-            (s.subjects || [])
-              .includes(subject.id) ||
-            (s.subjects || [])
-              .includes(subject.name)
+            studentHasSubject(
+              s,
+              subject.id
+            )
         ).length;
-
 
       return `
 
@@ -3360,11 +3033,9 @@ function adminSubjects(){
           </td>
 
           <td>
-
             <span class="badge">
               ${enrolled} student(s)
             </span>
-
           </td>
 
           <td>
@@ -3393,31 +3064,23 @@ function adminSubjects(){
 
     }).join("");
 
-
-  document.getElementById(
-    "content"
-  ).innerHTML = `
+  document.getElementById("content").innerHTML = `
 
     <div class="dashboard-header">
 
-      <h1>
-        Subjects
-      </h1>
+      <h1>Subjects</h1>
 
       <p>
-        Create and manage subjects available for individual learners.
+        Create and manage subjects available to individual learners.
       </p>
 
     </div>
-
 
     <div class="card">
 
       <div class="card-title">
 
-        <h3>
-          Subject List
-        </h3>
+        <h3>Subject List</h3>
 
         <button
           class="btn btn-primary"
@@ -3427,12 +3090,9 @@ function adminSubjects(){
 
       </div>
 
-
       ${
         adminCache.subjects.length
-
         ?
-
         `<div class="table-wrap">
 
           <table>
@@ -3440,12 +3100,10 @@ function adminSubjects(){
             <thead>
 
               <tr>
-
                 <th>Subject</th>
                 <th>Description</th>
                 <th>Enrolled Students</th>
                 <th>Actions</th>
-
               </tr>
 
             </thead>
@@ -3468,11 +3126,10 @@ function adminSubjects(){
 
     </div>
 
-
     <div class="alert alert-info">
 
-      Subjects are assigned directly to individual students.
-      A student's class does not automatically determine subject access.
+      Subjects are assigned to individual students.
+      There is no class-based subject assignment.
 
     </div>
 
@@ -3485,16 +3142,13 @@ function addSubject(){
 
   openModal(
     "Create New Subject",
-
     `
 
       <form onsubmit="saveNewSubject(event)">
 
         <div class="form-group">
 
-          <label>
-            Subject Name
-          </label>
+          <label>Subject Name</label>
 
           <input
             id="newSubjectName"
@@ -3502,20 +3156,15 @@ function addSubject(){
 
         </div>
 
-
         <div class="form-group">
 
-          <label>
-            Description
-          </label>
+          <label>Description</label>
 
           <textarea
             id="newSubjectDescription"
-            placeholder="Brief description of the subject">
-          </textarea>
+            placeholder="Brief description of the subject"></textarea>
 
         </div>
-
 
         <button class="btn btn-primary">
           Create Subject
@@ -3533,21 +3182,18 @@ async function saveNewSubject(event){
 
   event.preventDefault();
 
-
   const name =
     document.getElementById(
       "newSubjectName"
     ).value.trim();
-
 
   const description =
     document.getElementById(
       "newSubjectDescription"
     ).value.trim();
 
-
-  if(!name) return;
-
+  if(!name)
+    return;
 
   if(subjectExists(name)){
 
@@ -3559,7 +3205,6 @@ async function saveNewSubject(event){
 
   }
 
-
   const id =
     name
       .toLowerCase()
@@ -3568,7 +3213,6 @@ async function saveNewSubject(event){
       + "-" +
       Date.now();
 
-
   try{
 
     await col("subjects")
@@ -3576,13 +3220,10 @@ async function saveNewSubject(event){
       .set({
 
         name,
-
         description,
-
         createdAt:nowISO()
 
       });
-
 
     closeModal();
 
@@ -3610,21 +3251,18 @@ function editSubject(id){
       s => s.id === id
     );
 
-  if(!subject) return;
-
+  if(!subject)
+    return;
 
   openModal(
     "Edit Subject",
-
     `
 
       <form onsubmit="saveSubjectEdit(event,'${id}')">
 
         <div class="form-group">
 
-          <label>
-            Subject Name
-          </label>
+          <label>Subject Name</label>
 
           <input
             id="editSubjectName"
@@ -3633,12 +3271,9 @@ function editSubject(id){
 
         </div>
 
-
         <div class="form-group">
 
-          <label>
-            Description
-          </label>
+          <label>Description</label>
 
           <textarea
             id="editSubjectDescription">${escapeHTML(
@@ -3646,7 +3281,6 @@ function editSubject(id){
             )}</textarea>
 
         </div>
-
 
         <button class="btn btn-primary">
           Save Changes
@@ -3664,29 +3298,26 @@ async function saveSubjectEdit(event,id){
 
   event.preventDefault();
 
-
   const subject =
     adminCache.subjects.find(
       s => s.id === id
     );
 
-  if(!subject) return;
-
+  if(!subject)
+    return;
 
   const name =
     document.getElementById(
       "editSubjectName"
     ).value.trim();
 
-
   const description =
     document.getElementById(
       "editSubjectDescription"
     ).value.trim();
 
-
-  if(!name) return;
-
+  if(!name)
+    return;
 
   const duplicate =
     adminCache.subjects.some(
@@ -3695,7 +3326,6 @@ async function saveSubjectEdit(event,id){
         s.name.toLowerCase() ===
         name.toLowerCase()
     );
-
 
   if(duplicate){
 
@@ -3707,23 +3337,19 @@ async function saveSubjectEdit(event,id){
 
   }
 
-
   await col("subjects")
     .doc(id)
     .update({
 
       name,
-
       description,
-
       updatedAt:nowISO()
 
     });
 
-
   /*
-    Keep old student subject-name records
-    compatible with the new subject ID.
+    Convert old records that stored the
+    subject name into the subject ID.
   */
 
   const students =
@@ -3733,10 +3359,7 @@ async function saveSubjectEdit(event,id){
           .includes(subject.name)
     );
 
-
-  for(
-    const student of students
-  ){
+  for(const student of students){
 
     const updatedSubjects =
       (student.subjects || [])
@@ -3747,17 +3370,13 @@ async function saveSubjectEdit(event,id){
             : s
         );
 
-
     await col("students")
       .doc(student.id)
       .update({
-
         subjects:updatedSubjects
-
       });
 
   }
-
 
   closeModal();
 
@@ -3775,18 +3394,17 @@ async function deleteSubject(id){
       s => s.id === id
     );
 
-  if(!subject) return;
-
+  if(!subject)
+    return;
 
   const usedByStudent =
     adminCache.students.some(
       s =>
-        (s.subjects || [])
-          .includes(id) ||
-        (s.subjects || [])
-          .includes(subject.name)
+        studentHasSubject(
+          s,
+          id
+        )
     );
-
 
   const usedBySchedule =
     adminCache.schedule.some(
@@ -3795,14 +3413,12 @@ async function deleteSubject(id){
         s.subject === subject.name
     );
 
-
   const usedByAssessment =
     adminCache.assessments.some(
       a =>
         a.subject === id ||
         a.subject === subject.name
     );
-
 
   if(
     usedByStudent ||
@@ -3818,18 +3434,14 @@ async function deleteSubject(id){
 
   }
 
-
-  if(
-    !confirm(
-      `Delete "${subject.name}"?`
-    )
-  ) return;
-
+  if(!confirm(
+    `Delete "${subject.name}"?`
+  ))
+    return;
 
   await col("subjects")
     .doc(id)
     .delete();
-
 
   await loadAdminData();
 
@@ -3858,7 +3470,6 @@ function subjectCheckboxes(selected=[]){
     `;
 
   }
-
 
   return `
 
@@ -3896,15 +3507,11 @@ function subjectCheckboxes(selected=[]){
 
 function adminStudents(){
 
-  document.getElementById(
-    "content"
-  ).innerHTML = `
+  document.getElementById("content").innerHTML = `
 
     <div class="dashboard-header">
 
-      <h1>
-        Students
-      </h1>
+      <h1>Students</h1>
 
       <p>
         Register learners and assign subjects individually.
@@ -3912,14 +3519,11 @@ function adminStudents(){
 
     </div>
 
-
     <div class="card">
 
       <div class="card-title">
 
-        <h3>
-          Student List
-        </h3>
+        <h3>Student List</h3>
 
         <button
           class="btn btn-primary"
@@ -3929,10 +3533,8 @@ function adminStudents(){
 
       </div>
 
-
       ${
         adminCache.students.length
-
         ?
 
         `<div class="table-wrap">
@@ -3942,17 +3544,14 @@ function adminStudents(){
             <thead>
 
               <tr>
-
                 <th>Name</th>
                 <th>Username</th>
                 <th>Subjects</th>
                 <th>Mode</th>
                 <th>Actions</th>
-
               </tr>
 
             </thead>
-
 
             <tbody>
 
@@ -3974,16 +3573,18 @@ function adminStudents(){
 
                   <td>
 
-                    ${subjectNames(
-                      student.subjects || []
-                    )
-                    .map(
-                      s =>
-                        `<span class="badge">
-                          ${escapeHTML(s)}
-                        </span>`
-                    )
-                    .join(" ")}
+                    ${
+                      subjectNames(
+                        student.subjects || []
+                      )
+                      .map(
+                        s =>
+                          `<span class="badge">
+                            ${escapeHTML(s)}
+                          </span>`
+                      )
+                      .join(" ")
+                    }
 
                   </td>
 
@@ -4042,7 +3643,6 @@ function registerStudent(){
 
   openModal(
     "Register Student",
-
     `
 
       <form onsubmit="saveStudent(event)">
@@ -4051,9 +3651,7 @@ function registerStudent(){
 
           <div class="form-group">
 
-            <label>
-              Full Name
-            </label>
+            <label>Full Name</label>
 
             <input
               id="studentName"
@@ -4061,12 +3659,9 @@ function registerStudent(){
 
           </div>
 
-
           <div class="form-group">
 
-            <label>
-              Username
-            </label>
+            <label>Username</label>
 
             <input
               id="studentUsername"
@@ -4074,12 +3669,9 @@ function registerStudent(){
 
           </div>
 
-
           <div class="form-group">
 
-            <label>
-              Password
-            </label>
+            <label>Password</label>
 
             <input
               id="studentPassword"
@@ -4087,40 +3679,30 @@ function registerStudent(){
 
           </div>
 
-
           <div class="form-group">
 
-            <label>
-              Learning Mode
-            </label>
+            <label>Learning Mode</label>
 
             <select id="studentMode">
 
               ${MODES.map(
-                m =>
-                  `<option>
-                    ${escapeHTML(m)}
-                  </option>`
+                mode =>
+                  `<option>${escapeHTML(mode)}</option>`
               ).join("")}
 
             </select>
 
           </div>
 
-
           <div class="form-group">
 
-            <label>
-              WhatsApp
-            </label>
+            <label>WhatsApp</label>
 
-            <input
-              id="studentWhatsapp">
+            <input id="studentWhatsapp">
 
           </div>
 
         </div>
-
 
         <div class="form-group">
 
@@ -4131,7 +3713,6 @@ function registerStudent(){
           ${subjectCheckboxes([])}
 
         </div>
-
 
         <button class="btn btn-primary">
           Register Student
@@ -4149,36 +3730,30 @@ async function saveStudent(event){
 
   event.preventDefault();
 
-
   const name =
     document.getElementById(
       "studentName"
     ).value.trim();
-
 
   const username =
     document.getElementById(
       "studentUsername"
     ).value.trim();
 
-
   const password =
     document.getElementById(
       "studentPassword"
     ).value;
-
 
   const mode =
     document.getElementById(
       "studentMode"
     ).value;
 
-
   const whatsapp =
     document.getElementById(
       "studentWhatsapp"
     ).value.trim();
-
 
   const subjects =
     [
@@ -4189,7 +3764,6 @@ async function saveStudent(event){
       input => input.value
     );
 
-
   const duplicate =
     adminCache.students.some(
       s =>
@@ -4197,7 +3771,6 @@ async function saveStudent(event){
           .toLowerCase() ===
         username.toLowerCase()
     );
-
 
   if(duplicate){
 
@@ -4209,34 +3782,23 @@ async function saveStudent(event){
 
   }
 
-
   const id =
-    "student-" +
-    Date.now();
-
+    "student-" + Date.now();
 
   await col("students")
     .doc(id)
     .set({
 
       name,
-
       username,
-
       password,
-
       mode,
-
       subjects,
-
       whatsapp,
-
       feesRecords:[],
-
       createdAt:nowISO()
 
     });
-
 
   closeModal();
 
@@ -4254,12 +3816,11 @@ function editStudent(id){
       s => s.id === id
     );
 
-  if(!student) return;
-
+  if(!student)
+    return;
 
   openModal(
     "Edit Student",
-
     `
 
       <form onsubmit="updateStudent(event,'${id}')">
@@ -4268,9 +3829,7 @@ function editStudent(id){
 
           <div class="form-group">
 
-            <label>
-              Full Name
-            </label>
+            <label>Full Name</label>
 
             <input
               id="editStudentName"
@@ -4279,12 +3838,9 @@ function editStudent(id){
 
           </div>
 
-
           <div class="form-group">
 
-            <label>
-              Username
-            </label>
+            <label>Username</label>
 
             <input
               id="editStudentUsername"
@@ -4295,12 +3851,9 @@ function editStudent(id){
 
           </div>
 
-
           <div class="form-group">
 
-            <label>
-              Password
-            </label>
+            <label>Password</label>
 
             <input
               id="editStudentPassword"
@@ -4311,27 +3864,22 @@ function editStudent(id){
 
           </div>
 
-
           <div class="form-group">
 
-            <label>
-              Learning Mode
-            </label>
+            <label>Learning Mode</label>
 
             <select id="editStudentMode">
 
               ${MODES.map(
-                m => `
+                mode => `
 
                   <option
                     ${
-                      student.mode === m
+                      student.mode === mode
                       ? "selected"
                       : ""
                     }>
-
-                    ${escapeHTML(m)}
-
+                    ${escapeHTML(mode)}
                   </option>
 
                 `
@@ -4341,12 +3889,9 @@ function editStudent(id){
 
           </div>
 
-
           <div class="form-group">
 
-            <label>
-              WhatsApp
-            </label>
+            <label>WhatsApp</label>
 
             <input
               id="editStudentWhatsapp"
@@ -4357,7 +3902,6 @@ function editStudent(id){
           </div>
 
         </div>
-
 
         <div class="form-group">
 
@@ -4370,7 +3914,6 @@ function editStudent(id){
           )}
 
         </div>
-
 
         <button class="btn btn-primary">
           Save Changes
@@ -4388,7 +3931,6 @@ async function updateStudent(event,id){
 
   event.preventDefault();
 
-
   const subjects =
     [
       ...document.querySelectorAll(
@@ -4397,7 +3939,6 @@ async function updateStudent(event,id){
     ].map(
       input => input.value
     );
-
 
   await col("students")
     .doc(id)
@@ -4434,7 +3975,6 @@ async function updateStudent(event,id){
 
     });
 
-
   closeModal();
 
   await loadAdminData();
@@ -4451,20 +3991,17 @@ async function deleteStudent(id){
       s => s.id === id
     );
 
-  if(!student) return;
+  if(!student)
+    return;
 
-
-  if(
-    !confirm(
-      `Delete ${student.name}? This cannot be undone.`
-    )
-  ) return;
-
+  if(!confirm(
+    `Delete ${student.name}? This cannot be undone.`
+  ))
+    return;
 
   await col("students")
     .doc(id)
     .delete();
-
 
   await loadAdminData();
 
@@ -4492,24 +4029,22 @@ function subjectSelectHTML(
         Select subject
       </option>
 
-      ${adminCache.subjects.map(
-        subject => `
+      ${adminCache.subjects.map(subject=>`
 
-          <option
-            value="${escapeHTML(subject.id)}"
-            ${
-              selected === subject.id ||
-              selected === subject.name
-              ? "selected"
-              : ""
-            }>
+        <option
+          value="${escapeHTML(subject.id)}"
+          ${
+            selected === subject.id ||
+            selected === subject.name
+            ? "selected"
+            : ""
+          }>
 
-            ${escapeHTML(subject.name)}
+          ${escapeHTML(subject.name)}
 
-          </option>
+        </option>
 
-        `
-      ).join("")}
+      `).join("")}
 
     </select>
 
@@ -4522,32 +4057,118 @@ function subjectSelectHTML(
    SCHEDULE
 ===================================================== */
 
-function adminSchedule(){
+function scheduleTargetHTML(){
 
-  document.getElementById(
-    "content"
-  ).innerHTML = `
+  return `
 
-    <div class="dashboard-header">
+    <div class="form-group">
 
-      <h1>
-        Schedule
-      </h1>
+      <label>
+        Schedule Applies To
+      </label>
 
-      <p>
-        Create lessons for a specific student or for students taking a subject.
-      </p>
+      <select
+        id="scheduleTargetType"
+        onchange="toggleScheduleTarget()"
+        required>
+
+        <option value="subject">
+          Everyone taking this subject
+        </option>
+
+        <option value="student">
+          Specific student
+        </option>
+
+      </select>
 
     </div>
 
+    <div
+      id="scheduleStudentGroup"
+      class="form-group hidden">
+
+      <label>
+        Select Student
+      </label>
+
+      <select id="scheduleStudent">
+
+        <option value="">
+          Select student
+        </option>
+
+        ${adminCache.students.map(
+          student => `
+
+            <option value="${student.id}">
+              ${escapeHTML(student.name)}
+            </option>
+
+          `
+        ).join("")}
+
+      </select>
+
+    </div>
+
+  `;
+
+}
+
+
+function toggleScheduleTarget(){
+
+  const type =
+    document.getElementById(
+      "scheduleTargetType"
+    ).value;
+
+  const studentGroup =
+    document.getElementById(
+      "scheduleStudentGroup"
+    );
+
+  if(type === "student"){
+
+    studentGroup.classList.remove("hidden");
+
+    document.getElementById(
+      "scheduleStudent"
+    ).required = true;
+
+  }else{
+
+    studentGroup.classList.add("hidden");
+
+    document.getElementById(
+      "scheduleStudent"
+    ).required = false;
+
+  }
+
+}
+
+
+function adminSchedule(){
+
+  document.getElementById("content").innerHTML = `
+
+    <div class="dashboard-header">
+
+      <h1>Schedule</h1>
+
+      <p>
+        Schedule a lesson for a specific student or for everyone taking a subject.
+      </p>
+
+    </div>
 
     <div class="card">
 
       <div class="card-title">
 
-        <h3>
-          Lesson Schedule
-        </h3>
+        <h3>Lesson Schedule</h3>
 
         <button
           class="btn btn-primary"
@@ -4557,10 +4178,8 @@ function adminSchedule(){
 
       </div>
 
-
       ${
         adminCache.schedule.length
-
         ?
 
         `<div class="table-wrap">
@@ -4570,97 +4189,102 @@ function adminSchedule(){
             <thead>
 
               <tr>
-
                 <th>Subject</th>
-                <th>For</th>
+                <th>Applies To</th>
                 <th>Mode</th>
                 <th>Day</th>
                 <th>Time</th>
                 <th>Actions</th>
-
               </tr>
 
             </thead>
 
-
             <tbody>
 
-              ${adminCache.schedule.map(item=>`
+              ${adminCache.schedule.map(item=>{
 
-                <tr>
+                let target = "";
 
-                  <td>
-                    ${escapeHTML(
-                      getSubjectName(
-                        item.subject
-                      )
-                    )}
-                  </td>
+                if(
+                  item.targetType === "student"
+                ){
 
+                  const student =
+                    adminCache.students.find(
+                      s =>
+                        s.id === item.studentId
+                    );
 
-                  <td>
+                  target =
+                    student
+                    ? student.name
+                    : "Specific Student";
 
-                    ${
-                      item.targetType ===
-                      "student"
+                }else{
 
-                      ?
+                  target =
+                    "Students taking " +
+                    getSubjectName(
+                      item.subject
+                    );
 
-                      escapeHTML(
-                        adminCache.students
-                          .find(
-                            s =>
-                              s.id ===
-                              item.studentId
-                          )?.name ||
-                        "Specific Student"
-                      )
+                }
 
-                      :
+                /*
+                  Old schedule records that still
+                  contain classLevel are displayed
+                  by subject only. Class is ignored.
+                */
 
-                      `<span class="badge">
-                        Students taking this subject
-                      </span>`
+                return `
 
-                    }
+                  <tr>
 
-                  </td>
+                    <td>
+                      ${escapeHTML(
+                        getSubjectName(
+                          item.subject
+                        )
+                      )}
+                    </td>
 
+                    <td>
+                      ${escapeHTML(target)}
+                    </td>
 
-                  <td>
-                    ${escapeHTML(
-                      item.mode || "-"
-                    )}
-                  </td>
+                    <td>
+                      ${escapeHTML(
+                        item.mode || "-"
+                      )}
+                    </td>
 
+                    <td>
+                      ${escapeHTML(
+                        item.day || "-"
+                      )}
+                    </td>
 
-                  <td>
-                    ${escapeHTML(
-                      item.day || "-"
-                    )}
-                  </td>
+                    <td>
+                      ${escapeHTML(
+                        item.time || "-"
+                      )}
+                    </td>
 
+                    <td>
 
-                  <td>
-                    ${escapeHTML(
-                      item.time || "-"
-                    )}
-                  </td>
+                      <button
+                        class="btn btn-danger btn-sm"
+                        onclick="deleteSchedule('${item.id}')">
+                        Delete
+                      </button>
 
+                    </td>
 
-                  <td>
+                  </tr>
 
-                    <button
-                      class="btn btn-danger btn-sm"
-                      onclick="deleteSchedule('${item.id}')">
-                      Delete
-                    </button>
+                `;
 
-                  </td>
-
-                </tr>
-
-              `).join("")}
+              }).join("")}
 
             </tbody>
 
@@ -4687,127 +4311,55 @@ function addSchedule(){
 
   openModal(
     "Add Lesson",
-
     `
 
       <form onsubmit="saveSchedule(event)">
 
         <div class="form-group">
 
-          <label>
-            Subject
-          </label>
+          <label>Subject</label>
 
           ${subjectSelectHTML()}
 
         </div>
 
-
-        <div class="form-group">
-
-          <label>
-            Schedule For
-          </label>
-
-          <select
-            id="scheduleTargetType"
-            onchange="toggleScheduleTarget()"
-            required>
-
-            <option value="subject">
-              All Students Taking This Subject
-            </option>
-
-            <option value="student">
-              Specific Student
-            </option>
-
-          </select>
-
-        </div>
-
-
-        <div
-          id="specificStudentField"
-          class="form-group hidden">
-
-          <label>
-            Select Student
-          </label>
-
-          <select id="scheduleStudent">
-
-            <option value="">
-              Select student
-            </option>
-
-            ${adminCache.students.map(
-              student => `
-
-                <option
-                  value="${student.id}">
-
-                  ${escapeHTML(
-                    student.name
-                  )}
-
-                </option>
-
-              `
-            ).join("")}
-
-          </select>
-
-        </div>
-
+        ${scheduleTargetHTML()}
 
         <div class="form-grid">
 
           <div class="form-group">
 
-            <label>
-              Mode
-            </label>
+            <label>Mode</label>
 
             <select id="scheduleMode">
 
               ${MODES.map(
                 mode =>
-                  `<option>
-                    ${escapeHTML(mode)}
-                  </option>`
+                  `<option>${escapeHTML(mode)}</option>`
               ).join("")}
 
             </select>
 
           </div>
 
-
           <div class="form-group">
 
-            <label>
-              Day
-            </label>
+            <label>Day</label>
 
             <select id="scheduleDay">
 
               ${DAYS.map(
                 day =>
-                  `<option>
-                    ${day}
-                  </option>`
+                  `<option>${day}</option>`
               ).join("")}
 
             </select>
 
           </div>
 
-
           <div class="form-group">
 
-            <label>
-              Time
-            </label>
+            <label>Time</label>
 
             <input
               id="scheduleTime"
@@ -4818,12 +4370,9 @@ function addSchedule(){
 
         </div>
 
-
         <div class="form-group">
 
-          <label>
-            Online Link
-          </label>
+          <label>Online Link</label>
 
           <input
             id="scheduleLink"
@@ -4831,20 +4380,15 @@ function addSchedule(){
 
         </div>
 
-
         <div class="form-group">
 
-          <label>
-            Lesson Note
-          </label>
+          <label>Notes</label>
 
           <textarea
-            id="scheduleNote"
-            placeholder="Optional lesson information">
-          </textarea>
+            id="scheduleNotes"
+            placeholder="Optional lesson notes"></textarea>
 
         </div>
-
 
         <button class="btn btn-primary">
           Save Schedule
@@ -4858,60 +4402,19 @@ function addSchedule(){
 }
 
 
-function toggleScheduleTarget(){
-
-  const type =
-    document.getElementById(
-      "scheduleTargetType"
-    ).value;
-
-  const field =
-    document.getElementById(
-      "specificStudentField"
-    );
-
-
-  if(type === "student"){
-
-    field.classList.remove(
-      "hidden"
-    );
-
-    document.getElementById(
-      "scheduleStudent"
-    ).required = true;
-
-  }else{
-
-    field.classList.add(
-      "hidden"
-    );
-
-    document.getElementById(
-      "scheduleStudent"
-    ).required = false;
-
-  }
-
-}
-
-
 async function saveSchedule(event){
 
   event.preventDefault();
-
 
   const subject =
     document.getElementById(
       "scheduleSubject"
     ).value;
 
-
   const targetType =
     document.getElementById(
       "scheduleTargetType"
     ).value;
-
 
   const studentId =
     targetType === "student"
@@ -4920,8 +4423,7 @@ async function saveSchedule(event){
       "scheduleStudent"
     ).value
     :
-    null;
-
+    "";
 
   if(
     targetType === "student" &&
@@ -4936,45 +4438,42 @@ async function saveSchedule(event){
 
   }
 
+  await col("schedule").add({
 
-  await col("schedule")
-    .add({
+    subject,
 
-      subject,
+    targetType,
 
-      targetType,
+    studentId,
 
-      studentId,
+    mode:
+      document.getElementById(
+        "scheduleMode"
+      ).value,
 
-      mode:
-        document.getElementById(
-          "scheduleMode"
-        ).value,
+    day:
+      document.getElementById(
+        "scheduleDay"
+      ).value,
 
-      day:
-        document.getElementById(
-          "scheduleDay"
-        ).value,
+    time:
+      document.getElementById(
+        "scheduleTime"
+      ).value.trim(),
 
-      time:
-        document.getElementById(
-          "scheduleTime"
-        ).value.trim(),
+    onlineLink:
+      document.getElementById(
+        "scheduleLink"
+      ).value.trim(),
 
-      onlineLink:
-        document.getElementById(
-          "scheduleLink"
-        ).value.trim(),
+    notes:
+      document.getElementById(
+        "scheduleNotes"
+      ).value.trim(),
 
-      note:
-        document.getElementById(
-          "scheduleNote"
-        ).value.trim(),
+    createdAt:nowISO()
 
-      createdAt:nowISO()
-
-    });
-
+  });
 
   closeModal();
 
@@ -4987,17 +4486,14 @@ async function saveSchedule(event){
 
 async function deleteSchedule(id){
 
-  if(
-    !confirm(
-      "Delete this schedule entry?"
-    )
-  ) return;
-
+  if(!confirm(
+    "Delete this schedule entry?"
+  ))
+    return;
 
   await col("schedule")
     .doc(id)
     .delete();
-
 
   await loadAdminData();
 
@@ -5012,15 +4508,11 @@ async function deleteSchedule(id){
 
 function adminAnnouncements(){
 
-  document.getElementById(
-    "content"
-  ).innerHTML = `
+  document.getElementById("content").innerHTML = `
 
     <div class="dashboard-header">
 
-      <h1>
-        Announcements
-      </h1>
+      <h1>Announcements</h1>
 
       <p>
         Share important information with learners.
@@ -5028,14 +4520,11 @@ function adminAnnouncements(){
 
     </div>
 
-
     <div class="card">
 
       <div class="card-title">
 
-        <h3>
-          Announcements
-        </h3>
+        <h3>Announcements</h3>
 
         <button
           class="btn btn-primary"
@@ -5045,42 +4534,36 @@ function adminAnnouncements(){
 
       </div>
 
-
       ${
         adminCache.announcements.length
-
         ?
 
-        adminCache.announcements.map(
-          a => `
+        adminCache.announcements.map(a=>`
 
-            <div class="notice">
+          <div class="notice">
 
-              <h4>
-                ${escapeHTML(a.title)}
-              </h4>
+            <h4>
+              ${escapeHTML(a.title)}
+            </h4>
 
-              <small>
-                ${formatDateTime(
-                  a.createdAt
-                )}
-              </small>
+            <small>
+              ${formatDateTime(a.createdAt)}
+            </small>
 
-              <p style="margin-top:8px;">
-                ${escapeHTML(a.body)}
-              </p>
+            <p style="margin-top:8px;">
+              ${escapeHTML(a.body)}
+            </p>
 
-              <button
-                class="btn btn-danger btn-sm"
-                style="margin-top:10px;"
-                onclick="deleteAnnouncement('${a.id}')">
-                Delete
-              </button>
+            <button
+              class="btn btn-danger btn-sm"
+              style="margin-top:10px;"
+              onclick="deleteAnnouncement('${a.id}')">
+              Delete
+            </button>
 
-            </div>
+          </div>
 
-          `
-        ).join("")
+        `).join("")
 
         :
 
@@ -5101,16 +4584,13 @@ function addAnnouncement(){
 
   openModal(
     "New Announcement",
-
     `
 
       <form onsubmit="saveAnnouncement(event)">
 
         <div class="form-group">
 
-          <label>
-            Title
-          </label>
+          <label>Title</label>
 
           <input
             id="announcementTitle"
@@ -5118,29 +4598,21 @@ function addAnnouncement(){
 
         </div>
 
-
         <div class="form-group">
 
-          <label>
-            Message
-          </label>
+          <label>Message</label>
 
           <textarea
             id="announcementBody"
-            required>
-          </textarea>
+            required></textarea>
 
         </div>
 
-
         <div class="form-group">
 
-          <label>
-            Audience
-          </label>
+          <label>Audience</label>
 
-          <select
-            id="announcementAudience">
+          <select id="announcementAudience">
 
             <option value="all">
               All Students
@@ -5158,11 +4630,10 @@ function addAnnouncement(){
 
         </div>
 
-
         <div class="form-group">
 
           <label>
-            Subject
+            Subject (if applicable)
           </label>
 
           ${subjectSelectHTML(
@@ -5171,11 +4642,10 @@ function addAnnouncement(){
 
         </div>
 
-
         <div class="form-group">
 
           <label>
-            Student
+            Student (if applicable)
           </label>
 
           <select id="announcementStudent">
@@ -5185,15 +4655,10 @@ function addAnnouncement(){
             </option>
 
             ${adminCache.students.map(
-              s => `
+              student => `
 
-                <option
-                  value="${s.id}">
-
-                  ${escapeHTML(
-                    s.name
-                  )}
-
+                <option value="${student.id}">
+                  ${escapeHTML(student.name)}
                 </option>
 
               `
@@ -5202,7 +4667,6 @@ function addAnnouncement(){
           </select>
 
         </div>
-
 
         <button class="btn btn-primary">
           Publish
@@ -5220,39 +4684,36 @@ async function saveAnnouncement(event){
 
   event.preventDefault();
 
+  await col("announcements").add({
 
-  await col("announcements")
-    .add({
+    title:
+      document.getElementById(
+        "announcementTitle"
+      ).value.trim(),
 
-      title:
-        document.getElementById(
-          "announcementTitle"
-        ).value.trim(),
+    body:
+      document.getElementById(
+        "announcementBody"
+      ).value.trim(),
 
-      body:
-        document.getElementById(
-          "announcementBody"
-        ).value.trim(),
+    audience:
+      document.getElementById(
+        "announcementAudience"
+      ).value,
 
-      audience:
-        document.getElementById(
-          "announcementAudience"
-        ).value,
+    subject:
+      document.getElementById(
+        "announcementSubject"
+      ).value,
 
-      subject:
-        document.getElementById(
-          "announcementSubject"
-        ).value,
+    studentId:
+      document.getElementById(
+        "announcementStudent"
+      ).value,
 
-      studentId:
-        document.getElementById(
-          "announcementStudent"
-        ).value,
+    createdAt:nowISO()
 
-      createdAt:nowISO()
-
-    });
-
+  });
 
   closeModal();
 
@@ -5265,17 +4726,14 @@ async function saveAnnouncement(event){
 
 async function deleteAnnouncement(id){
 
-  if(
-    !confirm(
-      "Delete this announcement?"
-    )
-  ) return;
-
+  if(!confirm(
+    "Delete this announcement?"
+  ))
+    return;
 
   await col("announcements")
     .doc(id)
     .delete();
-
 
   await loadAdminData();
 
@@ -5290,30 +4748,31 @@ async function deleteAnnouncement(id){
 
 function adminMessages(){
 
-  document.getElementById(
-    "content"
-  ).innerHTML = `
+  const messages =
+    [...adminCache.messages]
+      .sort(
+        (a,b) =>
+          new Date(b.createdAt || 0) -
+          new Date(a.createdAt || 0)
+      );
+
+  document.getElementById("content").innerHTML = `
 
     <div class="dashboard-header">
 
-      <h1>
-        Messages
-      </h1>
+      <h1>Messages</h1>
 
       <p>
-        Communicate directly with learners and view messages sent to Albert.
+        Message learners or respond to messages sent to Albert.
       </p>
 
     </div>
-
 
     <div class="card">
 
       <div class="card-title">
 
-        <h3>
-          Messages
-        </h3>
+        <h3>Messages</h3>
 
         <button
           class="btn btn-primary"
@@ -5323,58 +4782,85 @@ function adminMessages(){
 
       </div>
 
-
       ${
-        adminCache.messages.length
-
+        messages.length
         ?
 
-        adminCache.messages
-          .slice()
-          .reverse()
-          .map(
-            m => `
+        messages.map(m=>{
 
-              <div class="notice">
+          const incoming =
+            m.senderType === "student" ||
+            m.senderType === "visitor";
 
-                <h4>
-                  ${escapeHTML(
-                    m.subject ||
-                    "Message"
-                  )}
-                </h4>
+          let senderText =
+            incoming
+            ?
+            `From: ${escapeHTML(
+              m.senderName || "Sender"
+            )}`
+            :
+            `To: ${
+              m.recipient === "all"
+              ? "All Students"
+              : escapeHTML(
+                  adminCache.students.find(
+                    s => s.id === m.recipient
+                  )?.name ||
+                  m.recipient ||
+                  "Student"
+                )
+            }`;
 
-                <small>
+          return `
 
-                  ${
-                    m.senderName
-                    ?
-                    "From " +
-                    escapeHTML(
-                      m.senderName
-                    ) +
-                    " • "
-                    :
-                    ""
-                  }
+            <div class="notice">
 
-                  ${formatDateTime(
-                    m.createdAt
-                  )}
+              <h4>
+                ${escapeHTML(
+                  m.subject || "Message"
+                )}
+              </h4>
 
-                </small>
+              <small>
+                ${senderText}
+                &nbsp; • &nbsp;
+                ${formatDateTime(m.createdAt)}
+              </small>
 
-                <p style="margin-top:8px;">
-                  ${escapeHTML(
-                    m.body
-                  )}
-                </p>
+              ${
+                m.contact
+                ?
+                `<small style="display:block;margin-top:4px;">
+                  Contact: ${escapeHTML(m.contact)}
+                </small>`
+                :
+                ""
+              }
 
-              </div>
+              <p style="margin-top:8px;">
+                ${escapeHTML(m.body)}
+              </p>
 
-            `
-          )
-          .join("")
+              ${
+                incoming &&
+                m.senderType === "student"
+                ?
+                `
+                  <button
+                    class="btn btn-primary btn-sm"
+                    onclick="replyToStudent('${m.senderId}')">
+                    Reply
+                  </button>
+                `
+                :
+                ""
+              }
+
+            </div>
+
+          `;
+
+        }).join("")
 
         :
 
@@ -5395,16 +4881,13 @@ function addMessage(){
 
   openModal(
     "Send Message",
-
     `
 
       <form onsubmit="saveMessage(event)">
 
         <div class="form-group">
 
-          <label>
-            Subject
-          </label>
+          <label>Subject</label>
 
           <input
             id="messageSubject"
@@ -5412,44 +4895,31 @@ function addMessage(){
 
         </div>
 
-
         <div class="form-group">
 
-          <label>
-            Message
-          </label>
+          <label>Message</label>
 
           <textarea
             id="messageBody"
-            required>
-          </textarea>
+            required></textarea>
 
         </div>
 
-
         <div class="form-group">
 
-          <label>
-            Recipient
-          </label>
+          <label>Recipient</label>
 
-          <select
-            id="messageRecipient">
+          <select id="messageRecipient">
 
             <option value="all">
               All Students
             </option>
 
             ${adminCache.students.map(
-              s => `
+              student => `
 
-                <option
-                  value="${s.id}">
-
-                  ${escapeHTML(
-                    s.name
-                  )}
-
+                <option value="${student.id}">
+                  ${escapeHTML(student.name)}
                 </option>
 
               `
@@ -5458,7 +4928,6 @@ function addMessage(){
           </select>
 
         </div>
-
 
         <button class="btn btn-primary">
           Send Message
@@ -5476,31 +4945,117 @@ async function saveMessage(event){
 
   event.preventDefault();
 
+  await col("messages").add({
 
-  await col("messages")
-    .add({
+    senderType:"admin",
 
-      subject:
-        document.getElementById(
-          "messageSubject"
-        ).value.trim(),
+    senderName:"Albert",
 
-      body:
-        document.getElementById(
-          "messageBody"
-        ).value.trim(),
+    subject:
+      document.getElementById(
+        "messageSubject"
+      ).value.trim(),
 
-      recipient:
-        document.getElementById(
-          "messageRecipient"
-        ).value,
+    body:
+      document.getElementById(
+        "messageBody"
+      ).value.trim(),
 
-      sender:"Albert",
+    recipient:
+      document.getElementById(
+        "messageRecipient"
+      ).value,
 
-      createdAt:nowISO()
+    createdAt:nowISO(),
 
-    });
+    read:false
 
+  });
+
+  closeModal();
+
+  await loadAdminData();
+
+  adminMessages();
+
+}
+
+
+function replyToStudent(studentId){
+
+  const student =
+    adminCache.students.find(
+      s => s.id === studentId
+    );
+
+  if(!student)
+    return;
+
+  openModal(
+    `Reply to ${escapeHTML(student.name)}`,
+    `
+
+      <form onsubmit="saveReply(event,'${studentId}')">
+
+        <div class="form-group">
+
+          <label>Subject</label>
+
+          <input
+            id="replySubject"
+            required>
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Message</label>
+
+          <textarea
+            id="replyBody"
+            required></textarea>
+
+        </div>
+
+        <button class="btn btn-primary">
+          Send Reply
+        </button>
+
+      </form>
+
+    `
+  );
+
+}
+
+
+async function saveReply(event,studentId){
+
+  event.preventDefault();
+
+  await col("messages").add({
+
+    senderType:"admin",
+
+    senderName:"Albert",
+
+    recipient:studentId,
+
+    subject:
+      document.getElementById(
+        "replySubject"
+      ).value.trim(),
+
+    body:
+      document.getElementById(
+        "replyBody"
+      ).value.trim(),
+
+    createdAt:nowISO(),
+
+    read:false
+
+  });
 
   closeModal();
 
@@ -5517,15 +5072,11 @@ async function saveMessage(event){
 
 function adminAssessments(){
 
-  document.getElementById(
-    "content"
-  ).innerHTML = `
+  document.getElementById("content").innerHTML = `
 
     <div class="dashboard-header">
 
-      <h1>
-        Assessments
-      </h1>
+      <h1>Assessments</h1>
 
       <p>
         Create tests based on subject enrolment.
@@ -5534,14 +5085,11 @@ function adminAssessments(){
 
     </div>
 
-
     <div class="card">
 
       <div class="card-title">
 
-        <h3>
-          Assessment List
-        </h3>
+        <h3>Assessment List</h3>
 
         <button
           class="btn btn-primary"
@@ -5551,10 +5099,8 @@ function adminAssessments(){
 
       </div>
 
-
       ${
         adminCache.assessments.length
-
         ?
 
         `<div class="table-wrap">
@@ -5564,63 +5110,56 @@ function adminAssessments(){
             <thead>
 
               <tr>
-
                 <th>Title</th>
                 <th>Subject</th>
                 <th>Type</th>
                 <th>Due Date</th>
                 <th>Actions</th>
-
               </tr>
 
             </thead>
 
-
             <tbody>
 
-              ${adminCache.assessments.map(
-                a => `
+              ${adminCache.assessments.map(a=>`
 
-                  <tr>
+                <tr>
 
-                    <td>
-                      ${escapeHTML(a.title)}
-                    </td>
+                  <td>
+                    ${escapeHTML(a.title)}
+                  </td>
 
-                    <td>
-                      ${escapeHTML(
-                        getSubjectName(
-                          a.subject
-                        )
-                      )}
-                    </td>
+                  <td>
+                    ${escapeHTML(
+                      getSubjectName(
+                        a.subject
+                      )
+                    )}
+                  </td>
 
-                    <td>
-                      ${escapeHTML(
-                        a.type || "-"
-                      )}
-                    </td>
+                  <td>
+                    ${escapeHTML(
+                      a.type || "-"
+                    )}
+                  </td>
 
-                    <td>
-                      ${formatDate(
-                        a.dueDate
-                      )}
-                    </td>
+                  <td>
+                    ${formatDate(a.dueDate)}
+                  </td>
 
-                    <td>
+                  <td>
 
-                      <button
-                        class="btn btn-danger btn-sm"
-                        onclick="deleteAssessment('${a.id}')">
-                        Delete
-                      </button>
+                    <button
+                      class="btn btn-danger btn-sm"
+                      onclick="deleteAssessment('${a.id}')">
+                      Delete
+                    </button>
 
-                    </td>
+                  </td>
 
-                  </tr>
+                </tr>
 
-                `
-              ).join("")}
+              `).join("")}
 
             </tbody>
 
@@ -5647,7 +5186,6 @@ function createAssessment(){
 
   openModal(
     "Create Assessment",
-
     `
 
       <form onsubmit="saveAssessment(event)">
@@ -5656,9 +5194,7 @@ function createAssessment(){
 
           <div class="form-group">
 
-            <label>
-              Title
-            </label>
+            <label>Title</label>
 
             <input
               id="assessmentTitle"
@@ -5666,12 +5202,9 @@ function createAssessment(){
 
           </div>
 
-
           <div class="form-group">
 
-            <label>
-              Subject
-            </label>
+            <label>Subject</label>
 
             ${subjectSelectHTML(
               "assessmentSubject"
@@ -5679,12 +5212,9 @@ function createAssessment(){
 
           </div>
 
-
           <div class="form-group">
 
-            <label>
-              Type
-            </label>
+            <label>Type</label>
 
             <select id="assessmentType">
 
@@ -5700,12 +5230,9 @@ function createAssessment(){
 
           </div>
 
-
           <div class="form-group">
 
-            <label>
-              Due Date
-            </label>
+            <label>Due Date</label>
 
             <input
               id="assessmentDueDate"
@@ -5715,7 +5242,6 @@ function createAssessment(){
 
         </div>
 
-
         <div class="form-group">
 
           <label>
@@ -5724,35 +5250,31 @@ function createAssessment(){
 
           <textarea
             id="assessmentQuestions"
-            placeholder='For MCQ:
+            placeholder="For MCQ use JSON format. Example:
 [
   {
-    "question":"What is 2 + 2?",
-    "options":["3","4","5"],
-    "answer":"4"
+    &quot;question&quot;:&quot;What is 2 + 2?&quot;,
+    &quot;options&quot;:[&quot;3&quot;,&quot;4&quot;,&quot;5&quot;],
+    &quot;answer&quot;:&quot;4&quot;
   }
 ]
 
 For theory:
 [
   {
-    "question":"Explain photosynthesis."
+    &quot;question&quot;:&quot;Explain photosynthesis.&quot;
   }
-]'
+]"
             required></textarea>
 
         </div>
 
-
         <div class="alert alert-info">
 
-          Every student enrolled in the selected subject will
-          automatically be eligible for this assessment.
-
-          Class level is not used.
+          Every student enrolled in the selected subject
+          will automatically be eligible for this assessment.
 
         </div>
-
 
         <button class="btn btn-primary">
           Create Assessment
@@ -5770,33 +5292,27 @@ async function saveAssessment(event){
 
   event.preventDefault();
 
-
   const title =
     document.getElementById(
       "assessmentTitle"
     ).value.trim();
-
 
   const subject =
     document.getElementById(
       "assessmentSubject"
     ).value;
 
-
   const type =
     document.getElementById(
       "assessmentType"
     ).value;
-
 
   const dueDate =
     document.getElementById(
       "assessmentDueDate"
     ).value;
 
-
   let questions;
-
 
   try{
 
@@ -5807,14 +5323,8 @@ async function saveAssessment(event){
         ).value
       );
 
-
-    if(
-      !Array.isArray(questions)
-    ){
-
+    if(!Array.isArray(questions))
       throw new Error();
-
-    }
 
   }catch{
 
@@ -5826,59 +5336,30 @@ async function saveAssessment(event){
 
   }
 
-
-  /*
-    IMPORTANT:
-    Eligibility is based ONLY on subject enrolment.
-  */
-
-  const subjectObject =
-    adminCache.subjects.find(
-      s => s.id === subject
-    );
-
-
   const recipients =
     adminCache.students
       .filter(
-        student => {
-
-          const assigned =
-            student.subjects || [];
-
-          return (
-            assigned.includes(subject) ||
-            assigned.includes(
-              subjectObject?.name
-            )
-          );
-
-        }
+        student =>
+          studentHasSubject(
+            student,
+            subject
+          )
       )
       .map(
         student => student.id
       );
 
+  await col("assessments").add({
 
-  await col("assessments")
-    .add({
+    title,
+    subject,
+    type,
+    dueDate,
+    questions,
+    assignedTo:recipients,
+    createdAt:nowISO()
 
-      title,
-
-      subject,
-
-      type,
-
-      dueDate,
-
-      questions,
-
-      assignedTo:recipients,
-
-      createdAt:nowISO()
-
-    });
-
+  });
 
   closeModal();
 
@@ -5891,17 +5372,14 @@ async function saveAssessment(event){
 
 async function deleteAssessment(id){
 
-  if(
-    !confirm(
-      "Delete this assessment?"
-    )
-  ) return;
-
+  if(!confirm(
+    "Delete this assessment?"
+  ))
+    return;
 
   await col("assessments")
     .doc(id)
     .delete();
-
 
   await loadAdminData();
 
@@ -5916,15 +5394,11 @@ async function deleteAssessment(id){
 
 function adminFees(){
 
-  document.getElementById(
-    "content"
-  ).innerHTML = `
+  document.getElementById("content").innerHTML = `
 
     <div class="dashboard-header">
 
-      <h1>
-        Fees
-      </h1>
+      <h1>Fees</h1>
 
       <p>
         Manage learner fee records.
@@ -5932,17 +5406,13 @@ function adminFees(){
 
     </div>
 
-
     <div class="card">
 
       <div class="card-title">
 
-        <h3>
-          Student Fees
-        </h3>
+        <h3>Student Fees</h3>
 
       </div>
-
 
       <div class="table-wrap">
 
@@ -5951,52 +5421,43 @@ function adminFees(){
           <thead>
 
             <tr>
-
               <th>Student</th>
               <th>Records</th>
               <th>Action</th>
-
             </tr>
 
           </thead>
 
-
           <tbody>
 
-            ${adminCache.students.map(
-              student => `
+            ${adminCache.students.map(student=>`
 
-                <tr>
+              <tr>
 
-                  <td>
-                    ${escapeHTML(
-                      student.name
-                    )}
-                  </td>
+                <td>
+                  ${escapeHTML(student.name)}
+                </td>
 
-                  <td>
-                    ${
-                      (
-                        student.feesRecords ||
-                        []
-                      ).length
-                    }
-                  </td>
+                <td>
+                  ${
+                    (student.feesRecords || [])
+                      .length
+                  }
+                </td>
 
-                  <td>
+                <td>
 
-                    <button
-                      class="btn btn-primary btn-sm"
-                      onclick="addFee('${student.id}')">
-                      Add Fee Record
-                    </button>
+                  <button
+                    class="btn btn-primary btn-sm"
+                    onclick="addFee('${student.id}')">
+                    Add Fee Record
+                  </button>
 
-                  </td>
+                </td>
 
-                </tr>
+              </tr>
 
-              `
-            ).join("")}
+            `).join("")}
 
           </tbody>
 
@@ -6018,21 +5479,18 @@ function addFee(studentId){
       s => s.id === studentId
     );
 
-  if(!student) return;
-
+  if(!student)
+    return;
 
   openModal(
     "Add Fee Record",
-
     `
 
       <form onsubmit="saveFee(event,'${studentId}')">
 
         <div class="form-group">
 
-          <label>
-            Amount
-          </label>
+          <label>Amount</label>
 
           <input
             id="feeAmount"
@@ -6042,12 +5500,9 @@ function addFee(studentId){
 
         </div>
 
-
         <div class="form-group">
 
-          <label>
-            Status
-          </label>
+          <label>Status</label>
 
           <select id="feeStatus">
 
@@ -6063,17 +5518,13 @@ function addFee(studentId){
 
         </div>
 
-
         <div class="form-group">
 
-          <label>
-            Note
-          </label>
+          <label>Note</label>
 
           <input id="feeNote">
 
         </div>
-
 
         <button class="btn btn-primary">
           Save Fee
@@ -6087,23 +5538,20 @@ function addFee(studentId){
 }
 
 
-async function saveFee(
-  event,
-  studentId
-){
+async function saveFee(event,studentId){
 
   event.preventDefault();
-
 
   const student =
     adminCache.students.find(
       s => s.id === studentId
     );
 
+  if(!student)
+    return;
 
   const records =
     student.feesRecords || [];
-
 
   records.push({
 
@@ -6128,15 +5576,11 @@ async function saveFee(
 
   });
 
-
   await col("students")
     .doc(studentId)
     .update({
-
       feesRecords:records
-
     });
-
 
   closeModal();
 
@@ -6156,23 +5600,17 @@ function adminReports(){
   const students =
     adminCache.students;
 
-
-  document.getElementById(
-    "content"
-  ).innerHTML = `
+  document.getElementById("content").innerHTML = `
 
     <div class="dashboard-header">
 
-      <h1>
-        Reports
-      </h1>
+      <h1>Reports</h1>
 
       <p>
         Overview of learner activity and assessment results.
       </p>
 
     </div>
-
 
     <div class="card">
 
@@ -6183,7 +5621,6 @@ function adminReports(){
         </h3>
 
       </div>
-
 
       ${
         students.length
@@ -6197,71 +5634,60 @@ function adminReports(){
             <thead>
 
               <tr>
-
                 <th>Student</th>
                 <th>Subjects</th>
                 <th>Assessments Submitted</th>
-
               </tr>
 
             </thead>
 
-
             <tbody>
 
-              ${students.map(
-                student => {
+              ${students.map(student=>{
 
-                  const submissions =
-                    adminCache.submissions
-                      .filter(
-                        s =>
-                          s.studentId ===
-                          student.id
+                const submissions =
+                  adminCache.submissions
+                    .filter(
+                      s =>
+                        s.studentId ===
+                        student.id
+                    )
+                    .length;
+
+                return `
+
+                  <tr>
+
+                    <td>
+                      ${escapeHTML(
+                        student.name
+                      )}
+                    </td>
+
+                    <td>
+
+                      ${subjectNames(
+                        student.subjects || []
                       )
-                      .length;
+                      .map(
+                        s =>
+                          `<span class="badge">
+                            ${escapeHTML(s)}
+                          </span>`
+                      )
+                      .join(" ")}
 
+                    </td>
 
-                  return `
+                    <td>
+                      ${submissions}
+                    </td>
 
-                    <tr>
+                  </tr>
 
-                      <td>
-                        ${escapeHTML(
-                          student.name
-                        )}
-                      </td>
+                `;
 
-
-                      <td>
-
-                        ${
-                          subjectNames(
-                            student.subjects ||
-                            []
-                          )
-                          .map(
-                            s =>
-                              `<span class="badge">
-                                ${escapeHTML(s)}
-                              </span>`
-                          )
-                          .join(" ")
-                        }
-
-                      </td>
-
-
-                      <td>
-                        ${submissions}
-                      </td>
-
-                    </tr>
-
-                  `;
-
-                }
-              ).join("")}
+              }).join("")}
 
             </tbody>
 
@@ -6293,26 +5719,78 @@ async function getCurrentStudent(){
   if(
     !firebaseReady ||
     !session
-  ) return null;
-
+  )
+    return null;
 
   const doc =
     await col("students")
       .doc(session.id)
       .get();
 
-
   if(!doc.exists)
     return null;
-
 
   return {
 
     id:doc.id,
-
     ...doc.data()
 
   };
+
+}
+
+
+/* =====================================================
+   STUDENT SCHEDULE VISIBILITY
+===================================================== */
+
+function scheduleVisibleToStudent(
+  schedule,
+  student
+){
+
+  if(!schedule || !student)
+    return false;
+
+  /*
+    NEW SYSTEM:
+    1. Specific student
+    2. Subject
+  */
+
+  if(schedule.targetType === "student"){
+
+    return schedule.studentId ===
+      student.id;
+
+  }
+
+  if(schedule.targetType === "subject"){
+
+    return studentHasSubject(
+      student,
+      schedule.subject
+    );
+
+  }
+
+  /*
+    BACKWARD COMPATIBILITY:
+    Old schedule documents may not have
+    targetType. Their classLevel is ignored.
+    They are matched by subject only.
+  */
+
+  if(!schedule.targetType){
+
+    return studentHasSubject(
+      student,
+      schedule.subject
+    );
+
+  }
+
+  return false;
 
 }
 
@@ -6326,136 +5804,52 @@ async function studentDashboard(){
   const student =
     await getCurrentStudent();
 
-
-  if(!student) return;
-
+  if(!student)
+    return;
 
   const subjects =
     subjectNames(
       student.subjects || []
     );
 
-
   const availableAssessments =
-    studentCache.assessments
-      .filter(
-        assessment => {
+    studentCache.assessments.filter(
+      assessment => {
 
-          if(
+        if(
+          Array.isArray(
             assessment.assignedTo
-          ){
+          )
+        ){
 
-            return assessment
-              .assignedTo
-              .includes(
-                student.id
-              );
-
-          }
-
-
-          return (
-            student.subjects ||
-            []
-          ).includes(
-            assessment.subject
-          );
+          return assessment.assignedTo
+            .includes(student.id);
 
         }
-      );
 
+        return studentHasSubject(
+          student,
+          assessment.subject
+        );
 
-  /*
-    Schedule logic:
-
-    1. Specific student schedule:
-       only that student sees it.
-
-    2. Subject schedule:
-       every student enrolled in that subject sees it.
-
-    Class is NOT used.
-  */
+      }
+    );
 
   const upcoming =
-    studentCache.schedule
-      .filter(
-        schedule => {
+    studentCache.schedule.filter(
+      schedule =>
+        scheduleVisibleToStudent(
+          schedule,
+          student
+        )
+    );
 
-          if(
-            schedule.targetType ===
-            "student"
-          ){
-
-            return (
-              schedule.studentId ===
-              student.id
-            );
-
-          }
-
-
-          if(
-            schedule.targetType ===
-            "subject"
-          ){
-
-            return (
-              (student.subjects || [])
-                .includes(
-                  schedule.subject
-                ) ||
-
-              (student.subjects || [])
-                .includes(
-                  adminCache.subjects
-                    .find(
-                      s =>
-                        s.id ===
-                        schedule.subject
-                    )?.name
-                )
-            );
-
-          }
-
-
-          /*
-            Backward compatibility
-            for old subject-only records.
-          */
-
-          return (
-            (student.subjects || [])
-              .includes(
-                schedule.subject
-              ) ||
-
-            (student.subjects || [])
-              .includes(
-                adminCache.subjects
-                  .find(
-                    s =>
-                      s.id ===
-                      schedule.subject
-                  )?.name
-              )
-          );
-
-        }
-      );
-
-
-  document.getElementById(
-    "content"
-  ).innerHTML = `
+  document.getElementById("content").innerHTML = `
 
     <div class="dashboard-header">
 
       <h1>
-        Welcome, ${escapeHTML(
-          student.name
-        )}
+        Welcome, ${escapeHTML(student.name)}
       </h1>
 
       <p>
@@ -6464,14 +5858,11 @@ async function studentDashboard(){
 
     </div>
 
-
     <div class="stat-grid">
 
       <div class="stat-card">
 
-        <small>
-          Subjects
-        </small>
+        <small>Subjects</small>
 
         <strong>
           ${subjects.length}
@@ -6479,25 +5870,9 @@ async function studentDashboard(){
 
       </div>
 
-
       <div class="stat-card">
 
-        <small>
-          Assessments
-        </small>
-
-        <strong>
-          ${availableAssessments.length}
-        </strong>
-
-      </div>
-
-
-      <div class="stat-card">
-
-        <small>
-          Scheduled Lessons
-        </small>
+        <small>Upcoming Lessons</small>
 
         <strong>
           ${upcoming.length}
@@ -6505,12 +5880,19 @@ async function studentDashboard(){
 
       </div>
 
+      <div class="stat-card">
+
+        <small>Assessments</small>
+
+        <strong>
+          ${availableAssessments.length}
+        </strong>
+
+      </div>
 
       <div class="stat-card">
 
-        <small>
-          Notifications
-        </small>
+        <small>Notifications</small>
 
         <strong>
           ${studentCache.notifications.length}
@@ -6520,33 +5902,27 @@ async function studentDashboard(){
 
     </div>
 
-
     <div class="card">
 
       <div class="card-title">
 
-        <h3>
-          My Subjects
-        </h3>
+        <h3>My Subjects</h3>
 
       </div>
-
 
       ${
         subjects.length
 
         ?
 
-        subjects
-          .map(
-            s =>
-              `<span
-                class="badge"
-                style="margin:4px;">
-                ${escapeHTML(s)}
-              </span>`
-          )
-          .join("")
+        subjects.map(
+          subject =>
+            `<span
+              class="badge"
+              style="margin:4px;">
+              ${escapeHTML(subject)}
+            </span>`
+        ).join("")
 
         :
 
@@ -6558,14 +5934,11 @@ async function studentDashboard(){
 
     </div>
 
-
     <div class="card">
 
       <div class="card-title">
 
-        <h3>
-          Upcoming Lessons
-        </h3>
+        <h3>Upcoming Lessons</h3>
 
         <button
           class="btn btn-outline btn-sm"
@@ -6574,7 +5947,6 @@ async function studentDashboard(){
         </button>
 
       </div>
-
 
       ${
         upcoming.length
@@ -6588,84 +5960,51 @@ async function studentDashboard(){
             <thead>
 
               <tr>
-
                 <th>Subject</th>
-                <th>For</th>
                 <th>Day</th>
                 <th>Time</th>
                 <th>Mode</th>
-
               </tr>
 
             </thead>
 
-
             <tbody>
 
-              ${upcoming
-                .slice(0,5)
-                .map(
-                  s => `
+              ${upcoming.slice(0,5).map(
+                schedule => `
 
-                    <tr>
+                  <tr>
 
-                      <td>
-                        ${escapeHTML(
-                          getSubjectName(
-                            s.subject
-                          )
-                        )}
-                      </td>
+                    <td>
+                      ${escapeHTML(
+                        getSubjectName(
+                          schedule.subject
+                        )
+                      )}
+                    </td>
 
+                    <td>
+                      ${escapeHTML(
+                        schedule.day || "-"
+                      )}
+                    </td>
 
-                      <td>
+                    <td>
+                      ${escapeHTML(
+                        schedule.time || "-"
+                      )}
+                    </td>
 
-                        ${
-                          s.targetType ===
-                          "student"
+                    <td>
+                      ${escapeHTML(
+                        schedule.mode || "-"
+                      )}
+                    </td>
 
-                          ?
+                  </tr>
 
-                          `<span class="badge">
-                            Individual
-                          </span>`
-
-                          :
-
-                          `<span class="badge">
-                            Subject
-                          </span>`
-
-                        }
-
-                      </td>
-
-
-                      <td>
-                        ${escapeHTML(
-                          s.day
-                        )}
-                      </td>
-
-
-                      <td>
-                        ${escapeHTML(
-                          s.time
-                        )}
-                      </td>
-
-
-                      <td>
-                        ${escapeHTML(
-                          s.mode
-                        )}
-                      </td>
-
-                    </tr>
-
-                  `
-                )
-                .join("")}
+                `
+              ).join("")}
 
             </tbody>
 
@@ -6697,107 +6036,30 @@ async function studentSchedule(){
   const student =
     await getCurrentStudent();
 
-
-  if(!student) return;
-
+  if(!student)
+    return;
 
   const rows =
-    studentCache.schedule
-      .filter(
-        schedule => {
+    studentCache.schedule.filter(
+      schedule =>
+        scheduleVisibleToStudent(
+          schedule,
+          student
+        )
+    );
 
-          /*
-            Specific student schedule
-          */
-
-          if(
-            schedule.targetType ===
-            "student"
-          ){
-
-            return (
-              schedule.studentId ===
-              student.id
-            );
-
-          }
-
-
-          /*
-            Subject schedule
-          */
-
-          if(
-            schedule.targetType ===
-            "subject"
-          ){
-
-            return (
-
-              (student.subjects || [])
-                .includes(
-                  schedule.subject
-                ) ||
-
-              (student.subjects || [])
-                .includes(
-                  adminCache.subjects
-                    .find(
-                      x =>
-                        x.id ===
-                        schedule.subject
-                    )?.name
-                )
-
-            );
-
-          }
-
-
-          /*
-            Old records:
-            treat them as subject schedules.
-          */
-
-          return (
-
-            (student.subjects || [])
-              .includes(
-                schedule.subject
-              ) ||
-
-            (student.subjects || [])
-              .includes(
-                adminCache.subjects
-                  .find(
-                    x =>
-                      x.id ===
-                      schedule.subject
-                  )?.name
-              )
-
-          );
-
-        }
-      );
-
-
-  document.getElementById(
-    "content"
-  ).innerHTML = `
+  document.getElementById("content").innerHTML = `
 
     <div class="dashboard-header">
 
-      <h1>
-        My Schedule
-      </h1>
+      <h1>My Schedule</h1>
 
       <p>
-        Lessons assigned specifically to you or to the subjects you take.
+        Lessons scheduled specifically for you
+        or for subjects assigned to you.
       </p>
 
     </div>
-
 
     <div class="card">
 
@@ -6813,108 +6075,74 @@ async function studentSchedule(){
             <thead>
 
               <tr>
-
                 <th>Subject</th>
-                <th>Schedule Type</th>
                 <th>Day</th>
                 <th>Time</th>
                 <th>Mode</th>
                 <th>Link</th>
-
               </tr>
 
             </thead>
 
-
             <tbody>
 
-              ${rows.map(
-                s => `
+              ${rows.map(schedule=>`
 
-                  <tr>
+                <tr>
 
-                    <td>
-                      ${escapeHTML(
-                        getSubjectName(
-                          s.subject
-                        )
-                      )}
-                    </td>
+                  <td>
+                    ${escapeHTML(
+                      getSubjectName(
+                        schedule.subject
+                      )
+                    )}
+                  </td>
 
+                  <td>
+                    ${escapeHTML(
+                      schedule.day || "-"
+                    )}
+                  </td>
 
-                    <td>
+                  <td>
+                    ${escapeHTML(
+                      schedule.time || "-"
+                    )}
+                  </td>
 
-                      ${
-                        s.targetType ===
-                        "student"
+                  <td>
+                    ${escapeHTML(
+                      schedule.mode || "-"
+                    )}
+                  </td>
 
-                        ?
+                  <td>
 
-                        `<span class="badge">
-                          Individual
-                        </span>`
+                    ${
+                      schedule.onlineLink
 
-                        :
+                      ?
 
-                        `<span class="badge">
-                          Subject
-                        </span>`
+                      `<a
+                        href="${escapeHTML(
+                          schedule.onlineLink
+                        )}"
+                        target="_blank"
+                        class="btn btn-primary btn-sm">
+                        Join
+                      </a>`
 
-                      }
+                      :
 
-                    </td>
+                      "-"
 
+                    }
 
-                    <td>
-                      ${escapeHTML(
-                        s.day || "-"
-                      )}
-                    </td>
+                  </td>
 
+                </tr>
 
-                    <td>
-                      ${escapeHTML(
-                        s.time || "-"
-                      )}
-                    </td>
-
-
-                    <td>
-                      ${escapeHTML(
-                        s.mode || "-"
-                      )}
-                    </td>
-
-
-                    <td>
-
-                      ${
-                        s.onlineLink
-
-                        ?
-
-                        `<a
-                          href="${escapeHTML(
-                            s.onlineLink
-                          )}"
-                          target="_blank"
-                          rel="noopener"
-                          class="btn btn-primary btn-sm">
-                          Join
-                        </a>`
-
-                        :
-
-                        "-"
-
-                      }
-
-                    </td>
-
-                  </tr>
-
-                `
-              ).join("")}
+              `).join("")}
 
             </tbody>
 
@@ -6946,84 +6174,53 @@ async function studentAnnouncements(){
   const student =
     await getCurrentStudent();
 
-
-  if(!student) return;
-
+  if(!student)
+    return;
 
   const list =
-    studentCache.announcements
-      .filter(
-        announcement => {
+    studentCache.announcements.filter(
+      announcement => {
 
-          if(
-            announcement.audience ===
-            "all"
-          ){
+        if(
+          announcement.audience ===
+          "all"
+        )
+          return true;
 
-            return true;
+        if(
+          announcement.studentId ===
+          student.id
+        )
+          return true;
 
-          }
+        if(
+          announcement.audience ===
+          "subject"
+        ){
 
-
-          if(
-            announcement.studentId ===
-            student.id
-          ){
-
-            return true;
-
-          }
-
-
-          if(
-            announcement.audience ===
-            "subject"
-          ){
-
-            return (
-
-              (student.subjects || [])
-                .includes(
-                  announcement.subject
-                ) ||
-
-              (student.subjects || [])
-                .includes(
-                  adminCache.subjects
-                    .find(
-                      s =>
-                        s.id ===
-                        announcement.subject
-                    )?.name
-                )
-
-            );
-
-          }
-
-
-          return false;
+          return studentHasSubject(
+            student,
+            announcement.subject
+          );
 
         }
-      );
 
+        return false;
 
-  document.getElementById(
-    "content"
-  ).innerHTML = `
+      }
+    );
+
+  document.getElementById("content").innerHTML = `
 
     <div class="dashboard-header">
 
-      <h1>
-        Announcements
-      </h1>
+      <h1>Announcements</h1>
 
       <p>
         Important information from Phos Academy.
       </p>
 
     </div>
-
 
     <div class="card">
 
@@ -7033,25 +6230,25 @@ async function studentAnnouncements(){
         ?
 
         list.map(
-          a => `
+          announcement => `
 
             <div class="notice">
 
               <h4>
                 ${escapeHTML(
-                  a.title
+                  announcement.title
                 )}
               </h4>
 
               <small>
                 ${formatDateTime(
-                  a.createdAt
+                  announcement.createdAt
                 )}
               </small>
 
               <p style="margin-top:8px;">
                 ${escapeHTML(
-                  a.body
+                  announcement.body
                 )}
               </p>
 
@@ -7084,57 +6281,53 @@ async function studentMessages(){
   const student =
     await getCurrentStudent();
 
-
-  if(!student) return;
-
+  if(!student)
+    return;
 
   const messages =
-    studentCache.messages
-      .filter(
-        message => {
+    studentCache.messages.filter(
+      message => {
 
-          return (
-            message.recipient ===
-              "all" ||
+        /*
+          Show:
+          - messages sent to everyone
+          - messages sent directly to this student
+          - replies from Albert
+        */
 
-            message.recipient ===
-              student.id
+        return (
+          message.recipient === "all" ||
+          message.recipient === student.id
+        );
 
-          );
+      }
+    );
 
-        }
-      );
-
-
-  document.getElementById(
-    "content"
-  ).innerHTML = `
+  document.getElementById("content").innerHTML = `
 
     <div class="dashboard-header">
 
-      <h1>
-        Messages
-      </h1>
+      <h1>Messages</h1>
 
       <p>
-        Your messages from Albert and Phos Academy.
+        Your messages from Phos Academy.
       </p>
 
     </div>
 
-
     <div class="card">
 
-      <div style="margin-bottom:18px;">
+      <div class="card-title">
+
+        <h3>Your Messages</h3>
 
         <button
           class="btn btn-primary"
-          onclick="studentMessageAlbert()">
+          onclick="messageAlbertFromStudent()">
           Message Albert
         </button>
 
       </div>
-
 
       ${
         messages.length
@@ -7142,27 +6335,34 @@ async function studentMessages(){
         ?
 
         messages.map(
-          m => `
+          message => `
 
             <div class="notice">
 
               <h4>
                 ${escapeHTML(
-                  m.subject ||
+                  message.subject ||
                   "Message"
                 )}
               </h4>
 
               <small>
-                From Albert •
+                From:
+                ${
+                  message.senderName ||
+                  "Phos Academy"
+                }
+
+                &nbsp; • &nbsp;
+
                 ${formatDateTime(
-                  m.createdAt
+                  message.createdAt
                 )}
               </small>
 
               <p style="margin-top:8px;">
                 ${escapeHTML(
-                  m.body
+                  message.body
                 )}
               </p>
 
@@ -7186,20 +6386,17 @@ async function studentMessages(){
 }
 
 
-function studentMessageAlbert(){
+function messageAlbertFromStudent(){
 
   openModal(
     "Message Albert",
-
     `
 
-      <form onsubmit="sendStudentMessage(event)">
+      <form onsubmit="saveStudentMessage(event)">
 
         <div class="form-group">
 
-          <label>
-            Subject
-          </label>
+          <label>Subject</label>
 
           <input
             id="studentMessageSubject"
@@ -7207,20 +6404,16 @@ function studentMessageAlbert(){
 
         </div>
 
-
         <div class="form-group">
 
-          <label>
-            Message
-          </label>
+          <label>Message</label>
 
           <textarea
             id="studentMessageBody"
-            required>
-          </textarea>
+            placeholder="Write your message to Albert..."
+            required></textarea>
 
         </div>
-
 
         <button class="btn btn-primary">
           Send to Albert
@@ -7234,43 +6427,41 @@ function studentMessageAlbert(){
 }
 
 
-async function sendStudentMessage(event){
+async function saveStudentMessage(event){
 
   event.preventDefault();
-
 
   const student =
     await getCurrentStudent();
 
+  if(!student)
+    return;
 
-  if(!student) return;
+  await col("messages").add({
 
+    senderType:"student",
 
-  await col("messages")
-    .add({
+    senderId:student.id,
 
-      studentId:student.id,
+    senderName:student.name,
 
-      studentName:student.name,
+    recipient:"Albert",
 
-      sender:"student",
+    subject:
+      document.getElementById(
+        "studentMessageSubject"
+      ).value.trim(),
 
-      recipient:"Albert",
+    body:
+      document.getElementById(
+        "studentMessageBody"
+      ).value.trim(),
 
-      subject:
-        document.getElementById(
-          "studentMessageSubject"
-        ).value.trim(),
+    read:false,
 
-      body:
-        document.getElementById(
-          "studentMessageBody"
-        ).value.trim(),
+    createdAt:nowISO()
 
-      createdAt:nowISO()
-
-    });
-
+  });
 
   closeModal();
 
@@ -7294,37 +6485,632 @@ async function studentAssessments(){
   const student =
     await getCurrentStudent();
 
-
-  if(!student) return;
-
+  if(!student)
+    return;
 
   const assessments =
-    studentCache.assessments
-      .filter(
-        assessment => {
+    studentCache.assessments.filter(
+      assessment => {
 
-          /*
-            Explicit assignment wins.
-            Subject enrolment is used otherwise.
-            Class level is NOT used.
-          */
-
-          if(
+        if(
+          Array.isArray(
             assessment.assignedTo
-          ){
+          )
+        ){
 
-            return assessment
-              .assignedTo
-              .includes(
-                student.id
-              );
+          return assessment.assignedTo
+            .includes(student.id);
 
-          }
+        }
+
+        return studentHasSubject(
+          student,
+          assessment.subject
+        );
+
+      }
+    );
+
+  document.getElementById("content").innerHTML = `
+
+    <div class="dashboard-header">
+
+      <h1>Assessments</h1>
+
+      <p>
+        Tests and assignments for your enrolled subjects.
+      </p>
+
+    </div>
+
+    <div class="card">
+
+      ${
+        assessments.length
+
+        ?
+
+        `<div class="table-wrap">
+
+          <table>
+
+            <thead>
+
+              <tr>
+                <th>Title</th>
+                <th>Subject</th>
+                <th>Type</th>
+                <th>Due Date</th>
+                <th>Action</th>
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              ${assessments.map(
+                assessment => {
+
+                  const submitted =
+                    studentCache.submissions.some(
+                      submission =>
+                        submission.assessmentId ===
+                        assessment.id &&
+                        submission.studentId ===
+                        student.id
+                    );
+
+                  return `
+
+                    <tr>
+
+                      <td>
+                        ${escapeHTML(
+                          assessment.title
+                        )}
+                      </td>
+
+                      <td>
+                        ${escapeHTML(
+                          getSubjectName(
+                            assessment.subject
+                          )
+                        )}
+                      </td>
+
+                      <td>
+                        ${escapeHTML(
+                          assessment.type
+                        )}
+                      </td>
+
+                      <td>
+                        ${formatDate(
+                          assessment.dueDate
+                        )}
+                      </td>
+
+                      <td>
+
+                        ${
+                          submitted
+
+                          ?
+
+                          `<span class="badge badge-success">
+                            Submitted
+                          </span>`
+
+                          :
+
+                          `<button
+                            class="btn btn-primary btn-sm"
+                            onclick="takeAssessment('${assessment.id}')">
+                            Take Assessment
+                          </button>`
+
+                        }
+
+                      </td>
+
+                    </tr>
+
+                  `;
+
+                }
+              ).join("")}
+
+            </tbody>
+
+          </table>
+
+        </div>`
+
+        :
+
+        `<div class="empty">
+          No assessments are currently available.
+        </div>`
+
+      }
+
+    </div>
+
+  `;
+
+}
 
 
-          return (
-            (student.subjects || [])
-              .includes(
-                assessment.subject
-              )
-         
+async function takeAssessment(id){
+
+  const assessment =
+    studentCache.assessments.find(
+      a => a.id === id
+    );
+
+  if(!assessment)
+    return;
+
+  openModal(
+    assessment.title,
+    `
+
+      <form
+        onsubmit="submitAssessment(event,'${id}')">
+
+        ${
+          (assessment.questions || [])
+            .map(
+              (question,index)=>`
+
+                <div class="question">
+
+                  <strong>
+                    ${index + 1}.
+                    ${escapeHTML(
+                      question.question
+                    )}
+                  </strong>
+
+                  ${
+                    assessment.type === "MCQ"
+
+                    ?
+
+                    (question.options || [])
+                      .map(
+                        option => `
+
+                          <label class="option">
+
+                            <input
+                              type="radio"
+                              name="q${index}"
+                              value="${escapeHTML(option)}"
+                              required>
+
+                            ${escapeHTML(option)}
+
+                          </label>
+
+                        `
+                      ).join("")
+
+                    :
+
+                    `<textarea
+                      name="q${index}"
+                      required
+                      placeholder="Write your answer here..."></textarea>`
+
+                  }
+
+                </div>
+
+              `
+            ).join("")
+        }
+
+        <button class="btn btn-primary">
+          Submit Assessment
+        </button>
+
+      </form>
+
+    `
+  );
+
+}
+
+
+async function submitAssessment(
+  event,
+  assessmentId
+){
+
+  event.preventDefault();
+
+  const student =
+    await getCurrentStudent();
+
+  const assessment =
+    studentCache.assessments.find(
+      a => a.id === assessmentId
+    );
+
+  if(!student || !assessment)
+    return;
+
+  const answers = [];
+
+  assessment.questions.forEach(
+    (question,index)=>{
+
+      const field =
+        document.querySelector(
+          `[name="q${index}"]`
+        );
+
+      answers.push(
+        field
+        ? field.value
+        : ""
+      );
+
+    }
+  );
+
+  let score = null;
+
+  if(assessment.type === "MCQ"){
+
+    let correct = 0;
+
+    assessment.questions.forEach(
+      (question,index)=>{
+
+        if(
+
+          answers[index] &&
+
+          String(answers[index])
+            .trim()
+            .toLowerCase() ===
+
+          String(
+            question.answer || ""
+          )
+          .trim()
+          .toLowerCase()
+
+        ){
+
+          correct++;
+
+        }
+
+      }
+    );
+
+    score =
+      assessment.questions.length
+      ?
+      Math.round(
+        correct /
+        assessment.questions.length *
+        100
+      )
+      :
+      0;
+
+  }
+
+  await col("submissions").add({
+
+    assessmentId,
+
+    studentId:
+      student.id,
+
+    answers,
+
+    score,
+
+    reviewed:
+      assessment.type === "MCQ",
+
+    submittedAt:
+      nowISO()
+
+  });
+
+  closeModal();
+
+  await loadStudentData(student);
+
+  studentAssessments();
+
+  alert(
+    score !== null
+    ?
+    `Assessment submitted. Score: ${score}%`
+    :
+    "Assessment submitted successfully."
+  );
+
+}
+
+
+/* =====================================================
+   STUDENT REPORTS
+===================================================== */
+
+async function studentReports(){
+
+  const student =
+    await getCurrentStudent();
+
+  if(!student)
+    return;
+
+  const submissions =
+    studentCache.submissions.filter(
+      submission =>
+        submission.studentId ===
+        student.id
+    );
+
+  document.getElementById("content").innerHTML = `
+
+    <div class="dashboard-header">
+
+      <h1>My Reports</h1>
+
+      <p>
+        Your assessment performance.
+      </p>
+
+    </div>
+
+    <div class="card">
+
+      ${
+        submissions.length
+
+        ?
+
+        `<div class="table-wrap">
+
+          <table>
+
+            <thead>
+
+              <tr>
+                <th>Assessment</th>
+                <th>Subject</th>
+                <th>Score</th>
+                <th>Date</th>
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              ${submissions.map(
+                submission => {
+
+                  const assessment =
+                    studentCache.assessments.find(
+                      a =>
+                        a.id ===
+                        submission.assessmentId
+                    );
+
+                  return `
+
+                    <tr>
+
+                      <td>
+                        ${escapeHTML(
+                          assessment?.title ||
+                          "Assessment"
+                        )}
+                      </td>
+
+                      <td>
+                        ${escapeHTML(
+                          getSubjectName(
+                            assessment?.subject
+                          )
+                        )}
+                      </td>
+
+                      <td>
+
+                        ${
+                          submission.score !== null &&
+                          submission.score !== undefined
+
+                          ?
+
+                          `<span class="badge badge-success">
+                            ${submission.score}%
+                          </span>`
+
+                          :
+
+                          `<span class="badge badge-warning">
+                            Pending Review
+                          </span>`
+
+                        }
+
+                      </td>
+
+                      <td>
+                        ${formatDate(
+                          submission.submittedAt
+                        )}
+                      </td>
+
+                    </tr>
+
+                  `;
+
+                }
+              ).join("")}
+
+            </tbody>
+
+          </table>
+
+        </div>`
+
+        :
+
+        `<div class="empty">
+          No assessment records yet.
+        </div>`
+
+      }
+
+    </div>
+
+  `;
+
+}
+
+
+/* =====================================================
+   STUDENT FEES
+===================================================== */
+
+async function studentFees(){
+
+  const student =
+    await getCurrentStudent();
+
+  if(!student)
+    return;
+
+  const records =
+    student.feesRecords || [];
+
+  document.getElementById("content").innerHTML = `
+
+    <div class="dashboard-header">
+
+      <h1>Fees</h1>
+
+      <p>
+        Your fee records.
+      </p>
+
+    </div>
+
+    <div class="card">
+
+      ${
+        records.length
+
+        ?
+
+        `<div class="table-wrap">
+
+          <table>
+
+            <thead>
+
+              <tr>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Note</th>
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              ${records.map(record=>`
+
+                <tr>
+
+                  <td>
+                    ${formatDate(
+                      record.date
+                    )}
+                  </td>
+
+                  <td>
+                    ₦${Number(
+                      record.amount || 0
+                    ).toLocaleString()}
+                  </td>
+
+                  <td>
+
+                    <span class="
+                      badge
+                      ${
+                        record.status === "Paid"
+                        ? "badge-success"
+                        : "badge-warning"
+                      }
+                    ">
+
+                      ${escapeHTML(
+                        record.status
+                      )}
+
+                    </span>
+
+                  </td>
+
+                  <td>
+                    ${escapeHTML(
+                      record.note || "-"
+                    )}
+                  </td>
+
+                </tr>
+
+              `).join("")}
+
+            </tbody>
+
+          </table>
+
+        </div>`
+
+        :
+
+        `<div class="empty">
+          No fee records available.
+        </div>`
+
+      }
+
+    </div>
+
+  `;
+
+}
+
+
+/* =====================================================
+   STARTUP
+===================================================== */
+
+document.getElementById("year")
+  .textContent =
+    new Date().getFullYear();
+
+loadPublicSubjects();
+
+restoreSession();
+
+</script>
+
+</body>
+</html>
